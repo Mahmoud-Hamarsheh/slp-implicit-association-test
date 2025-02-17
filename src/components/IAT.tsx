@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
@@ -32,6 +31,7 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   const [responses, setResponses] = useState<{ block: number; responseTime: number; correct: boolean }[]>([]);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [isTestStarted, setIsTestStarted] = useState(false);
 
   const generateTrials = useCallback((block: number): Trial[] => {
     let newTrials: Trial[] = [];
@@ -101,14 +101,17 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
     setCurrentTrial(0);
   }, [currentBlock, generateTrials]);
 
-  const handleKeyPress = useCallback(async (e: KeyboardEvent) => {
-    if (!startTime || showFeedback) return;
+  const handleKeyPress = useCallback((e: KeyboardEvent) => {
+    console.log('Key pressed:', e.key, 'Current trial:', currentTrial, 'Start time:', startTime, 'Show feedback:', showFeedback);
+    
+    if (!isTestStarted || !startTime || showFeedback) return;
 
     const responseTime = Date.now() - startTime;
     const currentStimulus = trials[currentTrial];
 
-    if (e.key === "e" || e.key === "i") {
-      const correct = e.key === currentStimulus.correctKey;
+    if (e.key.toLowerCase() === "e" || e.key.toLowerCase() === "i") {
+      console.log('Valid key press detected');
+      const correct = e.key.toLowerCase() === currentStimulus.correctKey;
       setIsCorrect(correct);
       setShowFeedback(true);
       
@@ -135,7 +138,7 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
         }
       }, 500);
     }
-  }, [currentTrial, trials, startTime, showFeedback, responses, currentBlock, onComplete]);
+  }, [currentTrial, trials, startTime, showFeedback, responses, currentBlock, onComplete, isTestStarted]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
@@ -143,10 +146,10 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   }, [handleKeyPress]);
 
   useEffect(() => {
-    if (!showFeedback) {
+    if (!showFeedback && isTestStarted) {
       setStartTime(Date.now());
     }
-  }, [currentTrial, showFeedback]);
+  }, [currentTrial, showFeedback, isTestStarted]);
 
   const calculateDScore = (responses: { block: number; responseTime: number; correct: boolean }[]) => {
     // Get responses from blocks 4 and 7 (test blocks)
@@ -249,6 +252,11 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
     }
   };
 
+  const startTest = () => {
+    setIsTestStarted(true);
+    setStartTime(Date.now());
+  };
+
   if (!trials.length) return null;
 
   const instructions = getBlockInstructions(currentBlock);
@@ -258,17 +266,27 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
       <div className="text-center space-y-6">
         <h2 className="text-2xl font-semibold">{instructions.title}</h2>
         <p className="text-sm text-gray-600">Block {currentBlock} of 7</p>
-        <div className="text-4xl font-bold my-8">{trials[currentTrial]?.stimulus}</div>
         
-        <div className="flex justify-between px-8 text-sm text-gray-600">
-          <div>Press 'E' for {instructions.left}</div>
-          <div>Press 'I' for {instructions.right}</div>
-        </div>
-
-        {showFeedback && (
-          <div className={`text-xl font-bold ${isCorrect ? "text-green-500" : "text-red-500"}`}>
-            {isCorrect ? "Correct!" : "Incorrect"}
+        {!isTestStarted ? (
+          <div className="space-y-4">
+            <p className="text-lg">Press the button below to start the test.</p>
+            <Button onClick={startTest}>Start</Button>
           </div>
+        ) : (
+          <>
+            <div className="text-4xl font-bold my-8">{trials[currentTrial]?.stimulus}</div>
+            
+            <div className="flex justify-between px-8 text-sm text-gray-600">
+              <div>Press 'E' for {instructions.left}</div>
+              <div>Press 'I' for {instructions.right}</div>
+            </div>
+
+            {showFeedback && (
+              <div className={`text-xl font-bold ${isCorrect ? "text-green-500" : "text-red-500"}`}>
+                {isCorrect ? "Correct!" : "Incorrect"}
+              </div>
+            )}
+          </>
         )}
       </div>
     </Card>
