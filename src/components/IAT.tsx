@@ -33,15 +33,18 @@ export const IAT: React.FC<IATProps> = ({ onComplete }) => {
     let newTrials: Trial[] = [];
     switch (block) {
       case 1:
-        newTrials = [...BLOCKS.COMMUNICATION_DISORDER.map(item => ({
-          stimulus: item,
-          category: "communication_disorder",
-          correctKey: "e"
-        })), ...BLOCKS.NORMAL_COMMUNICATION.map(item => ({
-          stimulus: item,
-          category: "normal_communication",
-          correctKey: "i"
-        }))];
+        newTrials = [
+          ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
+            stimulus: item,
+            category: "communication_disorder",
+            correctKey: "e" as const
+          })),
+          ...BLOCKS.NORMAL_COMMUNICATION.map((item): Trial => ({
+            stimulus: item,
+            category: "normal_communication",
+            correctKey: "i" as const
+          }))
+        ];
         break;
       // Add other cases for different blocks
     }
