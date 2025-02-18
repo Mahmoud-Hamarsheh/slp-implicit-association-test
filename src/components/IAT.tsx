@@ -196,6 +196,7 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
             negative_attitudes: surveyData.biasAwarenessResponses.negativeAttitudes,
             normal_communication: surveyData.biasAwarenessResponses.normalCommunication,
             communication_disorders: surveyData.biasAwarenessResponses.communicationDisorders,
+            survey_responses: surveyData.biasAwarenessResponses,
             responses: responses
           }
         ]);
