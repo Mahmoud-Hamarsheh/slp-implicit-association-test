@@ -16,10 +16,10 @@ interface Trial {
 }
 
 const BLOCKS = {
-  COMMUNICATION_DISORDER: ["Aphasia", "Stuttering", "Dysarthria", "Voice Disorder", "Apraxia", "Language Delay"],
-  NORMAL_COMMUNICATION: ["Social", "Active", "Engaging", "Expressive", "Fluent", "Focused"],
-  NEGATIVE_ATTRIBUTES: ["Incompetent", "Weak", "Insecure", "Inept", "Confused", "Slow", "Inflexible", "Uncooperative"],
-  POSITIVE_ATTRIBUTES: ["Competent", "Strong", "Confident", "Intelligent", "Attentive", "Fast", "Flexible", "Cooperative"]
+  COMMUNICATION_DISORDER: ["أفيزيا", "تأتأة", "ديسارثريا", "اضطراب صوت", "أبراكسيا", "تأخر لغوي"],
+  NORMAL_COMMUNICATION: ["اجتماعي", "نشط", "متفاعل", "معبر", "طليق", "مركز"],
+  NEGATIVE_ATTRIBUTES: ["محدود", "ضعيف", "سلبي", "أخرق", "مشتت", "بطيء", "متردد", "متوتر"],
+  POSITIVE_ATTRIBUTES: ["كفو/قادر", "قوي", "واثق", "ذكي", "منتبه", "سريع", "مرن", "متعاون"]
 };
 
 export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
@@ -203,45 +203,45 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
     switch (block) {
       case 1:
         return {
-          left: "Communication Disorder",
-          right: "Normal Communication",
-          title: "Practice Block: Categories"
+          left: "أفيزيا",
+          right: "اجتماعي",
+          title: "مقطع تدريبية: الأقسام"
         };
       case 2:
         return {
-          left: "Negative Attributes",
-          right: "Positive Attributes",
-          title: "Practice Block: Attributes"
+          left: "سلبي",
+          right: "متعاون",
+          title: "مقطع تدريبية: الخصائص"
         };
       case 3:
         return {
-          left: "Communication Disorder or Negative",
-          right: "Normal Communication or Positive",
-          title: "Practice Block: Combined"
+          left: "أفيزيا أو سلبي",
+          right: "اجتماعي أو متعاون",
+          title: "مقطع تدريبية: مزدوج"
         };
       case 4:
         return {
-          left: "Communication Disorder",
-          right: "Normal Communication",
-          title: "Test Block: Categories"
+          left: "أفيزيا",
+          right: "اجتماعي",
+          title: "مقطع اختبار: الأقسام"
         };
       case 5:
         return {
-          left: "Negative Attributes",
-          right: "Positive Attributes",
-          title: "Test Block: Attributes"
+          left: "سلبي",
+          right: "متعاون",
+          title: "مقطع اختبار: الخصائص"
         };
       case 6:
         return {
-          left: "Communication Disorder or Negative",
-          right: "Normal Communication or Positive",
-          title: "Test Block: Combined"
+          left: "أفيزيا أو سلبي",
+          right: "اجتماعي أو متعاون",
+          title: "مقطع اختبار: مزدوج"
         };
       case 7:
         return {
-          left: "Normal Communication or Negative",
-          right: "Communication Disorder or Positive",
-          title: "Test Block: Reversed"
+          left: "اجتماعي أو سلبي",
+          right: "أفيزيا أو متعاون",
+          title: "مقطع اختبار: عكس"
         };
       default:
         return {
@@ -265,25 +265,25 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
     <Card className="w-full max-w-2xl p-8 mx-auto mt-8 animate-fadeIn">
       <div className="text-center space-y-6">
         <h2 className="text-2xl font-semibold">{instructions.title}</h2>
-        <p className="text-sm text-gray-600">Block {currentBlock} of 7</p>
+        <p className="text-sm text-gray-600">المقطع {currentBlock} من 7</p>
         
         {!isTestStarted ? (
           <div className="space-y-4">
-            <p className="text-lg">Press the button below to start the test.</p>
-            <Button onClick={startTest}>Start</Button>
+            <p className="text-lg">اضغط الزر أدناه لبدء الاختبار</p>
+            <Button onClick={startTest}>ابدأ</Button>
           </div>
         ) : (
           <>
             <div className="text-4xl font-bold my-8">{trials[currentTrial]?.stimulus}</div>
             
             <div className="flex justify-between px-8 text-sm text-gray-600">
-              <div>Press 'E' for {instructions.left}</div>
-              <div>Press 'I' for {instructions.right}</div>
+              <div>اضغط 'E' لـ {instructions.left}</div>
+              <div>اضغط 'I' لـ {instructions.right}</div>
             </div>
 
             {showFeedback && (
               <div className={`text-xl font-bold ${isCorrect ? "text-green-500" : "text-red-500"}`}>
-                {isCorrect ? "Correct!" : "Incorrect"}
+                {isCorrect ? "صحيح!" : "خطأ"}
               </div>
             )}
           </>

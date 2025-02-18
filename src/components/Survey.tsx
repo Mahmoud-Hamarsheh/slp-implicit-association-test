@@ -30,10 +30,10 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
 
   return (
     <Card className="w-full max-w-lg p-6 mx-auto mt-8 animate-slideIn">
-      <h2 className="text-2xl font-semibold text-center mb-6">Demographic Survey</h2>
+      <h2 className="text-2xl font-semibold text-center mb-6">البيانات الديموغرافية</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="age">Age</Label>
+          <Label htmlFor="age">العمر</Label>
           <Input
             id="age"
             type="number"
@@ -47,7 +47,7 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="experience">Years of Experience</Label>
+          <Label htmlFor="experience">سنوات الخبرة</Label>
           <Input
             id="experience"
             type="number"
@@ -61,26 +61,26 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="degree">University Degree</Label>
+          <Label htmlFor="degree">الدرجة العلمية</Label>
           <Select
             required
             value={data.degree}
             onValueChange={(value) => setData({ ...data, degree: value })}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select your degree" />
+              <SelectValue placeholder="اختر درجتك العلمية" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="bachelors">Bachelor's Degree</SelectItem>
-              <SelectItem value="masters">Master's Degree</SelectItem>
-              <SelectItem value="doctorate">Doctorate</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
+              <SelectItem value="bachelors">بكالوريوس</SelectItem>
+              <SelectItem value="masters">ماجستير</SelectItem>
+              <SelectItem value="doctorate">دكتوراه</SelectItem>
+              <SelectItem value="other">أخرى</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <Button type="submit" className="w-full">
-          Continue to IAT Test
+          متابعة إلى اختبار IAT
         </Button>
       </form>
     </Card>

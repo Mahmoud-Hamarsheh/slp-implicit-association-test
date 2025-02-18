@@ -1,17 +1,24 @@
 
 import { useState } from "react";
 import { Survey, SurveyData } from "@/components/Survey";
+import { BiasAwarenessSurvey, SurveyResponses } from "@/components/BiasAwarenessSurvey";
 import { IAT } from "@/components/IAT";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
-  const [stage, setStage] = useState<"welcome" | "survey" | "instructions" | "test" | "complete">("welcome");
+  const [stage, setStage] = useState<"welcome" | "survey" | "biasAwareness" | "instructions" | "test" | "complete">("welcome");
   const [surveyData, setSurveyData] = useState<SurveyData | null>(null);
+  const [biasAwarenessData, setBiasAwarenessData] = useState<SurveyResponses | null>(null);
   const [testResult, setTestResult] = useState<number | null>(null);
 
   const handleSurveyComplete = (data: SurveyData) => {
     setSurveyData(data);
+    setStage("biasAwareness");
+  };
+
+  const handleBiasAwarenessComplete = (data: SurveyResponses) => {
+    setBiasAwarenessData(data);
     setStage("instructions");
   };
 
@@ -21,48 +28,56 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-secondary to-background p-6">
+    <div className="min-h-screen bg-gradient-to-b from-secondary to-background p-6" dir="rtl">
       <div className="max-w-4xl mx-auto">
         {stage === "welcome" && (
           <Card className="p-8 text-center animate-slideIn">
-            <h1 className="text-3xl font-bold mb-6">Welcome to the SLP IAT Study</h1>
+            <h1 className="text-3xl font-bold mb-6">مرحباً بك في دراسة IAT للمعالجين</h1>
             <p className="mb-6 text-gray-600">
-              This study aims to understand implicit associations in Speech-Language Pathology practice.
+              تهدف هذه الدراسة إلى فهم الارتباطات الضمنية في ممارسة معالجة النطق واللغة.
             </p>
-            <Button onClick={() => setStage("survey")}>Begin Study</Button>
+            <Button onClick={() => setStage("survey")}>ابدأ الدراسة</Button>
           </Card>
         )}
 
         {stage === "survey" && <Survey onComplete={handleSurveyComplete} />}
 
+        {stage === "biasAwareness" && <BiasAwarenessSurvey onComplete={handleBiasAwarenessComplete} />}
+
         {stage === "instructions" && (
           <Card className="p-8 text-center animate-slideIn">
-            <h2 className="text-2xl font-bold mb-6">Test Instructions</h2>
+            <h2 className="text-2xl font-bold mb-6">تعليمات الاختبار</h2>
             <p className="mb-6 text-gray-600">
-              You will be shown words and asked to categorize them using the 'E' and 'I' keys.
-              The test consists of 7 blocks, including practice and test blocks.
-              Respond as quickly as possible while maintaining accuracy.
+              سيتم عرض كلمات عليك وسيُطلب منك تصنيفها باستخدام مفتاحي 'E' و 'I'.
+              يتكون الاختبار من 7 مقاطع، تشمل مقاطع للتدريب ومقاطع للاختبار.
+              استجب بأسرع ما يمكن مع الحفاظ على الدقة.
             </p>
-            <Button onClick={() => setStage("test")}>Start Test</Button>
+            <Button onClick={() => setStage("test")}>ابدأ الاختبار</Button>
           </Card>
         )}
 
-        {stage === "test" && surveyData && (
-          <IAT onComplete={handleTestComplete} surveyData={surveyData} />
+        {stage === "test" && surveyData && biasAwarenessData && (
+          <IAT 
+            onComplete={handleTestComplete} 
+            surveyData={{
+              ...surveyData,
+              biasAwarenessResponses: biasAwarenessData
+            }} 
+          />
         )}
 
         {stage === "complete" && (
           <Card className="p-8 text-center animate-slideIn">
-            <h2 className="text-2xl font-bold mb-6">Test Complete</h2>
+            <h2 className="text-2xl font-bold mb-6">اكتمل الاختبار</h2>
             <p className="mb-6 text-gray-600">
-              Thank you for participating in this study. Your results have been recorded.
+              شكراً لمشاركتك في هذه الدراسة. تم تسجيل نتائجك.
             </p>
             <div className="text-xl font-semibold mb-4">
-              D-Score: {testResult?.toFixed(2)}
+              النتيجة: {testResult?.toFixed(2)}
             </div>
             <p className="text-sm text-gray-600">
-              A positive D-score indicates a stronger association between communication disorders and negative attributes,
-              while a negative score indicates a stronger association between communication disorders and positive attributes.
+              النتيجة الإيجابية تشير إلى ارتباط أقوى بين اضطرابات التواصل والصفات السلبية،
+              بينما تشير النتيجة السلبية إلى ارتباط أقوى بين اضطرابات التواصل والصفات الإيجابية.
             </p>
           </Card>
         )}
