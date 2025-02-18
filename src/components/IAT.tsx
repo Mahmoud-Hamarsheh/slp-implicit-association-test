@@ -191,12 +191,13 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
             age: surveyData.age,
             years_experience: surveyData.yearsExperience,
             degree: surveyData.degree,
-            implicit_bias_awareness: surveyData.biasAwarenessResponses.implicitBiasAwareness,
-            positive_attitudes: surveyData.biasAwarenessResponses.positiveAttitudes,
-            negative_attitudes: surveyData.biasAwarenessResponses.negativeAttitudes,
-            normal_communication: surveyData.biasAwarenessResponses.normalCommunication,
-            communication_disorders: surveyData.biasAwarenessResponses.communicationDisorders,
-            survey_responses: surveyData.biasAwarenessResponses,
+            survey_responses: {
+              implicitBiasAwareness: surveyData.biasAwarenessResponses.implicitBiasAwareness,
+              positiveAttitudes: surveyData.biasAwarenessResponses.positiveAttitudes,
+              negativeAttitudes: surveyData.biasAwarenessResponses.negativeAttitudes,
+              normalCommunication: surveyData.biasAwarenessResponses.normalCommunication,
+              communicationDisorders: surveyData.biasAwarenessResponses.communicationDisorders
+            },
             responses: responses
           }
         ]);
@@ -208,6 +209,7 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
         description: "تم تسجيل إجاباتك في قاعدة البيانات",
       });
     } catch (error) {
+      console.error('Error saving results:', error);
       toast({
         title: "خطأ في حفظ النتائج",
         description: "حدث خطأ أثناء حفظ النتائج، يرجى المحاولة مرة أخرى",
