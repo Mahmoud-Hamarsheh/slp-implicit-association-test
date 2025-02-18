@@ -17,6 +17,7 @@ export type Database = {
           degree: string
           id: string
           responses: Json
+          survey_responses: Json | null
           years_experience: number
         }
         Insert: {
@@ -26,6 +27,7 @@ export type Database = {
           degree: string
           id?: string
           responses: Json
+          survey_responses?: Json | null
           years_experience: number
         }
         Update: {
@@ -35,6 +37,7 @@ export type Database = {
           degree?: string
           id?: string
           responses?: Json
+          survey_responses?: Json | null
           years_experience?: number
         }
         Relationships: []
