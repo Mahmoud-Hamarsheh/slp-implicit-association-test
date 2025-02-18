@@ -6,7 +6,18 @@ import { useToast } from "./ui/use-toast";
 
 interface IATProps {
   onComplete: (result: number) => void;
-  surveyData: { age: number; yearsExperience: number; degree: string };
+  surveyData: { 
+    age: number; 
+    yearsExperience: number; 
+    degree: string;
+    biasAwarenessResponses: {
+      implicitBiasAwareness: { [key: string]: string };
+      positiveAttitudes: { [key: string]: string };
+      negativeAttitudes: { [key: string]: string };
+      normalCommunication: { [key: string]: string };
+      communicationDisorders: { [key: string]: string };
+    }
+  };
 }
 
 interface Trial {
@@ -180,6 +191,11 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
             age: surveyData.age,
             years_experience: surveyData.yearsExperience,
             degree: surveyData.degree,
+            implicit_bias_awareness: surveyData.biasAwarenessResponses.implicitBiasAwareness,
+            positive_attitudes: surveyData.biasAwarenessResponses.positiveAttitudes,
+            negative_attitudes: surveyData.biasAwarenessResponses.negativeAttitudes,
+            normal_communication: surveyData.biasAwarenessResponses.normalCommunication,
+            communication_disorders: surveyData.biasAwarenessResponses.communicationDisorders,
             responses: responses
           }
         ]);
@@ -187,13 +203,13 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
       if (error) throw error;
       
       toast({
-        title: "Results saved successfully",
-        description: "Your IAT test results have been recorded.",
+        title: "تم حفظ النتائج بنجاح",
+        description: "تم تسجيل إجاباتك في قاعدة البيانات",
       });
     } catch (error) {
       toast({
-        title: "Error saving results",
-        description: "There was a problem saving your results. Please try again.",
+        title: "خطأ في حفظ النتائج",
+        description: "حدث خطأ أثناء حفظ النتائج، يرجى المحاولة مرة أخرى",
         variant: "destructive",
       });
     }
