@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Survey, SurveyData } from "@/components/Survey";
 import { BiasAwarenessSurvey, SurveyResponses } from "@/components/BiasAwarenessSurvey";
@@ -15,6 +14,7 @@ const Index = () => {
   const [biasAwarenessData, setBiasAwarenessData] = useState<SurveyResponses | null>(null);
   const [testResult, setTestResult] = useState<number | null>(null);
   const [showIATDialog, setShowIATDialog] = useState(false);
+  const [hasTakenIATBefore, setHasTakenIATBefore] = useState(false);
   const { toast } = useToast();
 
   const handleSurveyComplete = async (data: SurveyData) => {
@@ -24,15 +24,8 @@ const Index = () => {
 
   const handleIATResponse = async (hasTakenIAT: boolean) => {
     setShowIATDialog(false);
-    if (hasTakenIAT) {
-      toast({
-        title: "شكراً لك",
-        description: "بما أنك قمت بالاختبار مسبقاً، لا يمكننا حفظ بياناتك مرة أخرى.",
-      });
-      setStage("welcome");
-    } else {
-      setStage("biasAwareness");
-    }
+    setHasTakenIATBefore(hasTakenIAT);
+    setStage("biasAwareness");
   };
 
   const handleBiasAwarenessComplete = (data: SurveyResponses) => {
@@ -106,7 +99,8 @@ const Index = () => {
             onComplete={handleTestComplete} 
             surveyData={{
               ...surveyData,
-              biasAwarenessResponses: biasAwarenessData
+              biasAwarenessResponses: biasAwarenessData,
+              hasTakenIATBefore
             }} 
           />
         )}
@@ -121,7 +115,7 @@ const Index = () => {
               النتيجة: {testResult?.toFixed(2)}
             </div>
             <p className="text-sm text-gray-600">
-              النتيجة الإيجابية تشير إلى ارتباط أقوى بين اضطرابات التواصل والصفات السلبية،
+              النتيجة الإيجابية تشير إلى ارتباط أقوى بين اضطرابات التواصل والصفات السلبية，
               بينما تشير النتيجة السلبية إلى ارتباط أقوى بين اضطرابات التواصل والصفات الإيجابية.
             </p>
           </Card>

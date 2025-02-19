@@ -12,6 +12,7 @@ interface IATProps {
     yearsExperience: number; 
     degree: string;
     biasAwarenessResponses: SurveyResponses;
+    hasTakenIATBefore?: boolean;  // New prop to track if user has taken IAT before
   };
 }
 
@@ -174,6 +175,15 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   };
 
   const saveResults = async (dScore: number) => {
+    if (surveyData.hasTakenIATBefore) {
+      toast({
+        title: "اكتمل الاختبار",
+        description: "بما أنك قمت بالاختبار مسبقاً، لن يتم حفظ نتائجك في قاعدة البيانات.",
+      });
+      onComplete(dScore);
+      return;
+    }
+
     try {
       const { error } = await supabase
         .from('iat_results')
@@ -203,6 +213,7 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
         variant: "destructive",
       });
     }
+    onComplete(dScore);
   };
 
   const getBlockInstructions = (block: number) => {
