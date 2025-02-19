@@ -10,11 +10,10 @@ interface BiasAwarenessSurveyProps {
 }
 
 export interface SurveyResponses {
-  implicitBiasAwareness: { [key: string]: string };
-  positiveAttitudes: { [key: string]: string };
-  negativeAttitudes: { [key: string]: string };
-  normalCommunication: { [key: string]: string };
-  communicationDisorders: { [key: string]: string };
+  linguisticBias: { [key: string]: string };
+  socialBias: { [key: string]: string };
+  clinicalBias: { [key: string]: string };
+  integrationBias: { [key: string]: string };
 }
 
 const LIKERT_OPTIONS = [
@@ -26,33 +25,33 @@ const LIKERT_OPTIONS = [
 ];
 
 const QUESTIONS = {
-  implicitBiasAwareness: [
-    "التحيزات الضمنية قد تؤثر على قراراتي الاكلينيكية في تشخيصي وعلاجي للأفراد الذين يعانون من اضطرابات التواصل",
-    "أنا على دراية باحتمالية تأثير التحيزات الضمنية على قدراتي التشخيصية والعلاجية للأفراد الذين يعانون من اضطرابات التواصل",
-    "اعتقد بأن التحيّز الضمني قد يؤثر على نظرتي للأفراد الذين يعانون من اضطرابات التواصل",
-    "أثق بأنني خالٍ/خالية من أي تحيّز أثناء العمل مع الأفراد الذين لديهم اضطرابات تواصل",
-    "أحرص دائمًا على مراجعة أفكاري لضمان عدم تأثير التحيّز الضمني على عملي",
-    "لا أعتقد أن التحيّز تجاه الأفراد الذين يعانون من اضطرابات التواصل يُعد مشكلة في مجال النطق والتخاطب"
+  linguisticBias: [
+    "الأشخاص الذين يعانون من اضطرابات النطق واللغة أقل قدرة على التعلم مقارنة بالأشخاص غير المصابين",
+    "الأشخاص الذين يعانون من اضطرابات اللغة يجدون صعوبة في التفكير المعقد واتخاذ القرارات",
+    "من غير المرجح أن ينجح الأشخاص المصابون بالتلعثم في المناصب القيادية"
   ],
-  positiveAttitudes: [
-    "أعتقد أن الأشخاص الذين يعانون من اضطرابات التواصل يتمتعون بالكفاءة مثل أولئك الذين يتمتعون بتواصل طبيعي",
-    "أرى أن الأشخاص الذين يعانون من اضطرابات التواصل يتمتعون بالقوة في إدارة حياتهم اليومية",
-    "أرى أن الأشخاص الذين يعانون من اضطرابات التواصل هم أفراد واثقون",
-    "يمكن للأشخاص الذين يعانون من اضطرابات التواصل أن يظهروا الذكاء بشكل مشابه لأولئك الذين لا يعانون من هذه الاضطرابات",
-    "أجد أن الأشخاص الذين يعانون من اضطرابات التواصل يكونون منتبهين للآخرين",
-    "الأشخاص الذين يعانون من اضطرابات التواصل يتأقلمون بسرعة في المواقف الاجتماعية",
-    "أرى أن الأشخاص الذين يعانون من اضطرابات التواصل يكونون متعاونين في مختلف البيئات"
+  socialBias: [
+    "يميل الأشخاص الذين يعانون من اضطرابات التواصل إلى أن يكونوا أقل اجتماعية من غيرهم",
+    "من الصعب إجراء محادثة ممتعة مع شخص يعاني من اضطراب في النطق أو اللغة",
+    "يجب أن يُعامل الأشخاص المصابون باضطرابات التواصل بطرق خاصة تختلف عن الأشخاص العاديين"
   ],
-  // ... Continue with other categories
+  clinicalBias: [
+    "يجب إعطاء الأولوية في العلاج للأشخاص الذين لديهم احتمال أكبر للتحسن السريع",
+    "بعض اضطرابات التواصل ليست بحاجة إلى تدخل علاجي مكثف لأنها لا تؤثر بشكل كبير على حياة الشخص",
+    "المرضى الذين يُظهرون تحفيزًا أقل أثناء الجلسات العلاجية قد لا يكونون مؤهلين للعلاج المستمر"
+  ],
+  integrationBias: [
+    "الأشخاص الذين يعانون من اضطرابات اللغة لديهم فرص أقل للنجاح في حياتهم المهنية",
+    "من الأفضل للأطفال المصابين باضطرابات اللغة أن يتلقوا تعليمًا في بيئات خاصة بدلاً من المدارس العادية"
+  ]
 };
 
 export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete }) => {
   const [responses, setResponses] = useState<SurveyResponses>({
-    implicitBiasAwareness: {},
-    positiveAttitudes: {},
-    negativeAttitudes: {},
-    normalCommunication: {},
-    communicationDisorders: {},
+    linguisticBias: {},
+    socialBias: {},
+    clinicalBias: {},
+    integrationBias: {},
   });
 
   const handleResponse = (category: keyof SurveyResponses, question: string, value: string) => {
@@ -85,7 +84,7 @@ export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComp
       
       {Object.entries(QUESTIONS).map(([category, questions]) => (
         <div key={category} className="space-y-6">
-          <h3 className="text-xl font-medium text-right">{category}</h3>
+          <h3 className="text-xl font-medium text-right">{getCategoryTitle(category)}</h3>
           {questions.map((question, index) => (
             <div key={index} className="space-y-4">
               <p className="text-right">{question}</p>
@@ -116,3 +115,18 @@ export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComp
     </Card>
   );
 };
+
+function getCategoryTitle(category: string): string {
+  switch (category) {
+    case 'linguisticBias':
+      return 'تحيزات تتعلق بالكفاءة اللغوية والمعرفية';
+    case 'socialBias':
+      return 'تحيزات اجتماعية وسلوكية';
+    case 'clinicalBias':
+      return 'تحيزات مهنية في الممارسة الإكلينيكية';
+    case 'integrationBias':
+      return 'تحيزات تتعلق بالاندماج والتوقعات المستقبلية';
+    default:
+      return category;
+  }
+}

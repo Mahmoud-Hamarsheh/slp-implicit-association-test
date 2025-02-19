@@ -24,6 +24,8 @@ interface Trial {
   stimulus: string;
   category: string;
   correctKey: "e" | "i";
+  responseTime?: number;
+  correct?: boolean;
 }
 
 const BLOCKS = {
@@ -113,15 +115,12 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   }, [currentBlock, generateTrials]);
 
   const handleKeyPress = useCallback((e: KeyboardEvent) => {
-    console.log('Key pressed:', e.key, 'Current trial:', currentTrial, 'Start time:', startTime, 'Show feedback:', showFeedback);
-    
     if (!isTestStarted || !startTime || showFeedback) return;
 
-    const responseTime = Date.now() - startTime;
+    const responseTime = (Date.now() - startTime) / 1000; // Convert to seconds
     const currentStimulus = trials[currentTrial];
 
     if (e.key.toLowerCase() === "e" || e.key.toLowerCase() === "i") {
-      console.log('Valid key press detected');
       const correct = e.key.toLowerCase() === currentStimulus.correctKey;
       setIsCorrect(correct);
       setShowFeedback(true);
@@ -136,16 +135,18 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
 
       setTimeout(() => {
         setShowFeedback(false);
-        if (currentTrial + 1 >= trials.length) {
-          if (currentBlock < 7) {
-            setCurrentBlock(currentBlock + 1);
+        if (correct) {
+          if (currentTrial + 1 >= trials.length) {
+            if (currentBlock < 7) {
+              setCurrentBlock(currentBlock + 1);
+            } else {
+              const dScore = calculateDScore(responses);
+              saveResults(dScore);
+              onComplete(dScore);
+            }
           } else {
-            const dScore = calculateDScore(responses);
-            saveResults(dScore);
-            onComplete(dScore);
+            setCurrentTrial(currentTrial + 1);
           }
-        } else {
-          setCurrentTrial(currentTrial + 1);
         }
       }, 500);
     }
@@ -163,21 +164,17 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   }, [currentTrial, showFeedback, isTestStarted]);
 
   const calculateDScore = (responses: { block: number; responseTime: number; correct: boolean }[]) => {
-    // Get responses from blocks 4 and 7 (test blocks)
     const block4Responses = responses.filter(r => r.block === 4);
     const block7Responses = responses.filter(r => r.block === 7);
 
-    // Calculate means
     const mean4 = block4Responses.reduce((acc, r) => acc + r.responseTime, 0) / block4Responses.length;
     const mean7 = block7Responses.reduce((acc, r) => acc + r.responseTime, 0) / block7Responses.length;
 
-    // Calculate standard deviation
     const allTestResponses = [...block4Responses, ...block7Responses];
     const mean = allTestResponses.reduce((acc, r) => acc + r.responseTime, 0) / allTestResponses.length;
     const variance = allTestResponses.reduce((acc, r) => acc + Math.pow(r.responseTime - mean, 2), 0) / allTestResponses.length;
     const sd = Math.sqrt(variance);
 
-    // Calculate D score
     return (mean7 - mean4) / sd;
   };
 
@@ -191,13 +188,8 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
             age: surveyData.age,
             years_experience: surveyData.yearsExperience,
             degree: surveyData.degree,
-            survey_responses: {
-              implicitBiasAwareness: surveyData.biasAwarenessResponses.implicitBiasAwareness,
-              positiveAttitudes: surveyData.biasAwarenessResponses.positiveAttitudes,
-              negativeAttitudes: surveyData.biasAwarenessResponses.negativeAttitudes,
-              normalCommunication: surveyData.biasAwarenessResponses.normalCommunication,
-              communicationDisorders: surveyData.biasAwarenessResponses.communicationDisorders
-            },
+            survey_responses: surveyData.biasAwarenessResponses,
+            response_times: responses.map(r => r.responseTime),
             responses: responses
           }
         ]);
