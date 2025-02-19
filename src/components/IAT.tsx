@@ -3,6 +3,7 @@ import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "./ui/use-toast";
+import type { SurveyResponses } from "./BiasAwarenessSurvey";
 
 interface IATProps {
   onComplete: (result: number) => void;
@@ -10,13 +11,7 @@ interface IATProps {
     age: number; 
     yearsExperience: number; 
     degree: string;
-    biasAwarenessResponses: {
-      implicitBiasAwareness: { [key: string]: string };
-      positiveAttitudes: { [key: string]: string };
-      negativeAttitudes: { [key: string]: string };
-      normalCommunication: { [key: string]: string };
-      communicationDisorders: { [key: string]: string };
-    }
+    biasAwarenessResponses: SurveyResponses;
   };
 }
 
