@@ -16,6 +16,7 @@ export type Database = {
           d_score: number
           degree: string
           id: string
+          response_times: number[] | null
           responses: Json
           survey_responses: Json | null
           years_experience: number
@@ -26,6 +27,7 @@ export type Database = {
           d_score: number
           degree: string
           id?: string
+          response_times?: number[] | null
           responses: Json
           survey_responses?: Json | null
           years_experience: number
@@ -36,6 +38,7 @@ export type Database = {
           d_score?: number
           degree?: string
           id?: string
+          response_times?: number[] | null
           responses?: Json
           survey_responses?: Json | null
           years_experience?: number
