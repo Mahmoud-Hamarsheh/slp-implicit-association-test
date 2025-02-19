@@ -6,6 +6,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
+interface SurveyResponses {
+  implicitBiasAwareness: number[];
+  positiveAttitudes: number[];
+  negativeAttitudes: number[];
+  normalCommunication: string[];
+  communicationDisorders: string[];
+}
+
 interface IATResult {
   id: string;
   created_at: string;
@@ -13,13 +21,7 @@ interface IATResult {
   age: number;
   years_experience: number;
   degree: string;
-  survey_responses: {
-    implicitBiasAwareness: number[];
-    positiveAttitudes: number[];
-    negativeAttitudes: number[];
-    normalCommunication: string[];
-    communicationDisorders: string[];
-  };
+  survey_responses: SurveyResponses;
 }
 
 const Admin = () => {
@@ -48,7 +50,16 @@ const Admin = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setResults(data || []);
+      
+      // Parse the JSON survey_responses field
+      const parsedData = data?.map(item => ({
+        ...item,
+        survey_responses: typeof item.survey_responses === 'string' 
+          ? JSON.parse(item.survey_responses)
+          : item.survey_responses
+      })) as IATResult[];
+      
+      setResults(parsedData || []);
     } catch (error: any) {
       toast({
         title: "خطأ في جلب النتائج",
@@ -99,9 +110,9 @@ const Admin = () => {
                       <p><strong>تاريخ الاختبار:</strong> {new Date(result.created_at).toLocaleDateString('ar-SA')}</p>
                     </div>
                     <div>
-                      <p><strong>الوعي بالتحيز الضمني:</strong> {result.survey_responses.implicitBiasAwareness?.join(', ')}</p>
-                      <p><strong>المواقف الإيجابية:</strong> {result.survey_responses.positiveAttitudes?.join(', ')}</p>
-                      <p><strong>المواقف السلبية:</strong> {result.survey_responses.negativeAttitudes?.join(', ')}</p>
+                      <p><strong>الوعي بالتحيز الضمني:</strong> {result.survey_responses?.implicitBiasAwareness?.join(', ')}</p>
+                      <p><strong>المواقف الإيجابية:</strong> {result.survey_responses?.positiveAttitudes?.join(', ')}</p>
+                      <p><strong>المواقف السلبية:</strong> {result.survey_responses?.negativeAttitudes?.join(', ')}</p>
                     </div>
                   </div>
                 </CardContent>
