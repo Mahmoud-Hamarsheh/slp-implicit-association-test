@@ -34,16 +34,22 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="age">العمر</Label>
-          <Input
-            id="age"
-            type="number"
+          <Select
             required
-            min={18}
-            max={100}
-            value={data.age || ""}
-            onChange={(e) => setData({ ...data, age: parseInt(e.target.value) })}
-            className="w-full"
-          />
+            value={data.age.toString()}
+            onValueChange={(value) => setData({ ...data, age: parseInt(value) })}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="اختر الفئة العمرية" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">0</SelectItem>
+              <SelectItem value="1">1-2</SelectItem>
+              <SelectItem value="2">2-4</SelectItem>
+              <SelectItem value="4">4-10</SelectItem>
+              <SelectItem value="10">10+</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
@@ -86,3 +92,4 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
     </Card>
   );
 };
+
