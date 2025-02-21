@@ -12,7 +12,7 @@ interface IATProps {
     yearsExperience: number; 
     degree: string;
     biasAwarenessResponses: SurveyResponses;
-    hasTakenIATBefore?: boolean;  // New prop to track if user has taken IAT before
+    hasTakenIATBefore?: boolean;
   };
 }
 
@@ -22,6 +22,7 @@ interface Trial {
   correctKey: "e" | "i";
   responseTime?: number;
   correct?: boolean;
+  block: number;
 }
 
 const BLOCKS = {
@@ -37,10 +38,54 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   const [trials, setTrials] = useState<Trial[]>([]);
   const [currentTrial, setCurrentTrial] = useState(0);
   const [startTime, setStartTime] = useState(0);
-  const [responses, setResponses] = useState<{ block: number; responseTime: number; correct: boolean }[]>([]);
+  const [responses, setResponses<{ block: number; responseTime: number; correct: boolean }[]>([]);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isTestStarted, setIsTestStarted] = useState(false);
+  const [testOrder, setTestOrder] = useState<"standard" | "reversed">(
+    Math.random() < 0.5 ? "standard" : "reversed"
+  );
+
+  const calculateDScore = (responses: { block: number; responseTime: number; correct: boolean }[]) => {
+    // Remove trials with RT < 300ms
+    const validResponses = responses.filter(r => r.responseTime >= 0.3);
+
+    // Calculate mean latencies for each block
+    const blockResponses = {
+      3: validResponses.filter(r => r.block === 3),
+      4: validResponses.filter(r => r.block === 4),
+      6: validResponses.filter(r => r.block === 6),
+      7: validResponses.filter(r => r.block === 7)
+    };
+
+    // Calculate pooled standard deviations
+    const sd1 = calculatePooledSD(blockResponses[3], blockResponses[4]);
+    const sd2 = calculatePooledSD(blockResponses[6], blockResponses[7]);
+
+    // Calculate mean differences
+    const diff1 = calculateMeanDiff(blockResponses[6], blockResponses[3]);
+    const diff2 = calculateMeanDiff(blockResponses[7], blockResponses[4]);
+
+    // Calculate D-scores for each pair
+    const d1 = diff1 / sd1;
+    const d2 = diff2 / sd2;
+
+    // Final D-score is the average
+    return (d1 + d2) / 2;
+  };
+
+  const calculatePooledSD = (responses1: { block: number; responseTime: number; correct: boolean }[], responses2: { block: number; responseTime: number; correct: boolean }[]) => {
+    const allTimes = [...responses1, ...responses2].map(r => r.responseTime);
+    const mean = allTimes.reduce((a, b) => a + b, 0) / allTimes.length;
+    const variance = allTimes.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / allTimes.length;
+    return Math.sqrt(variance);
+  };
+
+  const calculateMeanDiff = (responses1: { block: number; responseTime: number; correct: boolean }[], responses2: { block: number; responseTime: number; correct: boolean }[]) => {
+    const mean1 = responses1.reduce((a, b) => a + b.responseTime, 0) / responses1.length;
+    const mean2 = responses2.reduce((a, b) => a + b.responseTime, 0) / responses2.length;
+    return mean1 - mean2;
+  };
 
   const generateTrials = useCallback((block: number): Trial[] => {
     let newTrials: Trial[] = [];
@@ -51,12 +96,14 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
           ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
             stimulus: item,
             category: "communication_disorder",
-            correctKey: "e" as const
+            correctKey: "e" as const,
+            block: block
           })),
           ...BLOCKS.NORMAL_COMMUNICATION.map((item): Trial => ({
             stimulus: item,
             category: "normal_communication",
-            correctKey: "i" as const
+            correctKey: "i" as const,
+            block: block
           }))
         ];
         break;
@@ -66,12 +113,14 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
           ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "negative",
-            correctKey: "e" as const
+            correctKey: "e" as const,
+            block: block
           })),
           ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "positive",
-            correctKey: "i" as const
+            correctKey: "i" as const,
+            block: block
           }))
         ];
         break;
@@ -82,22 +131,26 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
           ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
             stimulus: item,
             category: "communication_disorder",
-            correctKey: block === 7 ? "i" as const : "e" as const
+            correctKey: block === 7 ? "i" as const : "e" as const,
+            block: block
           })),
           ...BLOCKS.NORMAL_COMMUNICATION.map((item): Trial => ({
             stimulus: item,
             category: "normal_communication",
-            correctKey: block === 7 ? "e" as const : "i" as const
+            correctKey: block === 7 ? "e" as const : "i" as const,
+            block: block
           })),
           ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "negative",
-            correctKey: block === 7 ? "i" as const : "e" as const
+            correctKey: block === 7 ? "i" as const : "e" as const,
+            block: block
           })),
           ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "positive",
-            correctKey: block === 7 ? "e" as const : "i" as const
+            correctKey: block === 7 ? "e" as const : "i" as const,
+            block: block
           }))
         ];
         break;
@@ -158,21 +211,6 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
       setStartTime(Date.now());
     }
   }, [currentTrial, showFeedback, isTestStarted]);
-
-  const calculateDScore = (responses: { block: number; responseTime: number; correct: boolean }[]) => {
-    const block4Responses = responses.filter(r => r.block === 4);
-    const block7Responses = responses.filter(r => r.block === 7);
-
-    const mean4 = block4Responses.reduce((acc, r) => acc + r.responseTime, 0) / block4Responses.length;
-    const mean7 = block7Responses.reduce((acc, r) => acc + r.responseTime, 0) / block7Responses.length;
-
-    const allTestResponses = [...block4Responses, ...block7Responses];
-    const mean = allTestResponses.reduce((acc, r) => acc + r.responseTime, 0) / allTestResponses.length;
-    const variance = allTestResponses.reduce((acc, r) => acc + Math.pow(r.responseTime - mean, 2), 0) / allTestResponses.length;
-    const sd = Math.sqrt(variance);
-
-    return (mean7 - mean4) / sd;
-  };
 
   const saveResults = async (dScore: number) => {
     if (surveyData.hasTakenIATBefore) {
