@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
@@ -38,7 +39,7 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   const [trials, setTrials] = useState<Trial[]>([]);
   const [currentTrial, setCurrentTrial] = useState(0);
   const [startTime, setStartTime] = useState(0);
-  const [responses, setResponses<{ block: number; responseTime: number; correct: boolean }[]>([]);
+  const [responses, setResponses] = useState<{ block: number; responseTime: number; correct: boolean }[]>([]);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isTestStarted, setIsTestStarted] = useState(false);
