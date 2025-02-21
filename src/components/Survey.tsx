@@ -5,6 +5,7 @@ import { Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 interface SurveyProps {
   onComplete: (data: SurveyData) => void;
@@ -14,6 +15,7 @@ export interface SurveyData {
   age: number;
   yearsExperience: number;
   degree: string;
+  gender: "male" | "female";
 }
 
 export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
@@ -21,6 +23,7 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
     age: 0,
     yearsExperience: 0,
     degree: "",
+    gender: "male"
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -33,6 +36,24 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
       <h2 className="text-2xl font-semibold text-center mb-6">البيانات الديموغرافية</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
+          <Label htmlFor="gender">الجنس</Label>
+          <RadioGroup
+            value={data.gender}
+            onValueChange={(value) => setData({ ...data, gender: value as "male" | "female" })}
+            className="flex gap-4"
+          >
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="male">ذكر</Label>
+              <RadioGroupItem value="male" id="male" />
+            </div>
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="female">أنثى</Label>
+              <RadioGroupItem value="female" id="female" />
+            </div>
+          </RadioGroup>
+        </div>
+
+        <div className="space-y-2">
           <Label htmlFor="age">العمر</Label>
           <Select
             required
@@ -43,27 +64,32 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
               <SelectValue placeholder="اختر الفئة العمرية" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="0">0</SelectItem>
-              <SelectItem value="1">1-2</SelectItem>
-              <SelectItem value="2">2-4</SelectItem>
-              <SelectItem value="4">4-10</SelectItem>
-              <SelectItem value="10">10+</SelectItem>
+              <SelectItem value="20">20-30</SelectItem>
+              <SelectItem value="30">30-40</SelectItem>
+              <SelectItem value="40">40-50</SelectItem>
+              <SelectItem value="50">50+</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="experience">سنوات الخبرة</Label>
-          <Input
-            id="experience"
-            type="number"
+          <Select
             required
-            min={0}
-            max={50}
-            value={data.yearsExperience || ""}
-            onChange={(e) => setData({ ...data, yearsExperience: parseInt(e.target.value) })}
-            className="w-full"
-          />
+            value={data.yearsExperience.toString()}
+            onValueChange={(value) => setData({ ...data, yearsExperience: parseInt(value) })}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="اختر سنوات الخبرة" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">لا يوجد خبرة /طالب</SelectItem>
+              <SelectItem value="1">1-2</SelectItem>
+              <SelectItem value="2">2-4</SelectItem>
+              <SelectItem value="5">5-10</SelectItem>
+              <SelectItem value="10">10+</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
@@ -77,10 +103,10 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
               <SelectValue placeholder="اختر درجتك العلمية" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="student">طالب</SelectItem>
               <SelectItem value="bachelors">بكالوريوس</SelectItem>
               <SelectItem value="masters">ماجستير</SelectItem>
               <SelectItem value="doctorate">دكتوراه</SelectItem>
-              <SelectItem value="other">أخرى</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -92,4 +118,3 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
     </Card>
   );
 };
-

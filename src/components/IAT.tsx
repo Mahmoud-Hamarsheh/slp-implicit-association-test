@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
@@ -32,13 +31,13 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
           ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
             stimulus: item,
             category: "communication_disorder",
-            correctKey: "e" as const,
+            correctKey: "d" as const,
             block: block
           })),
           ...BLOCKS.NORMAL_COMMUNICATION.map((item): Trial => ({
             stimulus: item,
             category: "normal_communication",
-            correctKey: "i" as const,
+            correctKey: "k" as const,
             block: block
           }))
         ];
@@ -49,13 +48,13 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
           ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "negative",
-            correctKey: "e" as const,
+            correctKey: "d" as const,
             block: block
           })),
           ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "positive",
-            correctKey: "i" as const,
+            correctKey: "k" as const,
             block: block
           }))
         ];
@@ -67,25 +66,25 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
           ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
             stimulus: item,
             category: "communication_disorder",
-            correctKey: block === 7 ? "i" as const : "e" as const,
+            correctKey: block === 7 ? "k" as const : "d" as const,
             block: block
           })),
           ...BLOCKS.NORMAL_COMMUNICATION.map((item): Trial => ({
             stimulus: item,
             category: "normal_communication",
-            correctKey: block === 7 ? "e" as const : "i" as const,
+            correctKey: block === 7 ? "d" as const : "k" as const,
             block: block
           })),
           ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "negative",
-            correctKey: block === 7 ? "i" as const : "e" as const,
+            correctKey: block === 7 ? "k" as const : "d" as const,
             block: block
           })),
           ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "positive",
-            correctKey: block === 7 ? "e" as const : "i" as const,
+            correctKey: block === 7 ? "d" as const : "k" as const,
             block: block
           }))
         ];
@@ -105,7 +104,7 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
     const responseTime = (Date.now() - startTime) / 1000;
     const currentStimulus = trials[currentTrial];
 
-    if (e.key.toLowerCase() === "e" || e.key.toLowerCase() === "i") {
+    if (e.key.toLowerCase() === "d" || e.key.toLowerCase() === "k") {
       const correct = e.key.toLowerCase() === currentStimulus.correctKey;
       setIsCorrect(correct);
       setShowFeedback(true);

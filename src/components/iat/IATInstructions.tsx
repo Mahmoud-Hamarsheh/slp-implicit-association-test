@@ -66,8 +66,8 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
       <h2 className="text-2xl font-semibold">{instructions.title}</h2>
       <p className="text-sm text-gray-600">المقطع {block} من 7</p>
       <div className="flex justify-between px-8 text-sm text-gray-600">
-        <div>اضغط 'E' لـ {instructions.left}</div>
-        <div>اضغط 'I' لـ {instructions.right}</div>
+        <div>اضغط 'D' لـ {instructions.left}</div>
+        <div>اضغط 'K' لـ {instructions.right}</div>
       </div>
     </div>
   );

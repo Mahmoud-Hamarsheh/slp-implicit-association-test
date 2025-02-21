@@ -7,6 +7,7 @@ export interface IATProps {
     age: number; 
     yearsExperience: number; 
     degree: string;
+    gender: "male" | "female";
     biasAwarenessResponses: SurveyResponses;
     hasTakenIATBefore?: boolean;
   };
@@ -15,7 +16,7 @@ export interface IATProps {
 export interface Trial {
   stimulus: string;
   category: string;
-  correctKey: "e" | "i";
+  correctKey: "d" | "k";
   responseTime?: number;
   correct?: boolean;
   block: number;
