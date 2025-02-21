@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Survey, SurveyData } from "@/components/Survey";
 import { BiasAwarenessSurvey, SurveyResponses } from "@/components/BiasAwarenessSurvey";
@@ -8,33 +9,37 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+type Stage = 
+  | "welcome" 
+  | "consent" 
+  | "iat-experience" 
+  | "survey" 
+  | "iat-welcome" 
+  | "instructions" 
+  | "test" 
+  | "bias-awareness" 
+  | "complete";
+
 const Index = () => {
-  const [stage, setStage] = useState<"welcome" | "survey" | "biasAwareness" | "instructions" | "test" | "complete">("welcome");
+  const [stage, setStage] = useState<Stage>("welcome");
   const [surveyData, setSurveyData] = useState<SurveyData | null>(null);
   const [biasAwarenessData, setBiasAwarenessData] = useState<SurveyResponses | null>(null);
   const [testResult, setTestResult] = useState<number | null>(null);
-  const [showIATDialog, setShowIATDialog] = useState(false);
   const [hasTakenIATBefore, setHasTakenIATBefore] = useState(false);
   const { toast } = useToast();
 
-  const handleSurveyComplete = async (data: SurveyData) => {
+  const handleSurveyComplete = (data: SurveyData) => {
     setSurveyData(data);
-    setShowIATDialog(true);
+    setStage("iat-welcome");
   };
 
-  const handleIATResponse = async (hasTakenIAT: boolean) => {
-    setShowIATDialog(false);
-    setHasTakenIATBefore(hasTakenIAT);
-    setStage("biasAwareness");
+  const handleIATComplete = (result: number) => {
+    setTestResult(result);
+    setStage("bias-awareness");
   };
 
   const handleBiasAwarenessComplete = (data: SurveyResponses) => {
     setBiasAwarenessData(data);
-    setStage("instructions");
-  };
-
-  const handleTestComplete = (result: number) => {
-    setTestResult(result);
     setStage("complete");
   };
 
@@ -42,27 +47,86 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-b from-secondary to-background p-6" dir="rtl">
       <div className="max-w-4xl mx-auto">
         {stage === "welcome" && (
-          <Card className="p-8 text-center animate-slideIn">
-            <h1 className="text-3xl font-bold mb-6">مرحباً بك في دراسة IAT للمعالجين</h1>
-            <p className="mb-6 text-gray-600">
-              تهدف هذه الدراسة إلى فهم الارتباطات الضمنية في ممارسة معالجة النطق واللغة.
-            </p>
-            <Button onClick={() => setStage("survey")}>ابدأ الدراسة</Button>
+          <Card className="p-8 text-center space-y-6 animate-slideIn">
+            <h1 className="text-3xl font-bold">مرحباً بكم</h1>
+            <div className="text-right space-y-4">
+              <p>
+                شكراً لمشاركتكم في هذه الدراسة البحثية التي تهدف إلى فهم الارتباطات الضمنية في ممارسة معالجة النطق واللغة.
+              </p>
+              <p>
+                في هذه الدراسة، ستخضعون أولاً لاختبار الترابط الضمني (IAT)، حيث سيُطلب منك تصنيف الكلمات في مجموعات بأسرع ما يمكن تليه استبانة حول معتقداتك وارائك تجاه الأفراد ذوي اضطرابات التواصل، إلى جانب بعض الأسئلة الديموغرافية القياسية.
+              </p>
+              <p>
+                من المتوقع أن تستغرق هذه الدراسة حوالي 10 دقائق لإكمالها.
+              </p>
+              <p>
+                يرجى العلم بأن هذا الاختبار يتم في بيئة هادئة وخالية من المشتتات لضمان نتائج دقيقة. لا توجد إجابات صحيحة أو خاطئة، ونشجعكم على التفاعل مع الاختبار بعفوية.
+              </p>
+              <p>
+                جميع بياناتكم ستُعامل بسرية تامة ولن تُستخدم إلا لأغراض البحث العلمي.
+              </p>
+            </div>
+            <Button onClick={() => setStage("consent")}>متابعة</Button>
+          </Card>
+        )}
+
+        {stage === "consent" && (
+          <Card className="p-8 text-center space-y-6 animate-slideIn">
+            <h2 className="text-2xl font-bold">الموافقة على المشاركة في الدراسة البحثية</h2>
+            <div className="text-right space-y-4">
+              <p>شكراً لمشاركتك في هذه الدراسة. قبل البدء، نود إبلاغك ببعض المعلومات المهمة:</p>
+              <ul className="list-disc list-inside space-y-2">
+                <li>مشاركتك اختيارية، ويمكنك الانسحاب في أي وقت دون أي تأثير على مكانتك المهنية أو الأكاديمية.</li>
+                <li>جميع البيانات التي يتم جمعها ستكون سرية تماماً ولن تُستخدم إلا لأغراض البحث العلمي.</li>
+                <li>ستتضمن الدراسة اختبار الترابط الضمني (IAT) لقياس التحيزات غير الواعية، يليه استبيان لقياس الاتجاهات الصريحة.</li>
+                <li>لا توجد إجابات صحيحة أو خاطئة، ونشجعك على التفاعل مع الاختبار بعفوية.</li>
+              </ul>
+            </div>
+            <Button onClick={() => setStage("iat-experience")}>أوافق</Button>
+          </Card>
+        )}
+
+        {stage === "iat-experience" && (
+          <Card className="p-8 text-center space-y-6 animate-slideIn">
+            <h2 className="text-2xl font-bold">هل سبق لك أن خضعت لاختبار الترابط الضمني (IAT) من قبل؟</h2>
+            <div className="flex justify-center gap-4">
+              <Button variant="outline" onClick={() => {
+                setHasTakenIATBefore(true);
+                setStage("survey");
+              }}>نعم</Button>
+              <Button onClick={() => {
+                setHasTakenIATBefore(false);
+                setStage("survey");
+              }}>لا</Button>
+            </div>
           </Card>
         )}
 
         {stage === "survey" && <Survey onComplete={handleSurveyComplete} />}
 
-        {stage === "biasAwareness" && <BiasAwarenessSurvey onComplete={handleBiasAwarenessComplete} />}
+        {stage === "iat-welcome" && (
+          <Card className="p-8 text-center space-y-6 animate-slideIn">
+            <h2 className="text-2xl font-bold">مرحباً بك في اختبار الترابط الضمني (IAT)</h2>
+            <div className="text-right space-y-4">
+              <p>شكراً لمشاركتك في هذه الدراسة! ستبدأ الآن باختبار الترابط الضمني (IAT)، حيث سيُطلب منك تصنيف الكلمات في مجموعات بأسرع ما يمكن.</p>
+              <p>يرجى الانتباه إلى ما يلي قبل البدء:</p>
+              <ul className="list-disc list-inside space-y-2">
+                <li>لا توجد إجابات صحيحة أو خاطئة، فقط استجب بسرعة وبعفوية قدر الإمكان.</li>
+                <li>الاختبار يتطلب تركيزاً كاملاً، لذا احرص على التواجد في مكان هادئ وخالٍ من المشتتات.</li>
+                <li>بعد الانتهاء، ستنتقل إلى استبيان يقيس الاتجاهات الصريحة.</li>
+              </ul>
+            </div>
+            <Button onClick={() => setStage("instructions")}>ابدأ الاختبار</Button>
+          </Card>
+        )}
 
-        {stage === "instructions" && (
-          <Card className="p-8 text-center animate-slideIn">
-            <h2 className="text-2xl font-bold mb-6">تعليمات الاختبار</h2>
-            <p className="mb-6 text-gray-600">
-              سيتم عرض كلمات عليك وسيُطلب منك تصنيفها باستخدام مفتاحي 'E' و 'I'.
-              استجب بأسرع ما يمكن مع الحفاظ على الدقة.
-            </p>
-            <div className="mb-6 border rounded-lg p-4">
+        {stage === "instructions" && surveyData && (
+          <Card className="p-8 text-center space-y-6 animate-slideIn">
+            <h2 className="text-2xl font-bold">تعليمات الاختبار</h2>
+            <div className="text-right space-y-4">
+              <p>ستستخدم مفاتيح الكمبيوتر "E" و"I" لتصنيف العناصر في مجموعات بأسرع ما يمكن. فيما يلي المجموعات الأربع والعناصر التي تنتمي إلى كل منها:</p>
+            </div>
+            <div className="border rounded-lg p-4">
               <table className="w-full border-collapse">
                 <thead>
                   <tr>
@@ -90,55 +154,37 @@ const Index = () => {
                 </tbody>
               </table>
             </div>
-            <Button onClick={() => setStage("test")}>ابدأ الاختبار</Button>
+            <Button onClick={() => setStage("test")}>متابعة</Button>
           </Card>
         )}
 
-        {stage === "test" && surveyData && biasAwarenessData && (
+        {stage === "test" && surveyData && (
           <IAT 
-            onComplete={handleTestComplete} 
+            onComplete={handleIATComplete}
             surveyData={{
               ...surveyData,
-              biasAwarenessResponses: biasAwarenessData,
               hasTakenIATBefore
-            }} 
+            }}
           />
         )}
 
-        {stage === "complete" && (
-          <Card className="p-8 text-center animate-slideIn">
-            <h2 className="text-2xl font-bold mb-6">اكتمل الاختبار</h2>
-            <p className="mb-6 text-gray-600">
-              شكراً لمشاركتك في هذه الدراسة. تم تسجيل نتائجك.
-            </p>
-            <div className="text-xl font-semibold mb-4">
-              النتيجة: {testResult?.toFixed(2)}
-            </div>
-            <p className="text-sm text-gray-600">
-              النتيجة الإيجابية تشير إلى ارتباط أقوى بين اضطرابات التواصل والصفات السلبية，
-              بينما تشير النتيجة السلبية إلى ارتباط أقوى بين اضطرابات التواصل والصفات الإيجابية.
-            </p>
-          </Card>
+        {stage === "bias-awareness" && (
+          <BiasAwarenessSurvey onComplete={handleBiasAwarenessComplete} />
         )}
 
-        <Dialog open={showIATDialog} onOpenChange={setShowIATDialog}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>هل سبق لك إجراء اختبار IAT من قبل؟</DialogTitle>
-              <DialogDescription>
-                من المهم معرفة ما إذا كنت قد قمت بإجراء هذا الاختبار مسبقاً.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => handleIATResponse(true)}>
-                نعم، قمت به من قبل
-              </Button>
-              <Button onClick={() => handleIATResponse(false)}>
-                لا، هذه أول مرة
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        {stage === "complete" && (
+          <Card className="p-8 text-center space-y-6 animate-slideIn">
+            <h2 className="text-2xl font-bold">شكراً لك على إتمام الدراسة!</h2>
+            <p>
+              نحن نقدر وقتك وجهودك في المشاركة في هذه الدراسة البحثية. لقد كانت مساهمتك قيمة جداً في مساعدتنا على فهم الارتباطات الضمنية والصريحة في مجال النطق واللغة.
+            </p>
+            {testResult !== null && (
+              <div className="text-xl font-semibold">
+                نتيجة اختبار IAT: {testResult.toFixed(2)}
+              </div>
+            )}
+          </Card>
+        )}
       </div>
     </div>
   );
