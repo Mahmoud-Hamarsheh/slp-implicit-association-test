@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Survey, SurveyData } from "@/components/Survey";
 import { BiasAwarenessSurvey, SurveyResponses } from "@/components/BiasAwarenessSurvey";
@@ -163,7 +162,8 @@ const Index = () => {
             onComplete={handleIATComplete}
             surveyData={{
               ...surveyData,
-              hasTakenIATBefore
+              hasTakenIATBefore,
+              biasAwarenessResponses: biasAwarenessData || {} as SurveyResponses
             }}
           />
         )}
