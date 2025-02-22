@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Button } from "../ui/button";
+import { Check } from "lucide-react";
 
 interface InstructionsProps {
   block: number;
@@ -72,11 +73,11 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
 
   return (
     <div className="text-center space-y-6">
-      <h2 className="text-2xl font-bold mb-4">{instructions.title}</h2>
-      <p className="text-lg mb-6">{instructions.description}</p>
+      <h2 className="text-2xl font-bold">{instructions.title}</h2>
+      <p className="text-lg">{instructions.description}</p>
       
-      <div className="bg-gray-50 p-6 rounded-lg space-y-4">
-        <div className="text-xl font-bold mb-2">التصنيفات:</div>
+      <div className="bg-gray-50 p-6 rounded-lg">
+        <div className="text-xl font-bold mb-4">التصنيفات:</div>
         <div className="space-y-3 text-right">
           <div className="text-lg">
             اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}
@@ -87,25 +88,34 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
         </div>
       </div>
 
-      <div className="bg-gray-50 p-6 rounded-lg mt-4">
+      <div className="bg-gray-50 p-6 rounded-lg">
         <div className="text-xl font-bold mb-4">تذكر:</div>
         <ul className="space-y-3 text-right">
-          <li className="flex items-center gap-2">
-            <span className="text-green-500">✔</span>
+          <li className="flex items-center justify-end gap-2">
+            <span className="text-green-500">
+              <Check className="h-5 w-5" />
+            </span>
             حاول الإجابة بسرعة ودون تردد.
           </li>
-          <li className="flex items-center gap-2">
-            <span className="text-green-500">✔</span>
+          <li className="flex items-center justify-end gap-2">
+            <span className="text-green-500">
+              <Check className="h-5 w-5" />
+            </span>
             إذا أخطأت سيظهر رمز X أحمر. ويمكنك المحاولة مرة أخرى.
           </li>
-          <li className="flex items-center gap-2">
-            <span className="text-green-500">✔</span>
+          <li className="flex items-center justify-end gap-2">
+            <span className="text-green-500">
+              <Check className="h-5 w-5" />
+            </span>
             ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة.
           </li>
         </ul>
       </div>
 
-      <Button className="mt-6">ابدأ</Button>
+      <div className="mt-4">
+        <p className="text-lg mb-4">عند استعدادك، اضغط على "ابدأ" للمتابعة!</p>
+        <Button>ابدأ</Button>
+      </div>
     </div>
   );
 };

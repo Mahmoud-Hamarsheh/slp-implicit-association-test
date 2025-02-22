@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Survey, SurveyData } from "@/components/Survey";
 import { BiasAwarenessSurvey, SurveyResponses } from "@/components/BiasAwarenessSurvey";
@@ -84,7 +85,7 @@ const Index = () => {
                 بالضغط على "أوافق"، فإنك تؤكد/تؤكدين أنك قرأت وفهمت تفاصيل هذه الدراسة وتوافق/توافقين طوعًا على المشاركة.
               </p>
             </div>
-            <Button onClick={() => setStage("iat-experience")} className="mt-4">أوافق</Button>
+            <Button onClick={() => setStage("iat-experience")}>أوافق</Button>
           </Card>
         )}
 
@@ -106,7 +107,7 @@ const Index = () => {
 
         {stage === "survey" && <Survey onComplete={handleSurveyComplete} />}
 
-        {stage === "iat-welcome" && (
+        {stage === "iat-welcome" && surveyData && (
           <Card className="p-8 text-center space-y-6 animate-slideIn">
             <h2 className="text-2xl font-bold">مرحباً بك في اختبار الترابط الضمني (IAT)</h2>
             <div className="text-right space-y-4">
@@ -126,35 +127,25 @@ const Index = () => {
           <Card className="p-8 text-center space-y-6 animate-slideIn">
             <h2 className="text-2xl font-bold">تعليمات الاختبار</h2>
             <div className="text-right space-y-4">
-              <p>ستستخدم مفاتيح الكمبيوتر "E" و"I" لتصنيف العناصر في مجموعات بأسرع ما يمكن. فيما يلي المجموعات الأربع والعناصر التي تنتمي إلى كل منها:</p>
+              <p>ستستخدم مفاتيح الكمبيوتر "D" و"K" لتصنيف العناصر في مجموعات بأسرع ما يمكن. فيما يلي المجموعات الأربع والعناصر التي تنتمي إلى كل منها:</p>
             </div>
-            <div className="border rounded-lg p-4">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr>
-                    <th className="border p-2">التصنيفات</th>
-                    <th className="border p-2">العناصر</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="border p-2">صفات إيجابية</td>
-                    <td className="border p-2">كفؤ/قادر، قوي، واثق، ذكي، منتبه، سريع، مرن، متعاون</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-2">صفات سلبية</td>
-                    <td className="border p-2">محدود، ضعيف، سلبي، أخرق، مشتت، بطيء، متوتر، متردد</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-2">تواصل طبيعي</td>
-                    <td className="border p-2">وضوح الكلام، انسيابية الكلام، طلاقة التعبير، تواصل فعال، تواصل، معبر، كلام مترابط، الاستماع الفعال</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-2">اضطراب تواصل</td>
-                    <td className="border p-2">أفيزيا، أبراكسيا، ديسارثريا (عسر النطق)، تأخر لغوي، اضطراب صوت، تأتأة</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-bold mb-2">اضطراب تواصل</h3>
+                <p>أفيزيا، أبراكسيا، ديسارثريا (عسر النطق)، تأخر لغوي، اضطراب صوت، تأتأة</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-bold mb-2">تواصل طبيعي</h3>
+                <p>وضوح الكلام، انسيابية الكلام، طلاقة التعبير، تواصل فعال، معبر، كلام مترابط</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-bold mb-2">صفات سلبية</h3>
+                <p>محدود، ضعيف، سلبي، أخرق، مشتت، بطيء، متوتر، متردد</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-bold mb-2">صفات إيجابية</h3>
+                <p>كفؤ/قادر، قوي، واثق، ذكي، منتبه، سريع، مرن، متعاون</p>
+              </div>
             </div>
             <Button onClick={() => setStage("test")}>متابعة</Button>
           </Card>
