@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "../ui/button";
 
@@ -5,8 +6,17 @@ interface InstructionsProps {
   block: number;
 }
 
+interface BlockInstructions {
+  title: string;
+  leftCategory?: string;
+  rightCategory?: string;
+  description: string | string[];
+  leftKey?: string;
+  rightKey?: string;
+}
+
 export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
-  const getBlockInstructions = (block: number) => {
+  const getBlockInstructions = (block: number): BlockInstructions => {
     switch (block) {
       case 1:
         return {
@@ -80,20 +90,24 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
       <div className="grid grid-cols-2 text-center mb-8 text-green-600 font-semibold">
         <div className="border-r border-gray-200 p-4">
           <div className="text-sm mb-2">اضغط (D) للـ</div>
-          <div className="text-lg">{instructions.leftCategory}</div>
+          <div className="text-lg">{instructions.leftCategory || instructions.leftKey}</div>
         </div>
         <div className="p-4">
           <div className="text-sm mb-2">اضغط (K) للـ</div>
-          <div className="text-lg">{instructions.rightCategory}</div>
+          <div className="text-lg">{instructions.rightCategory || instructions.rightKey}</div>
         </div>
       </div>
 
       <div className="text-center mb-8">
         <h2 className="text-xl font-bold mb-6 underline">{instructions.title}</h2>
         <div className="space-y-3 text-right">
-          {instructions.description.map((line, index) => (
-            <p key={index} className="text-lg">{line}</p>
-          ))}
+          {Array.isArray(instructions.description) ? (
+            instructions.description.map((line, index) => (
+              <p key={index} className="text-lg">{line}</p>
+            ))
+          ) : (
+            <p className="text-lg">{instructions.description}</p>
+          )}
         </div>
       </div>
 
