@@ -1,7 +1,5 @@
-
 import React from "react";
 import { Button } from "../ui/button";
-import { Check } from "lucide-react";
 
 interface InstructionsProps {
   block: number;
@@ -12,10 +10,16 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
     switch (block) {
       case 1:
         return {
-          title: "١ من اصل ٧",
-          description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها إلى تواصل طبيعي أو اضطراب تواصل بأسرع ما يمكن.",
-          leftKey: "اضطراب تواصل",
-          rightKey: "تواصل طبيعي"
+          title: "الجزء ١ من ٧",
+          leftCategory: "اضطراب تواصل",
+          rightCategory: "تواصل طبيعي",
+          description: [
+            "ضع إصبع اليد اليسرى على مفتاح (D) للكلمات التي تنتمي إلى فئة اضطراب تواصل.",
+            "ضع إصبع اليد اليمنى على مفتاح (K) للكلمات التي تنتمي إلى فئة تواصل طبيعي.",
+            "ستظهر الكلمات واحدة تلو الأخرى.",
+            "إذا أخطأت سيظهر رمز X أحمر. اضغط على المفتاح الآخر للمتابعة.",
+            "أجب بأسرع ما يمكن مع الحفاظ على الدقة."
+          ]
         };
       case 2:
         return {
@@ -72,49 +76,35 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
   const instructions = getBlockInstructions(block);
 
   return (
-    <div className="text-center space-y-6">
-      <h2 className="text-2xl font-bold">{instructions.title}</h2>
-      <p className="text-lg">{instructions.description}</p>
-      
-      <div className="bg-gray-50 p-6 rounded-lg">
-        <div className="text-xl font-bold mb-4">التصنيفات:</div>
-        <div className="space-y-3 text-right">
-          <div className="text-lg">
-            اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}
-          </div>
-          <div className="text-lg">
-            اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}
-          </div>
+    <div className="max-w-3xl mx-auto border-2 border-blue-200 rounded-lg p-8 bg-white">
+      <div className="grid grid-cols-2 text-center mb-8 text-green-600 font-semibold">
+        <div className="border-r border-gray-200 p-4">
+          <div className="text-sm mb-2">اضغط (D) للـ</div>
+          <div className="text-lg">{instructions.leftCategory}</div>
+        </div>
+        <div className="p-4">
+          <div className="text-sm mb-2">اضغط (K) للـ</div>
+          <div className="text-lg">{instructions.rightCategory}</div>
         </div>
       </div>
 
-      <div className="bg-gray-50 p-6 rounded-lg">
-        <div className="text-xl font-bold mb-4">تذكر:</div>
-        <ul className="space-y-3 text-right">
-          <li className="flex items-center justify-end gap-2">
-            <span className="text-green-500">
-              <Check className="h-5 w-5" />
-            </span>
-            حاول الإجابة بسرعة ودون تردد.
-          </li>
-          <li className="flex items-center justify-end gap-2">
-            <span className="text-green-500">
-              <Check className="h-5 w-5" />
-            </span>
-            إذا أخطأت سيظهر رمز X أحمر. ويمكنك المحاولة مرة أخرى.
-          </li>
-          <li className="flex items-center justify-end gap-2">
-            <span className="text-green-500">
-              <Check className="h-5 w-5" />
-            </span>
-            ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة.
-          </li>
-        </ul>
+      <div className="text-center mb-8">
+        <h2 className="text-xl font-bold mb-6 underline">{instructions.title}</h2>
+        <div className="space-y-3 text-right">
+          {instructions.description.map((line, index) => (
+            <p key={index} className="text-lg">{line}</p>
+          ))}
+        </div>
       </div>
 
-      <div className="mt-4">
-        <p className="text-lg mb-4">عند استعدادك، اضغط على "ابدأ" للمتابعة!</p>
-        <Button>ابدأ</Button>
+      <div className="text-center mt-8">
+        <p className="text-lg mb-4">اضغط على زر المسافة عندما تكون مستعداً للبدء</p>
+        <Button 
+          variant="outline"
+          className="w-48 text-lg py-6"
+        >
+          ابدأ
+        </Button>
       </div>
     </div>
   );
