@@ -74,17 +74,17 @@ const Index = () => {
             <h2 className="text-2xl font-bold">الموافقة على المشاركة في الدراسة البحثية</h2>
             <div className="text-right space-y-4">
               <p>شكراً لمشاركتك في هذه الدراسة. قبل البدء، نود إبلاغك ببعض المعلومات المهمة:</p>
-              <ul className="list-disc list-inside space-y-2">
+              <ul className="list-disc list-inside space-y-2 mr-4">
                 <li>مشاركتك اختيارية، ويمكنك الانسحاب في أي وقت دون أي تأثير على مكانتك المهنية أو الأكاديمية.</li>
                 <li>جميع البيانات التي يتم جمعها ستكون سرية تماماً ولن تُستخدم إلا لأغراض البحث العلمي.</li>
                 <li>ستتضمن الدراسة اختبار الترابط الضمني (IAT) لقياس التحيزات غير الواعية، يليه استبيان لقياس الاتجاهات الصريحة.</li>
                 <li>لا توجد إجابات صحيحة أو خاطئة، ونشجعك على التفاعل مع الاختبار بعفوية.</li>
               </ul>
-              <p className="text-lg font-semibold mt-4">
+              <p className="text-lg font-semibold mt-4 bg-gray-50 p-4 rounded-lg">
                 بالضغط على "أوافق"، فإنك تؤكد/تؤكدين أنك قرأت وفهمت تفاصيل هذه الدراسة وتوافق/توافقين طوعًا على المشاركة.
               </p>
             </div>
-            <Button onClick={() => setStage("iat-experience")}>أوافق</Button>
+            <Button onClick={() => setStage("iat-experience")} className="mt-4">أوافق</Button>
           </Card>
         )}
 
