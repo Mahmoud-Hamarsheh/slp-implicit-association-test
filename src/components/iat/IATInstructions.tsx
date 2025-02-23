@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Button } from "../ui/button";
+import { Check } from "lucide-react";
 
 interface InstructionsProps {
   block: number;
@@ -8,11 +9,9 @@ interface InstructionsProps {
 
 interface BlockInstructions {
   title: string;
-  leftCategory?: string;
-  rightCategory?: string;
   description: string | string[];
-  leftKey?: string;
-  rightKey?: string;
+  leftKey: string;
+  rightKey: string;
 }
 
 export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
@@ -20,16 +19,10 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
     switch (block) {
       case 1:
         return {
-          title: "الجزء ١ من ٧",
-          leftCategory: "اضطراب تواصل",
-          rightCategory: "تواصل طبيعي",
-          description: [
-            "ضع إصبع اليد اليسرى على مفتاح (D) للكلمات التي تنتمي إلى فئة اضطراب تواصل.",
-            "ضع إصبع اليد اليمنى على مفتاح (K) للكلمات التي تنتمي إلى فئة تواصل طبيعي.",
-            "ستظهر الكلمات واحدة تلو الأخرى.",
-            "إذا أخطأت سيظهر رمز X أحمر. اضغط على المفتاح الآخر للمتابعة.",
-            "أجب بأسرع ما يمكن مع الحفاظ على الدقة."
-          ]
+          title: "١ من اصل ٧",
+          description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها إلى تواصل طبيعي أو اضطراب تواصل بأسرع ما يمكن.",
+          leftKey: "اضطراب تواصل",
+          rightKey: "تواصل طبيعي"
         };
       case 2:
         return {
@@ -42,15 +35,15 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
         return {
           title: "٣ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
-          leftKey: "اضطراب تواصل أو صفات سلبية",
-          rightKey: "تواصل طبيعي أو صفات إيجابية"
+          leftKey: "اضطراب تواصل أو صفة سلبية",
+          rightKey: "تواصل طبيعي أو صفة إيجابية"
         };
       case 4:
         return {
           title: "٤ من اصل ٧",
           description: "هذا مماثل للجزء السابق\nستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
-          leftKey: "اضطراب تواصل أو صفات سلبية",
-          rightKey: "تواصل طبيعي أو صفات إيجابية"
+          leftKey: "اضطراب تواصل أو صفة سلبية",
+          rightKey: "تواصل طبيعي أو صفة إيجابية"
         };
       case 5:
         return {
@@ -63,15 +56,15 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
         return {
           title: "٦ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
-          leftKey: "اضطراب تواصل أو صفات إيجابية",
-          rightKey: "تواصل طبيعي أو صفات سلبية"
+          leftKey: "اضطراب تواصل أو صفة ايجابية",
+          rightKey: "تواصل طبيعي أو صفة سلبية"
         };
       case 7:
         return {
           title: "٧ من اصل ٧",
           description: "هذا مماثل للجزء السابق",
-          leftKey: "اضطراب تواصل أو صفات إيجابية",
-          rightKey: "تواصل طبيعي أو صفات سلبية"
+          leftKey: "اضطراب تواصل أو صفة ايجابية",
+          rightKey: "تواصل طبيعي أو صفة سلبية"
         };
       default:
         return {
@@ -86,33 +79,44 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
   const instructions = getBlockInstructions(block);
 
   return (
-    <div className="max-w-3xl mx-auto border-2 border-blue-200 rounded-lg p-8 bg-white">
-      <div className="grid grid-cols-2 text-center mb-8 text-green-600 font-semibold">
-        <div className="border-r border-gray-200 p-4">
-          <div className="text-sm mb-2">اضغط (D) للـ</div>
-          <div className="text-lg">{instructions.leftCategory || instructions.leftKey}</div>
-        </div>
-        <div className="p-4">
-          <div className="text-sm mb-2">اضغط (K) للـ</div>
-          <div className="text-lg">{instructions.rightCategory || instructions.rightKey}</div>
+    <div className="max-w-3xl mx-auto text-right space-y-6">
+      <h2 className="text-2xl font-bold mb-4">{instructions.title}</h2>
+      <p className="text-lg mb-6">{instructions.description}</p>
+
+      <div className="bg-gray-50 p-6 rounded-lg mb-6">
+        <h3 className="text-xl font-bold mb-4">التصنيفات:</h3>
+        <div className="space-y-3">
+          <p className="text-lg">اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
+          <p className="text-lg">اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
         </div>
       </div>
 
-      <div className="text-center mb-8">
-        <h2 className="text-xl font-bold mb-6 underline">{instructions.title}</h2>
-        <div className="space-y-3 text-right">
-          {Array.isArray(instructions.description) ? (
-            instructions.description.map((line, index) => (
-              <p key={index} className="text-lg">{line}</p>
-            ))
-          ) : (
-            <p className="text-lg">{instructions.description}</p>
-          )}
-        </div>
+      <div className="bg-gray-50 p-6 rounded-lg">
+        <h3 className="text-xl font-bold mb-4">تذكر:</h3>
+        <ul className="space-y-3">
+          <li className="flex items-center justify-end gap-2">
+            <span>حاول الإجابة بسرعة ودون تردد.</span>
+            <span className="text-green-500">
+              <Check className="h-5 w-5" />
+            </span>
+          </li>
+          <li className="flex items-center justify-end gap-2">
+            <span>إذا أخطأت سيظهر رمز X أحمر. ويمكنك المحاولة مرة أخرى.</span>
+            <span className="text-green-500">
+              <Check className="h-5 w-5" />
+            </span>
+          </li>
+          <li className="flex items-center justify-end gap-2">
+            <span>ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة.</span>
+            <span className="text-green-500">
+              <Check className="h-5 w-5" />
+            </span>
+          </li>
+        </ul>
       </div>
 
       <div className="text-center mt-8">
-        <p className="text-lg mb-4">اضغط على زر المسافة عندما تكون مستعداً للبدء</p>
+        <p className="text-lg mb-4">عند استعدادك، اضغط على "ابدأ" للمتابعة!</p>
         <Button 
           variant="outline"
           className="w-48 text-lg py-6"
