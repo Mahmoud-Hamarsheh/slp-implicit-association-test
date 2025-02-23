@@ -2,36 +2,60 @@
 import type { Response } from "./IATTypes";
 
 export const calculateDScore = (responses: Response[]) => {
-  const validResponses = responses.filter(r => r.responseTime >= 0.3);
+  // Step 1: Delete trials > 10,000ms
+  const validResponses = responses.filter(r => r.responseTime <= 10);
 
-  const blockResponses = {
-    3: validResponses.filter(r => r.block === 3),
-    4: validResponses.filter(r => r.block === 4),
-    6: validResponses.filter(r => r.block === 6),
-    7: validResponses.filter(r => r.block === 7)
-  };
+  // Step 2: Check if more than 10% of trials are < 300ms
+  const fastTrials = validResponses.filter(r => r.responseTime < 0.3);
+  if (fastTrials.length / validResponses.length > 0.1) {
+    return null; // Invalid data - too many fast responses
+  }
 
-  const sd1 = calculatePooledSD(blockResponses[3], blockResponses[4]);
-  const sd2 = calculatePooledSD(blockResponses[6], blockResponses[7]);
+  const block3Responses = validResponses.filter(r => r.block === 3);
+  const block4Responses = validResponses.filter(r => r.block === 4);
+  const block6Responses = validResponses.filter(r => r.block === 6);
+  const block7Responses = validResponses.filter(r => r.block === 7);
 
-  const diff1 = calculateMeanDiff(blockResponses[6], blockResponses[3]);
-  const diff2 = calculateMeanDiff(blockResponses[7], blockResponses[4]);
+  // Step 3: Compute inclusive standard deviations
+  const sd1 = calculatePooledSD([...block3Responses, ...block6Responses]);
+  const sd2 = calculatePooledSD([...block4Responses, ...block7Responses]);
 
+  // Step 4: Compute means for each stage
+  const mean3 = calculateMean(block3Responses);
+  const mean4 = calculateMean(block4Responses);
+  const mean6 = calculateMean(block6Responses);
+  const mean7 = calculateMean(block7Responses);
+
+  // Step 5: Compute differences
+  const diff1 = mean6 - mean3;
+  const diff2 = mean7 - mean4;
+
+  // Step 6: Divide by standard deviations
   const d1 = diff1 / sd1;
   const d2 = diff2 / sd2;
 
+  // Step 7: Average the D scores
   return (d1 + d2) / 2;
 };
 
-const calculatePooledSD = (responses1: Response[], responses2: Response[]) => {
-  const allTimes = [...responses1, ...responses2].map(r => r.responseTime);
-  const mean = allTimes.reduce((a, b) => a + b, 0) / allTimes.length;
-  const variance = allTimes.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / allTimes.length;
-  return Math.sqrt(variance);
+const calculateMean = (responses: Response[]): number => {
+  if (responses.length === 0) return 0;
+  const sum = responses.reduce((acc, r) => {
+    // Add 600ms penalty for incorrect responses
+    const time = r.correct ? r.responseTime : r.responseTime + 0.6;
+    return acc + time;
+  }, 0);
+  return sum / responses.length;
 };
 
-const calculateMeanDiff = (responses1: Response[], responses2: Response[]) => {
-  const mean1 = responses1.reduce((a, b) => a + b.responseTime, 0) / responses1.length;
-  const mean2 = responses2.reduce((a, b) => a + b.responseTime, 0) / responses2.length;
-  return mean1 - mean2;
+const calculatePooledSD = (responses: Response[]): number => {
+  if (responses.length === 0) return 0;
+  
+  const mean = calculateMean(responses);
+  const sumSquares = responses.reduce((acc, r) => {
+    const time = r.correct ? r.responseTime : r.responseTime + 0.6;
+    return acc + Math.pow(time - mean, 2);
+  }, 0);
+  
+  return Math.sqrt(sumSquares / (responses.length - 1));
 };

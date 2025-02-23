@@ -24,8 +24,8 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
       case 3:
       case 4:
         return {
-          left: "اضطراب تواصل أو صفة سلبية",
-          right: "تواصل طبيعي أو صفة إيجابية"
+          left: "اضطراب تواصل\nأو\nصفات سلبية",
+          right: "تواصل طبيعي\nأو\nصفات إيجابية"
         };
       case 5:
         return {
@@ -35,8 +35,8 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
       case 6:
       case 7:
         return {
-          left: "اضطراب تواصل أو صفة ايجابية",
-          right: "تواصل طبيعي أو صفة سلبية"
+          left: "اضطراب تواصل\nأو\nصفات إيجابية",
+          right: "تواصل طبيعي\nأو\nصفات سلبية"
         };
       default:
         return {
@@ -50,14 +50,14 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
 
   return (
     <div className="max-w-3xl mx-auto border-2 border-blue-200 rounded-lg p-8 bg-white">
-      <div className="grid grid-cols-2 gap-4 mb-12">
-        <div className="text-center">
-          <div className="text-4xl font-bold mb-2">D</div>
-          <div className="text-lg text-green-600">{categories.left}</div>
+      <div className="grid grid-cols-2 gap-8 mb-12">
+        <div className="text-center space-y-4">
+          <div className="whitespace-pre-line text-xl text-green-600 mb-2">{categories.left}</div>
+          <div className="text-lg">اضغط "D"</div>
         </div>
-        <div className="text-center">
-          <div className="text-4xl font-bold mb-2">K</div>
-          <div className="text-lg text-green-600">{categories.right}</div>
+        <div className="text-center space-y-4">
+          <div className="whitespace-pre-line text-xl text-green-600 mb-2">{categories.right}</div>
+          <div className="text-lg">اضغط "K"</div>
         </div>
       </div>
 

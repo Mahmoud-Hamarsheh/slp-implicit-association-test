@@ -1,6 +1,4 @@
 
-import type { SurveyResponses } from "../BiasAwarenessSurvey";
-
 export interface IATProps {
   onComplete: (result: number) => void;
   surveyData: { 
@@ -29,8 +27,8 @@ export interface Response {
 }
 
 export const BLOCKS = {
-  COMMUNICATION_DISORDER: ["أفيزيا", "تأتأة", "ديسارثريا", "اضطراب صوت", "أبراكسيا", "تأخر لغوي"],
-  NORMAL_COMMUNICATION: ["اجتماعي", "نشط", "متفاعل", "معبر", "طليق", "مركز"],
-  NEGATIVE_ATTRIBUTES: ["محدود", "ضعيف", "سلبي", "أخرق", "مشتت", "بطيء", "متردد", "متوتر"],
+  COMMUNICATION_DISORDER: ["أفيزيا", "أبراكسيا", "ديسارثريا (عسر النطق)", "تأخر لغوي", "اضطراب صوت", "تأتأة"],
+  NORMAL_COMMUNICATION: ["وضوح الكلام", "انسيابية الكلام", "طلاقة التعبير", "تواصل فعال", "معبر", "كلام مترابط", "الاستماع الفعال"],
+  NEGATIVE_ATTRIBUTES: ["محدود", "ضعيف", "سلبي", "أخرق", "مشتت", "بطيء", "متوتر", "متردد"],
   POSITIVE_ATTRIBUTES: ["كفو/قادر", "قوي", "واثق", "ذكي", "منتبه", "سريع", "مرن", "متعاون"]
 };
