@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Card } from "./ui/card";
-import { Button } from "./ui/button";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "./ui/use-toast";
 import { IATInstructions } from "./iat/IATInstructions";
@@ -17,10 +16,8 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   const [responses, setResponses] = useState<{ block: number; responseTime: number; correct: boolean }[]>([]);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [isTestStarted, setIsTestStarted] = useState(false);
-  const [testOrder] = useState<"standard" | "reversed">(
-    Math.random() < 0.5 ? "standard" : "reversed"
-  );
+  const [showInstructions, setShowInstructions] = useState(true);
+  const [isBlockStarted, setIsBlockStarted] = useState(false);
 
   const generateTrials = useCallback((block: number): Trial[] => {
     let newTrials: Trial[] = [];
@@ -96,10 +93,12 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   useEffect(() => {
     setTrials(generateTrials(currentBlock));
     setCurrentTrial(0);
+    setShowInstructions(true);
+    setIsBlockStarted(false);
   }, [currentBlock, generateTrials]);
 
   const handleKeyPress = useCallback((e: KeyboardEvent) => {
-    if (!isTestStarted || !startTime || showFeedback) return;
+    if (!isBlockStarted || showInstructions || !startTime || showFeedback) return;
 
     const responseTime = (Date.now() - startTime) / 1000;
     const currentStimulus = trials[currentTrial];
@@ -134,7 +133,7 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
         }
       }, 500);
     }
-  }, [currentTrial, trials, startTime, showFeedback, responses, currentBlock, onComplete, isTestStarted]);
+  }, [currentTrial, trials, startTime, showFeedback, responses, currentBlock, onComplete, isBlockStarted, showInstructions]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
@@ -142,10 +141,10 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   }, [handleKeyPress]);
 
   useEffect(() => {
-    if (!showFeedback && isTestStarted) {
+    if (!showFeedback && isBlockStarted && !showInstructions) {
       setStartTime(Date.now());
     }
-  }, [currentTrial, showFeedback, isTestStarted]);
+  }, [currentTrial, showFeedback, isBlockStarted, showInstructions]);
 
   const saveResults = async (dScore: number) => {
     if (surveyData.hasTakenIATBefore) {
@@ -189,8 +188,9 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
     onComplete(dScore);
   };
 
-  const startTest = () => {
-    setIsTestStarted(true);
+  const handleStartBlock = () => {
+    setShowInstructions(false);
+    setIsBlockStarted(true);
     setStartTime(Date.now());
   };
 
@@ -199,13 +199,11 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   return (
     <Card className="w-full max-w-2xl p-8 mx-auto mt-8 animate-fadeIn">
       <div className="text-center space-y-6">
-        <IATInstructions block={currentBlock} />
-        
-        {!isTestStarted ? (
-          <div className="space-y-4">
-            <p className="text-lg">اضغط الزر أدناه لبدء الاختبار</p>
-            <Button onClick={startTest}>ابدأ</Button>
-          </div>
+        {showInstructions ? (
+          <IATInstructions 
+            block={currentBlock} 
+            onStart={handleStartBlock}
+          />
         ) : (
           <IATTrial 
             trial={trials[currentTrial]} 

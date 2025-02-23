@@ -5,6 +5,7 @@ import { Check } from "lucide-react";
 
 interface InstructionsProps {
   block: number;
+  onStart: () => void;
 }
 
 interface BlockInstructions {
@@ -14,7 +15,7 @@ interface BlockInstructions {
   rightKey: string;
 }
 
-export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
+export const IATInstructions: React.FC<InstructionsProps> = ({ block, onStart }) => {
   const getBlockInstructions = (block: number): BlockInstructions => {
     switch (block) {
       case 1:
@@ -116,10 +117,9 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block }) => {
       </div>
 
       <div className="text-center mt-8">
-        <p className="text-lg mb-4">عند استعدادك، اضغط على "ابدأ" للمتابعة!</p>
         <Button 
-          variant="outline"
-          className="w-48 text-lg py-6"
+          onClick={onStart}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg"
         >
           ابدأ
         </Button>
