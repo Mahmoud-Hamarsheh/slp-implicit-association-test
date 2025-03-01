@@ -1,4 +1,6 @@
 
+import { SurveyResponses } from "../BiasAwarenessSurvey";
+
 export interface IATProps {
   onComplete: (result: number) => void;
   surveyData: { 
