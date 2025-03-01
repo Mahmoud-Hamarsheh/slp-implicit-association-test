@@ -43,61 +43,32 @@ export class TrialGenerator {
       case 3:
       case 6:
       case 7:
-        if (block === 6 || block === 7) {
-          newTrials = [
-            ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
-              stimulus: item,
-              category: "communication_disorder",
-              correctKey: getCorrectKeyForBlock(block, "communication_disorder"),
-              block: block
-            })),
-            ...BLOCKS.NORMAL_COMMUNICATION.map((item): Trial => ({
-              stimulus: item,
-              category: "normal_communication",
-              correctKey: getCorrectKeyForBlock(block, "normal_communication"),
-              block: block
-            })),
-            ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
-              stimulus: item,
-              category: "negative",
-              correctKey: getCorrectKeyForBlock(block, "negative"),
-              block: block
-            })),
-            ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
-              stimulus: item,
-              category: "positive",
-              correctKey: getCorrectKeyForBlock(block, "positive"),
-              block: block
-            }))
-          ];
-        } else {
-          newTrials = [
-            ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
-              stimulus: item,
-              category: "communication_disorder",
-              correctKey: getCorrectKeyForBlock(block, "communication_disorder"),
-              block: block
-            })),
-            ...BLOCKS.NORMAL_COMMUNICATION.map((item): Trial => ({
-              stimulus: item,
-              category: "normal_communication",
-              correctKey: getCorrectKeyForBlock(block, "normal_communication"),
-              block: block
-            })),
-            ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
-              stimulus: item,
-              category: "negative",
-              correctKey: getCorrectKeyForBlock(block, "negative"),
-              block: block
-            })),
-            ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
-              stimulus: item,
-              category: "positive",
-              correctKey: getCorrectKeyForBlock(block, "positive"),
-              block: block
-            }))
-          ];
-        }
+        newTrials = [
+          ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
+            stimulus: item,
+            category: "communication_disorder",
+            correctKey: getCorrectKeyForBlock(block, "communication_disorder"),
+            block: block
+          })),
+          ...BLOCKS.NORMAL_COMMUNICATION.map((item): Trial => ({
+            stimulus: item,
+            category: "normal_communication",
+            correctKey: getCorrectKeyForBlock(block, "normal_communication"),
+            block: block
+          })),
+          ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
+            stimulus: item,
+            category: "negative",
+            correctKey: getCorrectKeyForBlock(block, "negative"),
+            block: block
+          })),
+          ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
+            stimulus: item,
+            category: "positive",
+            correctKey: getCorrectKeyForBlock(block, "positive"),
+            block: block
+          }))
+        ];
         break;
     }
     

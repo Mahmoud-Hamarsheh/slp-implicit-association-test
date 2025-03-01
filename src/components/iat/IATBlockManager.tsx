@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { IATInstructions } from "./IATInstructions";
@@ -67,23 +68,35 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         responseTime: r.correct ? r.responseTime : r.responseTime + 0.6
       }));
 
+      // Parse survey data to ensure it's in the correct format
+      const surveyDataFormatted = {
+        age: Number(surveyData.age) || 0,
+        yearsExperience: Number(surveyData.yearsExperience) || 0,
+        degree: String(surveyData.degree) || "",
+        gender: surveyData.gender || "female",
+        biasAwarenessResponses: surveyData.biasAwarenessResponses || {}
+      };
+
       const { error } = await supabase
         .from('iat_results')
         .insert([
           {
             d_score: dScore,
-            age: surveyData.age,
-            years_experience: surveyData.yearsExperience,
-            degree: surveyData.degree,
-            gender: surveyData.gender,
-            survey_responses: surveyData.biasAwarenessResponses,
+            age: surveyDataFormatted.age,
+            years_experience: surveyDataFormatted.yearsExperience,
+            degree: surveyDataFormatted.degree,
+            gender: surveyDataFormatted.gender,
+            survey_responses: surveyDataFormatted.biasAwarenessResponses,
             response_times: responses.map(r => r.responseTime),
             responses: penalizedResponses,
             valid_data: validData
           }
         ]);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
       
       toast({
         title: "تم حفظ النتائج بنجاح",
@@ -96,6 +109,9 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         description: "حدث خطأ أثناء حفظ النتائج، يرجى المحاولة مرة أخرى",
         variant: "destructive",
       });
+    } finally {
+      // Call onComplete regardless of whether saving succeeded
+      onComplete(dScore);
     }
   };
 
@@ -111,7 +127,6 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         const dScore = calculateDScore(responses);
         if (dScore !== null) {
           saveResults(dScore);
-          onComplete(dScore);
         } else {
           toast({
             title: "نتائج غير صالحة",
