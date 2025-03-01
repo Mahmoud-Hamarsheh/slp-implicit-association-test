@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from "react";
 import { Card } from "./ui/card";
 import { supabase } from "@/lib/supabase";
@@ -6,6 +7,8 @@ import { IATInstructions } from "./iat/IATInstructions";
 import { IATTrial } from "./iat/IATTrial";
 import { calculateDScore } from "./iat/IATScoring";
 import { IATProps, Trial, BLOCKS } from "./iat/IATTypes";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
+import { Button } from "./ui/button";
 
 export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   const { toast } = useToast();
@@ -18,6 +21,7 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [showInstructions, setShowInstructions] = useState(true);
   const [isBlockStarted, setIsBlockStarted] = useState(false);
+  const [showCategoryChangeAlert, setShowCategoryChangeAlert] = useState(false);
 
   const generateTrials = useCallback((block: number): Trial[] => {
     let newTrials: Trial[] = [];
@@ -45,13 +49,13 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
           ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "negative",
-            correctKey: "d" as const,
+            correctKey: block === 5 ? "k" as const : "d" as const,
             block: block
           })),
           ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "positive",
-            correctKey: "k" as const,
+            correctKey: block === 5 ? "d" as const : "k" as const,
             block: block
           }))
         ];
@@ -59,32 +63,61 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
       case 3:
       case 6:
       case 7:
-        newTrials = [
-          ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
-            stimulus: item,
-            category: "communication_disorder",
-            correctKey: block === 7 ? "k" as const : "d" as const,
-            block: block
-          })),
-          ...BLOCKS.NORMAL_COMMUNICATION.map((item): Trial => ({
-            stimulus: item,
-            category: "normal_communication",
-            correctKey: block === 7 ? "d" as const : "k" as const,
-            block: block
-          })),
-          ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
-            stimulus: item,
-            category: "negative",
-            correctKey: block === 7 ? "k" as const : "d" as const,
-            block: block
-          })),
-          ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
-            stimulus: item,
-            category: "positive",
-            correctKey: block === 7 ? "d" as const : "k" as const,
-            block: block
-          }))
-        ];
+        if (block === 6 || block === 7) {
+          newTrials = [
+            ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
+              stimulus: item,
+              category: "communication_disorder",
+              correctKey: "k" as const,
+              block: block
+            })),
+            ...BLOCKS.NORMAL_COMMUNICATION.map((item): Trial => ({
+              stimulus: item,
+              category: "normal_communication",
+              correctKey: "d" as const,
+              block: block
+            })),
+            ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
+              stimulus: item,
+              category: "negative",
+              correctKey: "d" as const,
+              block: block
+            })),
+            ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
+              stimulus: item,
+              category: "positive",
+              correctKey: "k" as const,
+              block: block
+            }))
+          ];
+        } else {
+          newTrials = [
+            ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
+              stimulus: item,
+              category: "communication_disorder",
+              correctKey: "d" as const,
+              block: block
+            })),
+            ...BLOCKS.NORMAL_COMMUNICATION.map((item): Trial => ({
+              stimulus: item,
+              category: "normal_communication",
+              correctKey: "k" as const,
+              block: block
+            })),
+            ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
+              stimulus: item,
+              category: "negative",
+              correctKey: "d" as const,
+              block: block
+            })),
+            ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
+              stimulus: item,
+              category: "positive",
+              correctKey: "k" as const,
+              block: block
+            }))
+          ];
+        }
         break;
     }
     return newTrials.sort(() => Math.random() - 0.5);
@@ -95,10 +128,15 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
     setCurrentTrial(0);
     setShowInstructions(true);
     setIsBlockStarted(false);
+    
+    // Show category change alert when moving from block 4 to block 5
+    if (currentBlock === 5) {
+      setShowCategoryChangeAlert(true);
+    }
   }, [currentBlock, generateTrials]);
 
   const handleKeyPress = useCallback((e: KeyboardEvent) => {
-    if (!isBlockStarted || showInstructions || !startTime || showFeedback) return;
+    if (!isBlockStarted || showInstructions || !startTime || showFeedback || showCategoryChangeAlert) return;
 
     const responseTime = (Date.now() - startTime) / 1000;
     const currentStimulus = trials[currentTrial];
@@ -133,7 +171,7 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
         }
       }, 500);
     }
-  }, [currentTrial, trials, startTime, showFeedback, responses, currentBlock, onComplete, isBlockStarted, showInstructions]);
+  }, [currentTrial, trials, startTime, showFeedback, responses, currentBlock, onComplete, isBlockStarted, showInstructions, showCategoryChangeAlert]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
@@ -141,10 +179,10 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   }, [handleKeyPress]);
 
   useEffect(() => {
-    if (!showFeedback && isBlockStarted && !showInstructions) {
+    if (!showFeedback && isBlockStarted && !showInstructions && !showCategoryChangeAlert) {
       setStartTime(Date.now());
     }
-  }, [currentTrial, showFeedback, isBlockStarted, showInstructions]);
+  }, [currentTrial, showFeedback, isBlockStarted, showInstructions, showCategoryChangeAlert]);
 
   const saveResults = async (dScore: number) => {
     if (surveyData.hasTakenIATBefore) {
@@ -157,6 +195,19 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
     }
 
     try {
+      // Filter responses based on IAT research criteria
+      const validResponses = responses.filter(r => r.responseTime >= 0.3 && r.responseTime <= 10);
+      
+      // Check if more than 10% of trials are below threshold
+      const tooFastResponsesPercentage = responses.filter(r => r.responseTime < 0.3).length / responses.length;
+      const validData = tooFastResponsesPercentage <= 0.1;
+      
+      // Apply error penalty (+600ms) to incorrect responses
+      const penalizedResponses = responses.map(r => ({
+        ...r,
+        responseTime: r.correct ? r.responseTime : r.responseTime + 0.6
+      }));
+
       const { error } = await supabase
         .from('iat_results')
         .insert([
@@ -165,9 +216,11 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
             age: surveyData.age,
             years_experience: surveyData.yearsExperience,
             degree: surveyData.degree,
+            gender: surveyData.gender,
             survey_responses: surveyData.biasAwarenessResponses,
             response_times: responses.map(r => r.responseTime),
-            responses: responses
+            responses: penalizedResponses,
+            valid_data: validData
           }
         ]);
 
@@ -194,6 +247,12 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
     setStartTime(Date.now());
   };
 
+  const handleCloseAlert = () => {
+    setShowCategoryChangeAlert(false);
+    setIsBlockStarted(true);
+    setStartTime(Date.now());
+  };
+
   if (!trials.length) return null;
 
   return (
@@ -212,6 +271,18 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
           />
         )}
       </div>
+      
+      <Dialog open={showCategoryChangeAlert} onOpenChange={setShowCategoryChangeAlert}>
+        <DialogContent className="text-center">
+          <DialogHeader>
+            <DialogTitle className="text-xl">تنبيه هام</DialogTitle>
+            <DialogDescription className="text-lg pt-4">
+              انتبه! ستتغير أماكن التصنيفات في المرحلة القادمة.
+            </DialogDescription>
+          </DialogHeader>
+          <Button onClick={handleCloseAlert} className="mt-4 mx-auto">فهمت</Button>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };

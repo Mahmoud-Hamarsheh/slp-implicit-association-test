@@ -41,6 +41,16 @@ const REVERSE_SCORING_QUESTIONS = [4, 7];
 
 export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete }) => {
   const [responses, setResponses] = useState<SurveyResponses>({});
+  const [currentPage, setCurrentPage] = useState(0);
+  
+  // Split questions into pages of 4 questions each
+  const questionsPerPage = 4;
+  const totalPages = Math.ceil(QUESTIONS.length / questionsPerPage);
+  
+  const currentPageQuestions = QUESTIONS.slice(
+    currentPage * questionsPerPage, 
+    (currentPage + 1) * questionsPerPage
+  );
 
   const handleResponse = (question: string, value: string) => {
     setResponses(prev => ({
@@ -49,8 +59,23 @@ export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComp
     }));
   };
 
-  const isComplete = () => {
-    return QUESTIONS.every(question => responses[question]);
+  const isPageComplete = () => {
+    return currentPageQuestions.every(question => responses[question]);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    } else {
+      // Final page - calculate and submit
+      calculateBiasScore();
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   const calculateBiasScore = () => {
@@ -89,34 +114,22 @@ export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComp
       biasLevel = "عالي";
     }
 
-    return {
-      score: meanScore,
-      level: biasLevel
+    // Add bias score to responses
+    const finalResponses = {
+      ...responses,
+      biasScore: meanScore.toString(),
+      biasLevel: biasLevel
     };
-  };
-
-  const handleSubmit = () => {
-    if (isComplete()) {
-      // Calculate the bias score before submitting
-      const biasResult = calculateBiasScore();
-      
-      // Add bias score to responses
-      const finalResponses = {
-        ...responses,
-        biasScore: biasResult.score.toString(),
-        biasLevel: biasResult.level
-      };
-      
-      onComplete(finalResponses);
-    }
+    
+    onComplete(finalResponses);
   };
 
   return (
     <Card className="w-full max-w-4xl p-8 mx-auto mt-8 space-y-8">
-      <h2 className="text-2xl font-semibold text-right mb-6">استبيان التحيز الضمني</h2>
+      <h2 className="text-2xl font-semibold text-right mb-6">استبيان تجاه الأفراد ذوي اضطرابات التواصل</h2>
       
       <div className="space-y-6">
-        {QUESTIONS.map((question, index) => (
+        {currentPageQuestions.map((question, index) => (
           <div key={index} className="space-y-4">
             <p className="text-right">{question}</p>
             <RadioGroup
@@ -126,8 +139,8 @@ export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComp
             >
               {LIKERT_OPTIONS.map((option) => (
                 <div key={option} className="flex items-center space-x-2 flex-row-reverse">
-                  <Label htmlFor={`${index}-${option}`} className="text-right">{option}</Label>
-                  <RadioGroupItem value={option} id={`${index}-${option}`} />
+                  <Label htmlFor={`${currentPage * questionsPerPage + index}-${option}`} className="text-right">{option}</Label>
+                  <RadioGroupItem value={option} id={`${currentPage * questionsPerPage + index}-${option}`} />
                 </div>
               ))}
             </RadioGroup>
@@ -135,13 +148,22 @@ export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComp
         ))}
       </div>
 
-      <Button 
-        onClick={handleSubmit}
-        disabled={!isComplete()}
-        className="w-full"
-      >
-        متابعة
-      </Button>
+      <div className="flex justify-between">
+        {currentPage > 0 && (
+          <Button onClick={handlePrevPage} variant="outline">
+            السابق
+          </Button>
+        )}
+        <div className="flex-1 text-center">
+          صفحة {currentPage + 1} من {totalPages}
+        </div>
+        <Button 
+          onClick={handleNextPage}
+          disabled={!isPageComplete()}
+        >
+          {currentPage < totalPages - 1 ? "التالي" : "إنهاء"}
+        </Button>
+      </div>
     </Card>
   );
 };

@@ -2,7 +2,6 @@
 import React from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
@@ -65,9 +64,9 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="20">20-30</SelectItem>
-              <SelectItem value="30">30-40</SelectItem>
-              <SelectItem value="40">40-50</SelectItem>
-              <SelectItem value="50">50+</SelectItem>
+              <SelectItem value="31">31-40</SelectItem>
+              <SelectItem value="41">41-50</SelectItem>
+              <SelectItem value="51">51+</SelectItem>
             </SelectContent>
           </Select>
         </div>

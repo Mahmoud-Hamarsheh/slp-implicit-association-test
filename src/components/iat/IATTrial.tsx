@@ -29,14 +29,14 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
         };
       case 5:
         return {
-          left: "صفات إيجابية",
-          right: "صفات سلبية"
+          left: "تواصل طبيعي",
+          right: "اضطراب تواصل"
         };
       case 6:
       case 7:
         return {
-          left: "اضطراب تواصل\nأو\nصفات إيجابية",
-          right: "تواصل طبيعي\nأو\nصفات سلبية"
+          left: "تواصل طبيعي\nأو\nصفات سلبية",
+          right: "اضطراب تواصل\nأو\nصفات إيجابية"
         };
       default:
         return {

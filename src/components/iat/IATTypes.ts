@@ -32,5 +32,43 @@ export const BLOCKS = {
   COMMUNICATION_DISORDER: ["أفيزيا", "أبراكسيا", "ديسارثريا (عسر النطق)", "تأخر لغوي", "اضطراب صوت", "تأتأة"],
   NORMAL_COMMUNICATION: ["وضوح الكلام", "انسيابية الكلام", "طلاقة التعبير", "تواصل فعال", "معبر", "كلام مترابط", "الاستماع الفعال"],
   NEGATIVE_ATTRIBUTES: ["محدود", "ضعيف", "سلبي", "أخرق", "مشتت", "بطيء", "متوتر", "متردد"],
-  POSITIVE_ATTRIBUTES: ["كفو/قادر", "قوي", "واثق", "ذكي", "منتبه", "سريع", "مرن", "متعاون"]
+  POSITIVE_ATTRIBUTES: ["كفؤ/قادر", "قوي", "واثق", "ذكي", "منتبه", "سريع", "مرن", "متعاون"]
+};
+
+export const getCorrectKeyForBlock = (block: number, category: string): "d" | "k" => {
+  switch (block) {
+    case 1:
+    case 3:
+    case 4:
+      // Original mapping for blocks 1, 3, 4
+      if (category === "communication_disorder" || category === "negative") {
+        return "d";
+      } else {
+        return "k";
+      }
+    case 2:
+      // Block 2 - negative on left, positive on right
+      if (category === "negative") {
+        return "d";
+      } else {
+        return "k";
+      }
+    case 5:
+      // Block 5 - normal on left, disorder on right (swapped from block 1)
+      if (category === "normal_communication") {
+        return "d";
+      } else {
+        return "k";
+      }
+    case 6:
+    case 7:
+      // Blocks 6, 7 - normal/negative on left, disorder/positive on right
+      if (category === "normal_communication" || category === "negative") {
+        return "d";
+      } else {
+        return "k";
+      }
+    default:
+      return "d";
+  }
 };
