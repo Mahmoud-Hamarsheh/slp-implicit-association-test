@@ -1,7 +1,5 @@
-
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
-import { Toast } from "@radix-ui/react-toast";
 import { IATInstructions } from "./IATInstructions";
 import { IATTrialRunner } from "./IATTrialRunner";
 import { calculateDScore } from "./IATScoring";
@@ -12,9 +10,11 @@ import { TrialGenerator } from "./TrialGenerator";
 interface IATBlockManagerProps {
   onComplete: (result: number) => void;
   surveyData: IATProps["surveyData"];
-  toast: {
-    toast: (props: { title: string; description: string; variant?: "default" | "destructive" }) => void;
-  };
+  toast: (props: { 
+    title: string; 
+    description: string; 
+    variant?: "default" | "destructive" 
+  }) => void;
 }
 
 export const IATBlockManager: React.FC<IATBlockManagerProps> = ({ 
@@ -45,7 +45,7 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
 
   const saveResults = async (dScore: number) => {
     if (surveyData.hasTakenIATBefore) {
-      toast.toast({
+      toast({
         title: "اكتمل الاختبار",
         description: "بما أنك قمت بالاختبار مسبقاً، لن يتم حفظ نتائجك في قاعدة البيانات.",
       });
@@ -85,13 +85,13 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
 
       if (error) throw error;
       
-      toast.toast({
+      toast({
         title: "تم حفظ النتائج بنجاح",
         description: "تم تسجيل إجاباتك في قاعدة البيانات",
       });
     } catch (error) {
       console.error('Error saving results:', error);
-      toast.toast({
+      toast({
         title: "خطأ في حفظ النتائج",
         description: "حدث خطأ أثناء حفظ النتائج، يرجى المحاولة مرة أخرى",
         variant: "destructive",
@@ -113,7 +113,7 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
           saveResults(dScore);
           onComplete(dScore);
         } else {
-          toast.toast({
+          toast({
             title: "نتائج غير صالحة",
             description: "لم تكن استجاباتك ضمن معايير الصلاحية للاختبار",
             variant: "destructive",
