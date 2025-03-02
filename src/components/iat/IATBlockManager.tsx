@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { IATInstructions } from "./IATInstructions";
@@ -57,7 +58,7 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
       // Only keep response times for correct responses
       const correctResponseTimes = responses
         .filter(r => r.correct)
-        .map(r => r.responseTime);
+        .map(r => Number(r.responseTime.toFixed(3)));
       
       // Check if more than 10% of trials are below threshold
       const tooFastResponsesPercentage = responses.filter(r => r.responseTime < 0.3).length / responses.length;
@@ -72,6 +73,17 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         biasAwarenessResponses: surveyData.biasAwarenessResponses || {}
       };
 
+      // Log what we're about to save to help with debugging
+      console.log("Saving IAT results:", {
+        d_score: dScore,
+        age: surveyDataFormatted.age,
+        years_experience: surveyDataFormatted.yearsExperience,
+        degree: surveyDataFormatted.degree,
+        gender: surveyDataFormatted.gender,
+        response_times: correctResponseTimes,
+        valid_data: validData
+      });
+
       const { error } = await supabase
         .from('iat_results')
         .insert([
@@ -83,8 +95,7 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
             gender: surveyDataFormatted.gender,
             survey_responses: surveyDataFormatted.biasAwarenessResponses,
             response_times: correctResponseTimes,
-            responses: responses,
-            valid_data: validData
+            responses: responses
           }
         ]);
 

@@ -19,7 +19,7 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
       <IATBlockManager 
         onComplete={handleTestComplete} 
         surveyData={surveyData}
-        toast={toast}
+        toast={(props) => toast(props)}
       />
     </Card>
   );
