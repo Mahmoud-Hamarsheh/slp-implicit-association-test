@@ -42,6 +42,7 @@ const REVERSE_SCORING_QUESTIONS = [4, 7];
 export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete }) => {
   const [responses, setResponses] = useState<SurveyResponses>({});
   const [currentPage, setCurrentPage] = useState(0);
+  const [pageResponses, setPageResponses] = useState<SurveyResponses>({});
   
   // Split questions into pages of 4 questions each
   const questionsPerPage = 4;
@@ -53,32 +54,43 @@ export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComp
   );
 
   const handleResponse = (question: string, value: string) => {
-    setResponses(prev => ({
+    setPageResponses(prev => ({
       ...prev,
       [question]: value
     }));
   };
 
   const isPageComplete = () => {
-    return currentPageQuestions.every(question => responses[question]);
+    return currentPageQuestions.every(question => pageResponses[question]);
   };
 
   const handleNextPage = () => {
+    // Save current page responses to the main responses object
+    setResponses(prev => ({
+      ...prev,
+      ...pageResponses
+    }));
+    
     if (currentPage < totalPages - 1) {
       setCurrentPage(currentPage + 1);
+      // Reset page responses for the next page
+      setPageResponses({});
     } else {
-      // Final page - calculate and submit
-      calculateBiasScore();
+      // Final page - calculate and submit with all collected responses
+      const finalResponses = { ...responses, ...pageResponses };
+      calculateBiasScore(finalResponses);
     }
   };
 
   const handlePrevPage = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
+      // Reset page responses for the previous page
+      setPageResponses({});
     }
   };
 
-  const calculateBiasScore = () => {
+  const calculateBiasScore = (allResponses: SurveyResponses) => {
     // Map LIKERT_OPTIONS to numeric values (from 5 to 1)
     const likertToNumber: Record<string, number> = {
       "أوافق بشدة": 5,
@@ -91,7 +103,7 @@ export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComp
     // Calculate sum of all responses with reverse scoring for negative items
     let sum = 0;
     QUESTIONS.forEach((question, index) => {
-      const responseValue = likertToNumber[responses[question]] || 0;
+      const responseValue = likertToNumber[allResponses[question]] || 0;
       
       // Apply reverse scoring for negative statements
       if (REVERSE_SCORING_QUESTIONS.includes(index)) {
@@ -116,7 +128,7 @@ export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComp
 
     // Add bias score to responses
     const finalResponses = {
-      ...responses,
+      ...allResponses,
       biasScore: meanScore.toString(),
       biasLevel: biasLevel
     };
@@ -135,7 +147,7 @@ export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComp
             <RadioGroup
               className="flex flex-row-reverse justify-end gap-4"
               onValueChange={(value) => handleResponse(question, value)}
-              value={responses[question]}
+              value={pageResponses[question]}
             >
               {LIKERT_OPTIONS.map((option) => (
                 <div key={option} className="flex items-center space-x-2 flex-row-reverse">

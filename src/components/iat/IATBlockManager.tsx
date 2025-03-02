@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { IATInstructions } from "./IATInstructions";
@@ -55,18 +54,14 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
     }
 
     try {
-      // Filter responses based on IAT research criteria
-      const validResponses = responses.filter(r => r.responseTime >= 0.3 && r.responseTime <= 10);
+      // Only keep response times for correct responses
+      const correctResponseTimes = responses
+        .filter(r => r.correct)
+        .map(r => r.responseTime);
       
       // Check if more than 10% of trials are below threshold
       const tooFastResponsesPercentage = responses.filter(r => r.responseTime < 0.3).length / responses.length;
       const validData = tooFastResponsesPercentage <= 0.1;
-      
-      // Apply error penalty (+600ms) to incorrect responses
-      const penalizedResponses = responses.map(r => ({
-        ...r,
-        responseTime: r.correct ? r.responseTime : r.responseTime + 0.6
-      }));
 
       // Parse survey data to ensure it's in the correct format
       const surveyDataFormatted = {
@@ -87,8 +82,8 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
             degree: surveyDataFormatted.degree,
             gender: surveyDataFormatted.gender,
             survey_responses: surveyDataFormatted.biasAwarenessResponses,
-            response_times: responses.map(r => r.responseTime),
-            responses: penalizedResponses,
+            response_times: correctResponseTimes,
+            responses: responses,
             valid_data: validData
           }
         ]);

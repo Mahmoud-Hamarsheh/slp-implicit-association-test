@@ -40,7 +40,7 @@ export const getCorrectKeyForBlock = (block: number, category: string): "d" | "k
     case 1:
     case 3:
     case 4:
-      // Updated mapping for blocks 1, 3, 4
+      // Blocks 1, 3, 4
       if (category === "communication_disorder" || category === "negative") {
         return "d";
       } else {
@@ -54,7 +54,7 @@ export const getCorrectKeyForBlock = (block: number, category: string): "d" | "k
         return "k";
       }
     case 5:
-      // Block 5 - normal on right, disorder on left (swapped)
+      // Block 5 - normal on right, disorder on left (swapped from block 1)
       if (category === "normal_communication") {
         return "d";
       } else {
