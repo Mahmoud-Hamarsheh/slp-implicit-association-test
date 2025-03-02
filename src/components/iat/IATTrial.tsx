@@ -13,19 +13,19 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
     switch (trial.block) {
       case 1:
         return {
-          left: "تواصل طبيعي",
-          right: "اضطراب تواصل"
+          left: "اضطراب تواصل",
+          right: "تواصل طبيعي"
         };
       case 2:
         return {
-          left: "صفات إيجابية",
-          right: "صفات سلبية"
+          left: "صفات سلبية",
+          right: "صفات إيجابية"
         };
       case 3:
       case 4:
         return {
-          left: "تواصل طبيعي\nأو\nصفات إيجابية",
-          right: "اضطراب تواصل\nأو\nصفات سلبية"
+          left: "اضطراب تواصل\nأو\nصفات سلبية",
+          right: "تواصل طبيعي\nأو\nصفات إيجابية"
         };
       case 5:
         return {
@@ -52,14 +52,14 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
     <div className="max-w-3xl mx-auto border-2 border-blue-200 rounded-lg p-8 bg-white">
       <div className="grid grid-cols-2 gap-8 mb-12">
         <div className="text-center flex flex-col items-center">
-          <div className="text-4xl font-bold mb-4">K</div>
+          <div className="text-4xl font-bold mb-4">D</div>
           <div className="whitespace-pre-line text-xl text-green-600 mb-2">{categories.left}</div>
-          <div className="text-lg">اضغط "K"</div>
+          <div className="text-lg">اضغط "D"</div>
         </div>
         <div className="text-center flex flex-col items-center">
-          <div className="text-4xl font-bold mb-4">D</div>
+          <div className="text-4xl font-bold mb-4">K</div>
           <div className="whitespace-pre-line text-xl text-green-600 mb-2">{categories.right}</div>
-          <div className="text-lg">اضغط "D"</div>
+          <div className="text-lg">اضغط "K"</div>
         </div>
       </div>
 

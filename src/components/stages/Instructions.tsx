@@ -16,19 +16,19 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue }) => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-bold mb-2">اضطراب تواصل</h3>
+          <h3 className="font-bold mb-2">اضطراب تواصل (D)</h3>
           <p>أفيزيا، أبراكسيا، ديسارثريا (عسر النطق)، تأخر لغوي، اضطراب صوت، تأتأة</p>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-bold mb-2">تواصل طبيعي</h3>
+          <h3 className="font-bold mb-2">تواصل طبيعي (K)</h3>
           <p>وضوح الكلام، انسيابية الكلام، طلاقة التعبير، تواصل فعال، معبر، كلام مترابط</p>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-bold mb-2">صفات سلبية</h3>
+          <h3 className="font-bold mb-2">صفات سلبية (D)</h3>
           <p>محدود، ضعيف، سلبي، أخرق، مشتت، بطيء، متوتر، متردد</p>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-bold mb-2">صفات إيجابية</h3>
+          <h3 className="font-bold mb-2">صفات إيجابية (K)</h3>
           <p>كفؤ/قادر، قوي، واثق، ذكي، منتبه، سريع، مرن، متعاون</p>
         </div>
       </div>

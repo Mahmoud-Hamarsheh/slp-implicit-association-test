@@ -50,8 +50,8 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block, onStart })
         return {
           title: "٥ من اصل ٧",
           description: "انتبه، لقد تغيرت أماكن التسميات!",
-          leftKey: "صفات إيجابية",
-          rightKey: "صفات سلبية"
+          leftKey: "اضطراب تواصل",
+          rightKey: "تواصل طبيعي"
         };
       case 6:
         return {

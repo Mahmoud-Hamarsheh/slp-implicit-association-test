@@ -42,16 +42,16 @@ export const getCorrectKeyForBlock = (block: number, category: string): "d" | "k
     case 4:
       // Blocks 1, 3, 4
       if (category === "communication_disorder" || category === "negative") {
-        return "k";
-      } else {
         return "d";
+      } else {
+        return "k";
       }
     case 2:
-      // Block 2 - negative on right, positive on left
+      // Block 2 - negative on left, positive on right
       if (category === "negative") {
-        return "k";
-      } else {
         return "d";
+      } else {
+        return "k";
       }
     case 5:
       // Block 5 - normal on right, disorder on left (swapped from block 1)
@@ -69,6 +69,6 @@ export const getCorrectKeyForBlock = (block: number, category: string): "d" | "k
         return "d";
       }
     default:
-      return "k";
+      return "d";
   }
 };
