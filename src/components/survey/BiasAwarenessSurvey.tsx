@@ -100,4 +100,3 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
 };
 
 export default BiasAwarenessSurvey;
-export { SurveyResponses };

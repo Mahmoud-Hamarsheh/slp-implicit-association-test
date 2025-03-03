@@ -1,5 +1,8 @@
 
-import BiasAwarenessSurvey, { SurveyResponses } from './survey/BiasAwarenessSurvey';
+import BiasAwarenessSurvey from './survey/BiasAwarenessSurvey';
+import { SurveyResponses } from './survey/types';
 
-export { SurveyResponses };
+export { BiasAwarenessSurvey };
+export type { SurveyResponses };
+
 export default BiasAwarenessSurvey;
