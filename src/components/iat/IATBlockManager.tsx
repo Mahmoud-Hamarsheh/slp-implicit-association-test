@@ -64,7 +64,7 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
       const tooFastResponsesPercentage = responses.filter(r => r.responseTime < 0.3).length / responses.length;
       const validData = tooFastResponsesPercentage <= 0.1;
 
-      // Convert dScore from milliseconds to seconds
+      // Ensure dScore is in seconds (no conversion needed as it's already in seconds)
       const dScoreInSeconds = dScore;
 
       // Parse survey data to ensure it's in the correct format
@@ -76,7 +76,7 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         biasAwarenessResponses: surveyData.biasAwarenessResponses || {}
       };
 
-      // Calculate survey score if available
+      // Extract survey score if available
       const surveyScore = surveyData.biasAwarenessResponses?.biasScore 
         ? parseFloat(surveyData.biasAwarenessResponses.biasScore)
         : null;

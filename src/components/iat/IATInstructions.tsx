@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "../ui/button";
 import { Check } from "lucide-react";
@@ -15,8 +14,16 @@ interface BlockInstructions {
   rightKey: string;
 }
 
-export const IATInstructions: React.FC<InstructionsProps> = ({ block, onStart }) => {
-  const getBlockInstructions = (block: number): BlockInstructions => {
+interface IATInstructionsProps {
+  block: number;
+  onStart: () => void;
+}
+
+export const IATInstructions: React.FC<IATInstructionsProps> = ({ 
+  block, 
+  onStart 
+}) => {
+  const getInstructionsForBlock = (block: number): BlockInstructions => {
     switch (block) {
       case 1:
         return {
@@ -77,13 +84,18 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block, onStart })
     }
   };
 
-  const instructions = getBlockInstructions(block);
+  const instructions = getInstructionsForBlock(block);
 
   return (
-    <div className="max-w-3xl mx-auto text-right space-y-6">
-      <h2 className="text-2xl font-bold mb-4">{instructions.title}</h2>
-      <p className="text-lg mb-6">{instructions.description}</p>
-
+    <div className="p-6 text-center space-y-4 max-w-3xl mx-auto animate-slideUpFade">
+      <h2 className="text-2xl font-bold">{instructions.title}</h2>
+      
+      {instructions.description && (
+        <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg">
+          <p className="text-amber-800">{instructions.description}</p>
+        </div>
+      )}
+      
       <div className="bg-gray-50 p-6 rounded-lg mb-6">
         <h3 className="text-xl font-bold mb-4">التصنيفات:</h3>
         <div className="space-y-3">
@@ -101,38 +113,7 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block, onStart })
         </div>
       </div>
 
-      <div className="bg-gray-50 p-6 rounded-lg">
-        <h3 className="text-xl font-bold mb-4">تذكر:</h3>
-        <ul className="space-y-3">
-          <li className="flex items-center justify-end gap-2">
-            <span>حاول الإجابة بسرعة ودون تردد.</span>
-            <span className="text-green-500">
-              <Check className="h-5 w-5" />
-            </span>
-          </li>
-          <li className="flex items-center justify-end gap-2">
-            <span>إذا أخطأت سيظهر رمز X أحمر. ويمكنك المحاولة مرة أخرى.</span>
-            <span className="text-green-500">
-              <Check className="h-5 w-5" />
-            </span>
-          </li>
-          <li className="flex items-center justify-end gap-2">
-            <span>ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة.</span>
-            <span className="text-green-500">
-              <Check className="h-5 w-5" />
-            </span>
-          </li>
-        </ul>
-      </div>
-
-      <div className="text-center mt-8">
-        <Button 
-          onClick={onStart}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg"
-        >
-          ابدأ
-        </Button>
-      </div>
+      <Button onClick={onStart} size="lg">بدء المرحلة</Button>
     </div>
   );
 };
