@@ -64,6 +64,9 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
       const tooFastResponsesPercentage = responses.filter(r => r.responseTime < 0.3).length / responses.length;
       const validData = tooFastResponsesPercentage <= 0.1;
 
+      // Convert dScore from milliseconds to seconds
+      const dScoreInSeconds = dScore;
+
       // Parse survey data to ensure it's in the correct format
       const surveyDataFormatted = {
         age: Number(surveyData.age) || 0,
@@ -73,13 +76,19 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         biasAwarenessResponses: surveyData.biasAwarenessResponses || {}
       };
 
+      // Calculate survey score if available
+      const surveyScore = surveyData.biasAwarenessResponses?.biasScore 
+        ? parseFloat(surveyData.biasAwarenessResponses.biasScore)
+        : null;
+
       // Log what we're about to save to help with debugging
       console.log("Saving IAT results:", {
-        d_score: dScore,
+        d_score: dScoreInSeconds,
         age: surveyDataFormatted.age,
         years_experience: surveyDataFormatted.yearsExperience,
         degree: surveyDataFormatted.degree,
         gender: surveyDataFormatted.gender,
+        survey_score: surveyScore,
         response_times: correctResponseTimes,
         valid_data: validData
       });
@@ -88,12 +97,13 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         .from('iat_results')
         .insert([
           {
-            d_score: dScore,
+            d_score: dScoreInSeconds,
             age: surveyDataFormatted.age,
             years_experience: surveyDataFormatted.yearsExperience,
             degree: surveyDataFormatted.degree,
             gender: surveyDataFormatted.gender,
             survey_responses: surveyDataFormatted.biasAwarenessResponses,
+            survey_score: surveyScore,
             response_times: correctResponseTimes,
             responses: responses
           }

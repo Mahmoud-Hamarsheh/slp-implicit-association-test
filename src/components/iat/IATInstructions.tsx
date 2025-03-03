@@ -50,8 +50,8 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block, onStart })
         return {
           title: "٥ من اصل ٧",
           description: "انتبه، لقد تغيرت أماكن التسميات!",
-          leftKey: "تواصل طبيعي",
-          rightKey: "اضطراب تواصل"
+          leftKey: "صفات إيجابية",
+          rightKey: "صفات سلبية"
         };
       case 6:
         return {
@@ -87,8 +87,17 @@ export const IATInstructions: React.FC<InstructionsProps> = ({ block, onStart })
       <div className="bg-gray-50 p-6 rounded-lg mb-6">
         <h3 className="text-xl font-bold mb-4">التصنيفات:</h3>
         <div className="space-y-3">
-          <p className="text-lg">اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
-          <p className="text-lg">اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
+          {block === 5 ? (
+            <>
+              <p className="text-lg">اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
+              <p className="text-lg">اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
+            </>
+          ) : (
+            <>
+              <p className="text-lg">اضغط على D إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
+              <p className="text-lg">اضغط على K إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
+            </>
+          )}
         </div>
       </div>
 

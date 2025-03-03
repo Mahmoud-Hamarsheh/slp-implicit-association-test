@@ -85,7 +85,7 @@ export const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComp
   const handlePrevPage = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
-      // Reset page responses for the previous page
+      // Reset page responses for the previous page - this is the change needed
       setPageResponses({});
     }
   };

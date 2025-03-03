@@ -32,6 +32,15 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue }) => {
           <p>محدود، ضعيف، سلبي، أخرق، مشتت، بطيء، متوتر، متردد</p>
         </div>
       </div>
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <p>اضغط على (D) إذا كانت الكلمة تنتمي إلى صفات إيجابية</p>
+        <p>اضغط على (K) إذا كانت الكلمة تنتمي إلى صفات سلبية</p>
+        <img 
+          src="/lovable-uploads/9222cbdf-195d-45e8-9dd6-c4b03f66cc3e.png" 
+          alt="Key instructions" 
+          className="mx-auto my-4 max-w-full"
+        />
+      </div>
       <Button onClick={onContinue}>متابعة</Button>
     </Card>
   );
