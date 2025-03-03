@@ -7,11 +7,15 @@ import { calculateBiasScore } from './scoreUtils';
 import { SurveyResponses, BiasAwarenessSurveyProps } from './types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, ArrowRight, Send } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 
 const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [formResponses, setFormResponses] = useState<SurveyResponses>({});
   const [pageResponses, setPageResponses] = useState<SurveyResponses>({});
+
+  // Calculate progress percentage
+  const progressPercentage = ((currentPage + 1) / surveyPages.length) * 100;
 
   const handleInputChange = (questionId: string, value: string) => {
     setPageResponses(prev => ({ ...prev, [questionId]: value }));
@@ -75,6 +79,9 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
           <div className="text-sm text-muted-foreground mt-2 font-medium">
             {`صفحة ${currentPage + 1} من ${surveyPages.length}`}
           </div>
+          <div className="mt-4">
+            <Progress value={progressPercentage} className="h-2 bg-secondary/50" />
+          </div>
         </CardHeader>
         
         <CardContent className="px-4 pt-6 pb-2 md:px-8">
@@ -97,6 +104,14 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
             <ArrowRight className="h-4 w-4" />
             السابق
           </Button>
+          
+          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+            <div className="hidden md:flex items-center text-sm text-muted-foreground">
+              <span className="font-medium">{currentPage + 1}</span>
+              <span className="mx-1">من</span>
+              <span className="font-medium">{surveyPages.length}</span>
+            </div>
+          </div>
           
           <Button
             onClick={handleNextPage}
@@ -121,3 +136,4 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
 };
 
 export default BiasAwarenessSurvey;
+
