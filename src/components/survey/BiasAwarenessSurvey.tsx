@@ -5,6 +5,8 @@ import { SurveyPageComponent } from './SurveyPage';
 import { surveyPages } from './surveyData';
 import { calculateBiasScore } from './scoreUtils';
 import { SurveyResponses, BiasAwarenessSurveyProps } from './types';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft, ArrowRight, Send } from 'lucide-react';
 
 const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete }) => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -63,38 +65,57 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
   };
 
   const currentSurveyPage = surveyPages[currentPage];
+  const isLastPage = currentPage === surveyPages.length - 1;
 
   return (
-    <div className="p-8 space-y-6">
-      <h2 className="text-2xl font-bold text-center">استبيان حول الوعي بالتحيز</h2>
-      <p className="text-center">
-        {`صفحة ${currentPage + 1} من ${surveyPages.length}`}
-      </p>
-      
-      {currentSurveyPage && (
-        <SurveyPageComponent
-          page={currentSurveyPage}
-          responses={pageResponses}
-          onResponseChange={handleInputChange}
-        />
-      )}
+    <div className="p-4 md:p-8 space-y-6 max-w-4xl mx-auto">
+      <Card className="shadow-lg border-0">
+        <CardHeader className="text-center bg-gradient-to-r from-primary/10 to-primary/5 rounded-t-lg">
+          <CardTitle className="text-2xl font-bold text-primary">استبيان حول الوعي بالتحيز</CardTitle>
+          <div className="text-sm text-muted-foreground mt-2 font-medium">
+            {`صفحة ${currentPage + 1} من ${surveyPages.length}`}
+          </div>
+        </CardHeader>
+        
+        <CardContent className="px-4 pt-6 pb-2 md:px-8">
+          {currentSurveyPage && (
+            <SurveyPageComponent
+              page={currentSurveyPage}
+              responses={pageResponses}
+              onResponseChange={handleInputChange}
+            />
+          )}
+        </CardContent>
 
-      <div className="flex justify-between">
-        <Button
-          onClick={handlePrevPage}
-          variant="outline"
-          className="bg-gray-200 hover:bg-gray-300 text-gray-800"
-          disabled={currentPage === 0}
-        >
-          السابق
-        </Button>
-        <Button
-          onClick={handleNextPage}
-          className="bg-indigo-500 hover:bg-indigo-700 text-white"
-        >
-          {currentPage === surveyPages.length - 1 ? 'إرسال' : 'التالي'}
-        </Button>
-      </div>
+        <CardFooter className="flex justify-between p-6 border-t border-gray-100">
+          <Button
+            onClick={handlePrevPage}
+            variant="outline"
+            className="flex items-center gap-2"
+            disabled={currentPage === 0}
+          >
+            <ArrowRight className="h-4 w-4" />
+            السابق
+          </Button>
+          
+          <Button
+            onClick={handleNextPage}
+            className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2"
+          >
+            {isLastPage ? (
+              <>
+                إرسال
+                <Send className="h-4 w-4 ms-1" />
+              </>
+            ) : (
+              <>
+                التالي
+                <ArrowLeft className="h-4 w-4" />
+              </>
+            )}
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 };
