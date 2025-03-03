@@ -1,7 +1,10 @@
+
 import React, { useState } from 'react';
 
-interface SurveyResponses {
+export interface SurveyResponses {
   [key: string]: string;
+  biasLevel?: string;
+  biasScore?: string;
 }
 
 interface BiasAwarenessSurveyProps {
@@ -74,7 +77,6 @@ const surveyPages: SurveyPage[] = [
   },
 ];
 
-// Update the navigation handlers to reset page responses
 const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [formResponses, setFormResponses] = useState<SurveyResponses>({});
@@ -100,13 +102,17 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
       return;
     }
     
+    // Save current page responses to form responses before moving on
+    const updatedFormResponses = { ...formResponses, ...pageResponses };
+    setFormResponses(updatedFormResponses);
+    
     // When moving to next page, reset page responses
     if (currentPage < surveyPages.length - 1) {
       setCurrentPage(currentPage + 1);
       setPageResponses({});
     } else {
       // Calculate final score
-      const responses = { ...formResponses, ...pageResponses };
+      const responses = { ...updatedFormResponses };
       
       // Calculate the bias score
       let biasScore = 0;

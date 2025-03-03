@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { Survey, SurveyData } from "@/components/Survey";
-import { BiasAwarenessSurvey, SurveyResponses } from "@/components/BiasAwarenessSurvey";
+import BiasAwarenessSurvey, { SurveyResponses } from "@/components/BiasAwarenessSurvey";
 import { useToast } from "@/hooks/use-toast";
 
 // Import refactored stage components
