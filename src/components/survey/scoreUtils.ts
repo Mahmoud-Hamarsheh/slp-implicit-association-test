@@ -50,7 +50,7 @@ export const calculateBiasScore = (responses: SurveyResponses): { biasScore: num
   }
 
   return { 
-    biasScore: averageScore, 
+    biasScore: Number(averageScore.toFixed(2)), 
     biasLevel 
   };
 };

@@ -44,15 +44,6 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
   }, [currentBlock]);
 
   const saveResults = async (dScore: number) => {
-    if (surveyData.hasTakenIATBefore) {
-      toast({
-        title: "اكتمل الاختبار",
-        description: "بما أنك قمت بالاختبار مسبقاً، لن يتم حفظ نتائجك في قاعدة البيانات.",
-      });
-      onComplete(dScore);
-      return;
-    }
-
     try {
       // Only keep response times for correct responses
       const correctResponseTimes = responses
@@ -62,9 +53,6 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
       // Check if more than 10% of trials are below threshold
       const tooFastResponsesPercentage = responses.filter(r => r.responseTime < 0.3).length / responses.length;
       const validData = tooFastResponsesPercentage <= 0.1;
-
-      // Ensure dScore is in seconds (no conversion needed as it's already in seconds)
-      const dScoreInSeconds = dScore;
 
       // Parse survey data to ensure it's in the correct format
       const surveyDataFormatted = {
@@ -82,7 +70,7 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
 
       // Log what we're about to save to help with debugging
       console.log("Saving IAT results:", {
-        d_score: dScoreInSeconds,
+        d_score: dScore,
         age: surveyDataFormatted.age,
         years_experience: surveyDataFormatted.yearsExperience,
         degree: surveyDataFormatted.degree,
@@ -92,31 +80,38 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         valid_data: validData
       });
 
-      const { error } = await supabase
-        .from('iat_results')
-        .insert([
-          {
-            d_score: dScoreInSeconds,
-            age: surveyDataFormatted.age,
-            years_experience: surveyDataFormatted.yearsExperience,
-            degree: surveyDataFormatted.degree,
-            gender: surveyDataFormatted.gender,
-            survey_responses: surveyDataFormatted.biasAwarenessResponses,
-            survey_score: surveyScore,
-            response_times: correctResponseTimes,
-            responses: responses
-          }
-        ]);
+      if (surveyData.hasTakenIATBefore) {
+        toast({
+          title: "اكتمل الاختبار",
+          description: "بما أنك قمت بالاختبار مسبقًا، لن يتم حفظ نتائجك في قاعدة البيانات.",
+        });
+      } else {
+        const { error } = await supabase
+          .from('iat_results')
+          .insert([
+            {
+              d_score: dScore,
+              age: surveyDataFormatted.age,
+              years_experience: surveyDataFormatted.yearsExperience,
+              degree: surveyDataFormatted.degree,
+              gender: surveyDataFormatted.gender,
+              survey_responses: surveyDataFormatted.biasAwarenessResponses,
+              survey_score: surveyScore,
+              response_times: correctResponseTimes,
+              responses: responses
+            }
+          ]);
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+        if (error) {
+          console.error('Supabase error:', error);
+          throw error;
+        }
+        
+        toast({
+          title: "تم حفظ النتائج بنجاح",
+          description: "تم تسجيل إجاباتك في قاعدة البيانات",
+        });
       }
-      
-      toast({
-        title: "تم حفظ النتائج بنجاح",
-        description: "تم تسجيل إجاباتك في قاعدة البيانات",
-      });
     } catch (error) {
       console.error('Error saving results:', error);
       toast({
@@ -125,7 +120,7 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         variant: "destructive",
       });
     } finally {
-      // Call onComplete regardless of whether saving succeeded
+      // Always call onComplete regardless of whether saving succeeded
       onComplete(dScore);
     }
   };
