@@ -37,56 +37,56 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
         return {
           title: "١ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها إلى تواصل طبيعي أو اضطراب تواصل بأسرع ما يمكن.",
-          leftKey: "اضطراب تواصل",
-          rightKey: "تواصل طبيعي",
+          leftKey: "تواصل طبيعي",
+          rightKey: "اضطراب تواصل",
           reminder: reminders
         };
       case 2:
         return {
           title: "٢ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها إلى صفات ايجابية أو صفات سلبية بأسرع ما يمكن.",
-          leftKey: "صفات سلبية",
-          rightKey: "صفات إيجابية",
+          leftKey: "صفات إيجابية",
+          rightKey: "صفات سلبية",
           reminder: reminders
         };
       case 3:
         return {
           title: "٣ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
-          leftKey: "اضطراب تواصل أو صفة سلبية",
-          rightKey: "تواصل طبيعي أو صفة إيجابية",
+          leftKey: "تواصل طبيعي أو صفة إيجابية",
+          rightKey: "اضطراب تواصل أو صفة سلبية",
           reminder: reminders
         };
       case 4:
         return {
           title: "٤ من اصل ٧",
           description: "هذا مماثل للجزء السابق\nستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
-          leftKey: "اضطراب تواصل أو صفة سلبية",
-          rightKey: "تواصل طبيعي أو صفة إيجابية",
+          leftKey: "تواصل طبيعي أو صفة إيجابية",
+          rightKey: "اضطراب تواصل أو صفة سلبية",
           reminder: reminders
         };
       case 5:
         return {
           title: "٥ من اصل ٧",
           description: "انتبه، لقد تغيرت أماكن التسميات!",
-          leftKey: "صفات إيجابية",
-          rightKey: "صفات سلبية",
+          leftKey: "صفات سلبية",
+          rightKey: "صفات إيجابية",
           reminder: reminders
         };
       case 6:
         return {
           title: "٦ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
-          leftKey: "اضطراب تواصل أو صفة ايجابية",
-          rightKey: "تواصل طبيعي أو صفة سلبية",
+          leftKey: "تواصل طبيعي أو صفة سلبية",
+          rightKey: "اضطراب تواصل أو صفة ايجابية",
           reminder: reminders
         };
       case 7:
         return {
           title: "٧ من اصل ٧",
           description: "هذا مماثل للجزء السابق",
-          leftKey: "اضطراب تواصل أو صفة ايجابية",
-          rightKey: "تواصل طبيعي أو صفة سلبية",
+          leftKey: "تواصل طبيعي أو صفة سلبية",
+          rightKey: "اضطراب تواصل أو صفة ايجابية",
           reminder: reminders
         };
       default:
@@ -114,8 +114,8 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
       <div className="bg-gray-50 p-6 rounded-lg mb-6">
         <h3 className="text-xl font-bold mb-4">التصنيفات:</h3>
         <div className="space-y-3">
-          <p className="text-lg">اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
-          <p className="text-lg">اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
+          <p className="text-lg">اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
+          <p className="text-lg">اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
         </div>
       </div>
 

@@ -38,14 +38,14 @@ export const BLOCKS = {
 export const getCorrectKeyForBlock = (block: number, category: string): "d" | "k" => {
   switch (block) {
     case 1:
-      // Block 1: D = disorder, K = normal
+      // Block 1: K = normal, D = disorder (swapped)
       if (category === "communication_disorder") {
         return "d";
       } else {
         return "k";
       }
     case 2:
-      // Block 2: D = negative, K = positive
+      // Block 2: K = positive, D = negative (swapped)
       if (category === "negative") {
         return "d";
       } else {
@@ -53,14 +53,14 @@ export const getCorrectKeyForBlock = (block: number, category: string): "d" | "k
       }
     case 3:
     case 4:
-      // Blocks 3, 4: D = disorder/negative, K = normal/positive
+      // Blocks 3, 4: K = normal/positive, D = disorder/negative (swapped)
       if (category === "communication_disorder" || category === "negative") {
         return "d";
       } else {
         return "k";
       }
     case 5:
-      // Block 5: D = positive, K = negative
+      // Block 5: K = negative, D = positive (swapped)
       if (category === "positive") {
         return "d";
       } else {
@@ -68,7 +68,7 @@ export const getCorrectKeyForBlock = (block: number, category: string): "d" | "k
       }
     case 6:
     case 7:
-      // Blocks 6, 7: D = disorder/positive, K = normal/negative
+      // Blocks 6, 7: K = normal/negative, D = disorder/positive (swapped)
       if (category === "communication_disorder" || category === "positive") {
         return "d";
       } else {
