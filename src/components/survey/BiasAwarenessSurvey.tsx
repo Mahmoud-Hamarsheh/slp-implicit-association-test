@@ -75,7 +75,7 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
     <div className="p-4 md:p-8 space-y-6 max-w-4xl mx-auto">
       <Card className="shadow-lg border-0">
         <CardHeader className="text-center bg-gradient-to-r from-primary/10 to-primary/5 rounded-t-lg">
-          <CardTitle className="text-2xl font-bold text-primary">استبيان حول الوعي بالتحيز</CardTitle>
+          <CardTitle className="text-2xl font-bold text-primary">استبيان تجاه الأفراد ذوي اضطرابات التواصل</CardTitle>
           <div className="text-sm text-muted-foreground mt-2 font-medium">
             {`صفحة ${currentPage + 1} من ${surveyPages.length}`}
           </div>
@@ -136,4 +136,3 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
 };
 
 export default BiasAwarenessSurvey;
-

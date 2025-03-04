@@ -17,7 +17,7 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <div className="bg-gray-50 p-4 rounded-lg">
           <h3 className="font-bold mb-2">تواصل طبيعي</h3>
-          <p>وضوح الكلام، انسيابية الكلام، طلاقة التعبير، تواصل فعال، معبر، كلام مترابط</p>
+          <p>وضوح الكلام، انسيابية الكلام، طلاقة التعبير، تواصل فعال، معبر، كلام مترابط، الاستماع الفعال</p>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
           <h3 className="font-bold mb-2">اضطراب تواصل</h3>
@@ -31,11 +31,6 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue }) => {
           <h3 className="font-bold mb-2">صفات سلبية</h3>
           <p>محدود، ضعيف، سلبي، أخرق، مشتت، بطيء، متوتر، متردد</p>
         </div>
-      </div>
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <p>ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة.</p>
-        <p>في بعض الأحيان ستضغط على (D) للصفات الإيجابية، وفي أحيان أخرى لاضطرابات التواصل.</p>
-        <p>اقرأ التعليمات بعناية في كل مرحلة.</p>
       </div>
       <Button onClick={onContinue}>متابعة</Button>
     </Card>

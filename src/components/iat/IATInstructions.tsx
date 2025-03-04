@@ -1,12 +1,6 @@
 
 import React from "react";
 import { Button } from "../ui/button";
-import { Check } from "lucide-react";
-
-interface InstructionsProps {
-  block: number;
-  onStart: () => void;
-}
 
 interface BlockInstructions {
   title: string;
