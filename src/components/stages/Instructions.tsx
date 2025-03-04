@@ -33,13 +33,9 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue }) => {
         </div>
       </div>
       <div className="bg-gray-50 p-4 rounded-lg">
-        <p>اضغط على (D) إذا كانت الكلمة تنتمي إلى صفات إيجابية</p>
-        <p>اضغط على (K) إذا كانت الكلمة تنتمي إلى صفات سلبية</p>
-        <img 
-          src="/lovable-uploads/9222cbdf-195d-45e8-9dd6-c4b03f66cc3e.png" 
-          alt="Key instructions" 
-          className="mx-auto my-4 max-w-full"
-        />
+        <p>ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة.</p>
+        <p>في بعض الأحيان ستضغط على (D) للصفات الإيجابية، وفي أحيان أخرى لاضطرابات التواصل.</p>
+        <p>اقرأ التعليمات بعناية في كل مرحلة.</p>
       </div>
       <Button onClick={onContinue}>متابعة</Button>
     </Card>

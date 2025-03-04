@@ -11,31 +11,46 @@ export const calculateBiasScore = (responses: SurveyResponses): { biasScore: num
     'لا أوافق بشدة': 1,
   };
 
-  // Questions that indicate bias if agreed with
-  const biasQuestions = ['q1', 'q3', 'q5', 'q6'];
+  // Items that need reverse scoring (q5 and q8)
+  const reverseItems = ['q5', 'q8'];
   
-  // Calculate the score based on responses
-  let biasScore = 0;
+  // Calculate the sum of scores
+  let totalScore = 0;
+  let answeredQuestions = 0;
   
-  biasQuestions.forEach(questionId => {
+  // Process all question responses
+  for (let i = 1; i <= 12; i++) {
+    const questionId = `q${i}`;
     const response = responses[questionId];
+    
     if (response) {
-      biasScore += responseValues[response] || 0;
+      answeredQuestions++;
+      let score = responseValues[response] || 0;
+      
+      // Apply reverse scoring for negative items
+      if (reverseItems.includes(questionId)) {
+        score = 6 - score; // Reverse the score: 6 - original score
+      }
+      
+      totalScore += score;
     }
-  });
-
-  // Normalize the score
-  biasScore = (biasScore / (biasQuestions.length * 5)) * 100;
-
-  // Determine bias level based on score
-  let biasLevel = 'محايد';
-  if (biasScore > 60) {
-    biasLevel = 'مرتفع';
-  } else if (biasScore > 40) {
+  }
+  
+  // Calculate average score if at least one question was answered
+  const averageScore = answeredQuestions > 0 ? totalScore / answeredQuestions : 0;
+  
+  // Determine bias level based on average score
+  let biasLevel = '';
+  if (averageScore <= 2.5) {
+    biasLevel = 'منخفض';
+  } else if (averageScore <= 3.5) {
     biasLevel = 'متوسط';
-  } else if (biasScore > 20) {
-    biasLevel = 'ضعيف';
+  } else {
+    biasLevel = 'مرتفع';
   }
 
-  return { biasScore, biasLevel };
+  return { 
+    biasScore: averageScore, 
+    biasLevel 
+  };
 };

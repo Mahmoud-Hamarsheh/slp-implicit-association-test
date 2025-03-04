@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "../ui/button";
 import { Check } from "lucide-react";
@@ -12,6 +13,7 @@ interface BlockInstructions {
   description: string | string[];
   leftKey: string;
   rightKey: string;
+  reminder?: string[];
 }
 
 interface IATInstructionsProps {
@@ -24,55 +26,68 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
   onStart 
 }) => {
   const getInstructionsForBlock = (block: number): BlockInstructions => {
+    const reminders = [
+      "✔ حاول الإجابة بسرعة ودون تردد.",
+      "✔ إذا أخطأت سيظهر رمز X أحمر. ويمكنك المحاولة مرة أخرى.",
+      "✔ ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة."
+    ];
+
     switch (block) {
       case 1:
         return {
           title: "١ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها إلى تواصل طبيعي أو اضطراب تواصل بأسرع ما يمكن.",
-          leftKey: "تواصل طبيعي",
-          rightKey: "اضطراب تواصل"
+          leftKey: "اضطراب تواصل",
+          rightKey: "تواصل طبيعي",
+          reminder: reminders
         };
       case 2:
         return {
           title: "٢ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها إلى صفات ايجابية أو صفات سلبية بأسرع ما يمكن.",
-          leftKey: "صفات إيجابية",
-          rightKey: "صفات سلبية"
+          leftKey: "صفات سلبية",
+          rightKey: "صفات إيجابية",
+          reminder: reminders
         };
       case 3:
         return {
           title: "٣ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
-          leftKey: "تواصل طبيعي أو صفة إيجابية",
-          rightKey: "اضطراب تواصل أو صفة سلبية"
+          leftKey: "اضطراب تواصل أو صفة سلبية",
+          rightKey: "تواصل طبيعي أو صفة إيجابية",
+          reminder: reminders
         };
       case 4:
         return {
           title: "٤ من اصل ٧",
           description: "هذا مماثل للجزء السابق\nستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
-          leftKey: "تواصل طبيعي أو صفة إيجابية",
-          rightKey: "اضطراب تواصل أو صفة سلبية"
+          leftKey: "اضطراب تواصل أو صفة سلبية",
+          rightKey: "تواصل طبيعي أو صفة إيجابية",
+          reminder: reminders
         };
       case 5:
         return {
           title: "٥ من اصل ٧",
           description: "انتبه، لقد تغيرت أماكن التسميات!",
           leftKey: "صفات إيجابية",
-          rightKey: "صفات سلبية"
+          rightKey: "صفات سلبية",
+          reminder: reminders
         };
       case 6:
         return {
           title: "٦ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
-          leftKey: "تواصل طبيعي أو صفة سلبية",
-          rightKey: "اضطراب تواصل أو صفة ايجابية"
+          leftKey: "اضطراب تواصل أو صفة ايجابية",
+          rightKey: "تواصل طبيعي أو صفة سلبية",
+          reminder: reminders
         };
       case 7:
         return {
           title: "٧ من اصل ٧",
           description: "هذا مماثل للجزء السابق",
-          leftKey: "تواصل طبيعي أو صفة سلبية",
-          rightKey: "اضطراب تواصل أو صفة ايجابية"
+          leftKey: "اضطراب تواصل أو صفة ايجابية",
+          rightKey: "تواصل طبيعي أو صفة سلبية",
+          reminder: reminders
         };
       default:
         return {
@@ -92,26 +107,28 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
       
       {instructions.description && (
         <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg">
-          <p className="text-amber-800">{instructions.description}</p>
+          <p className="text-amber-800 whitespace-pre-line">{instructions.description}</p>
         </div>
       )}
       
       <div className="bg-gray-50 p-6 rounded-lg mb-6">
         <h3 className="text-xl font-bold mb-4">التصنيفات:</h3>
         <div className="space-y-3">
-          {block === 5 ? (
-            <>
-              <p className="text-lg">اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
-              <p className="text-lg">اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
-            </>
-          ) : (
-            <>
-              <p className="text-lg">اضغط على D إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
-              <p className="text-lg">اضغط على K إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
-            </>
-          )}
+          <p className="text-lg">اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
+          <p className="text-lg">اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
         </div>
       </div>
+
+      {instructions.reminder && (
+        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+          <h3 className="font-bold mb-2">تذكر:</h3>
+          <div className="text-right space-y-2">
+            {instructions.reminder.map((item, index) => (
+              <p key={index} className="text-blue-700">{item}</p>
+            ))}
+          </div>
+        </div>
+      )}
 
       <Button onClick={onStart} size="lg">بدء المرحلة</Button>
     </div>
