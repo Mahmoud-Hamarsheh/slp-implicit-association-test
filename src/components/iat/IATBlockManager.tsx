@@ -54,63 +54,51 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
       const tooFastResponsesPercentage = responses.filter(r => r.responseTime < 0.3).length / responses.length;
       const validData = tooFastResponsesPercentage <= 0.1;
 
-      // Parse survey data to ensure it's in the correct format
-      const surveyDataFormatted = {
-        age: Number(surveyData.age) || 0,
-        yearsExperience: Number(surveyData.yearsExperience) || 0,
-        degree: String(surveyData.degree) || "",
+      // Ensure all data is properly formatted
+      const formattedData = {
+        d_score: dScore,
+        age: Number(surveyData.age) || 25, // Default if missing
+        years_experience: Number(surveyData.yearsExperience) || 0,
+        degree: surveyData.degree || "student",
         gender: surveyData.gender || "female",
-        biasAwarenessResponses: surveyData.biasAwarenessResponses || {}
+        survey_responses: surveyData.biasAwarenessResponses || {},
+        survey_score: surveyData.biasAwarenessResponses?.biasScore 
+          ? parseFloat(surveyData.biasAwarenessResponses.biasScore)
+          : null,
+        response_times: correctResponseTimes,
+        responses: responses
       };
 
-      // Extract survey score if available
-      const surveyScore = surveyData.biasAwarenessResponses?.biasScore 
-        ? parseFloat(surveyData.biasAwarenessResponses.biasScore)
-        : null;
-
-      // Log what we're about to save to help with debugging
-      console.log("Saving IAT results:", {
-        d_score: dScore,
-        age: surveyDataFormatted.age,
-        years_experience: surveyDataFormatted.yearsExperience,
-        degree: surveyDataFormatted.degree,
-        gender: surveyDataFormatted.gender,
-        survey_score: surveyScore,
-        response_times: correctResponseTimes,
-        valid_data: validData
-      });
+      // Log what we're going to save
+      console.log("Saving IAT results with data:", formattedData);
 
       if (surveyData.hasTakenIATBefore) {
+        console.log("User has taken IAT before, not saving to database");
         toast({
           title: "اكتمل الاختبار",
           description: "بما أنك قمت بالاختبار مسبقًا، لن يتم حفظ نتائجك في قاعدة البيانات.",
         });
+        onComplete(dScore);
       } else {
         const { error } = await supabase
           .from('iat_results')
-          .insert([
-            {
-              d_score: dScore,
-              age: surveyDataFormatted.age,
-              years_experience: surveyDataFormatted.yearsExperience,
-              degree: surveyDataFormatted.degree,
-              gender: surveyDataFormatted.gender,
-              survey_responses: surveyDataFormatted.biasAwarenessResponses,
-              survey_score: surveyScore,
-              response_times: correctResponseTimes,
-              responses: responses
-            }
-          ]);
+          .insert([formattedData]);
 
         if (error) {
           console.error('Supabase error:', error);
-          throw error;
+          toast({
+            title: "خطأ في حفظ النتائج",
+            description: "حدث خطأ أثناء حفظ النتائج: " + error.message,
+            variant: "destructive",
+          });
+        } else {
+          console.log("Results saved successfully");
+          toast({
+            title: "تم حفظ النتائج بنجاح",
+            description: "تم تسجيل إجاباتك في قاعدة البيانات",
+          });
         }
-        
-        toast({
-          title: "تم حفظ النتائج بنجاح",
-          description: "تم تسجيل إجاباتك في قاعدة البيانات",
-        });
+        onComplete(dScore);
       }
     } catch (error) {
       console.error('Error saving results:', error);
@@ -119,31 +107,36 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         description: "حدث خطأ أثناء حفظ النتائج، يرجى المحاولة مرة أخرى",
         variant: "destructive",
       });
-    } finally {
-      // Always call onComplete regardless of whether saving succeeded
-      onComplete(dScore);
+      // Still proceed to next step despite error
+      onComplete(0);
     }
   };
 
   const handleTrialComplete = (response: Response) => {
     // Add response to the list
     setResponses(prev => [...prev, response]);
+    console.log(`Completed trial in block ${response.block}, correct: ${response.correct}, time: ${response.responseTime.toFixed(3)}s`);
 
     // Move to next trial or block
     if (currentTrial + 1 >= trials.length) {
       if (currentBlock < 7) {
+        console.log(`Completed block ${currentBlock}, moving to block ${currentBlock + 1}`);
         setCurrentBlock(currentBlock + 1);
       } else {
-        const dScore = calculateDScore(responses);
+        console.log("All blocks completed, calculating D-score");
+        const dScore = calculateDScore([...responses, response]);
+        console.log(`Final D-score: ${dScore !== null ? dScore.toFixed(3) : 'invalid'}`);
+        
         if (dScore !== null) {
           saveResults(dScore);
         } else {
           toast({
             title: "نتائج غير صالحة",
-            description: "لم تكن استجاباتك ضمن معايير الصلاحية للاختبار",
+            description: "لم تكن ا��تجاباتك ضمن معايير الصلاحية للاختبار",
             variant: "destructive",
           });
-          onComplete(0); // Default to neutral score for invalid data
+          // Even with invalid data, we proceed to the next step
+          onComplete(0);
         }
       }
     } else {

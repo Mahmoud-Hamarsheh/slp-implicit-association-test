@@ -7,7 +7,6 @@ export class TrialGenerator {
     
     switch (block) {
       case 1:
-      case 4:
         newTrials = [
           ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
             stimulus: item,
@@ -39,8 +38,8 @@ export class TrialGenerator {
           }))
         ];
         break;
-      case 5:
-        // Special handling for block 5 where normal and disorder categories are swapped
+      case 3:
+      case 4:
         newTrials = [
           ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
             stimulus: item,
@@ -53,10 +52,38 @@ export class TrialGenerator {
             category: "normal_communication",
             correctKey: getCorrectKeyForBlock(block, "normal_communication"),
             block: block
+          })),
+          ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
+            stimulus: item,
+            category: "negative",
+            correctKey: getCorrectKeyForBlock(block, "negative"),
+            block: block
+          })),
+          ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
+            stimulus: item,
+            category: "positive",
+            correctKey: getCorrectKeyForBlock(block, "positive"),
+            block: block
           }))
         ];
         break;
-      case 3:
+      case 5:
+        // Special handling for block 5 for negative/positive attributes only
+        newTrials = [
+          ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
+            stimulus: item,
+            category: "negative",
+            correctKey: getCorrectKeyForBlock(block, "negative"),
+            block: block
+          })),
+          ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
+            stimulus: item,
+            category: "positive",
+            correctKey: getCorrectKeyForBlock(block, "positive"),
+            block: block
+          }))
+        ];
+        break;
       case 6:
       case 7:
         newTrials = [
