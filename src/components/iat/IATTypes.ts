@@ -7,7 +7,7 @@ export interface IATProps {
     age: number; 
     yearsExperience: number; 
     degree: string;
-    gender: "male" | "female";
+    gender: "male" | "female" | number;
     biasAwarenessResponses: SurveyResponses;
     hasTakenIATBefore?: boolean;
   };

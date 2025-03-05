@@ -17,14 +17,17 @@ export const TestStage: React.FC<TestStageProps> = ({
   hasTakenIATBefore,
   biasAwarenessData
 }) => {
+  // Ensure surveyData is properly formatted for IAT component
+  const formattedSurveyData = {
+    ...surveyData,
+    hasTakenIATBefore,
+    biasAwarenessResponses: biasAwarenessData || {} as SurveyResponses
+  };
+
   return (
     <IAT 
       onComplete={onComplete}
-      surveyData={{
-        ...surveyData,
-        hasTakenIATBefore,
-        biasAwarenessResponses: biasAwarenessData || {} as SurveyResponses
-      }}
+      surveyData={formattedSurveyData}
     />
   );
 };
