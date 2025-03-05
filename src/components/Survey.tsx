@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
@@ -13,7 +14,7 @@ export interface SurveyData {
   age: number;
   yearsExperience: number;
   degree: string;
-  gender: "male" | "female";
+  gender: "male" | "female" | number;  // Updated to allow number values
 }
 
 export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
@@ -30,7 +31,7 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
       age: formatAge(data.age),
       yearsExperience: formatExperience(data.yearsExperience),
       degree: formatDegree(data.degree),
-      gender: data.gender === "male" ? 1 : 2
+      gender: data.gender === "male" ? 1 : 2  // Store gender as 1 (male) or 2 (female)
     };
     onComplete(formattedData as unknown as SurveyData);
   };

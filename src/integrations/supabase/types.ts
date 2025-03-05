@@ -15,6 +15,7 @@ export type Database = {
           created_at: string
           d_score: number
           degree: string
+          gender: number | null
           id: string
           response_times: number[] | null
           responses: Json
@@ -27,6 +28,7 @@ export type Database = {
           created_at?: string
           d_score: number
           degree: string
+          gender?: number | null
           id?: string
           response_times?: number[] | null
           responses: Json
@@ -39,6 +41,7 @@ export type Database = {
           created_at?: string
           d_score?: number
           degree?: string
+          gender?: number | null
           id?: string
           response_times?: number[] | null
           responses?: Json

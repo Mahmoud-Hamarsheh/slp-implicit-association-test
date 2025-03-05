@@ -97,6 +97,7 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
           age: formattedData.age,
           years_experience: formattedData.years_experience,
           degree: formattedData.degree,
+          gender: formattedData.gender, // Now including the gender field
           response_times: formattedData.response_times,
           responses: formattedData.responses,
           survey_responses: formattedData.survey_responses,
