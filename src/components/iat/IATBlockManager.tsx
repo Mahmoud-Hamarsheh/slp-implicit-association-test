@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { IATInstructions } from "./IATInstructions";
@@ -54,13 +55,19 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
       const tooFastResponsesPercentage = responses.filter(r => r.responseTime < 0.3).length / responses.length;
       const validData = tooFastResponsesPercentage <= 0.1;
 
+      // Get gender as numerical value (should already be formatted from Survey component)
+      const gender = typeof surveyData.gender === 'string' 
+        ? (surveyData.gender === 'male' ? 1 : 2)
+        : surveyData.gender;
+
       // Ensure all data is properly formatted
       const formattedData = {
         d_score: dScore,
-        age: Number(surveyData.age) || 25, // Default if missing
-        years_experience: Number(surveyData.yearsExperience) || 0,
-        degree: surveyData.degree || "student",
-        gender: surveyData.gender || "female",
+        // Use the pre-formatted values from the survey component
+        age: Number(surveyData.age) || 1, // Default to 1 if missing
+        years_experience: Number(surveyData.yearsExperience) || 1, // Default to 1 if missing
+        degree: surveyData.degree || "1", // Default to "1" if missing
+        gender: gender, // Already should be 1 or 2
         survey_responses: surveyData.biasAwarenessResponses || {},
         survey_score: surveyData.biasAwarenessResponses?.biasScore 
           ? parseFloat(surveyData.biasAwarenessResponses.biasScore)

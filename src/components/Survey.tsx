@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
@@ -27,7 +26,44 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onComplete(data);
+    const formattedData = {
+      age: formatAge(data.age),
+      yearsExperience: formatExperience(data.yearsExperience),
+      degree: formatDegree(data.degree),
+      gender: data.gender === "male" ? 1 : 2
+    };
+    onComplete(formattedData as unknown as SurveyData);
+  };
+
+  const formatAge = (age: number): number => {
+    switch(age) {
+      case 20: return 1; // 20-30
+      case 31: return 2; // 31-40
+      case 41: return 3; // 41-50
+      case 51: return 4; // 51+
+      default: return 1;
+    }
+  };
+
+  const formatExperience = (experience: number): number => {
+    switch(experience) {
+      case 0: return 1; // No experience
+      case 1: return 2; // 1-2 years
+      case 2: return 3; // 2-4 years
+      case 5: return 4; // 5-10 years
+      case 10: return 5; // 10+ years
+      default: return 1;
+    }
+  };
+
+  const formatDegree = (degree: string): string => {
+    switch(degree) {
+      case "student": return "1";
+      case "bachelors": return "2";
+      case "masters": return "3";
+      case "doctorate": return "4";
+      default: return "1";
+    }
   };
 
   return (
