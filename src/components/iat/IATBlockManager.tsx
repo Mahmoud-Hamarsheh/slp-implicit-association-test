@@ -91,9 +91,23 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         });
         onComplete(dScore);
       } else {
+        // Modified version that saves only the columns that exist in the database
+        const dataToSave = {
+          d_score: formattedData.d_score,
+          age: formattedData.age,
+          years_experience: formattedData.years_experience,
+          degree: formattedData.degree,
+          response_times: formattedData.response_times,
+          responses: formattedData.responses,
+          survey_responses: formattedData.survey_responses,
+          survey_score: formattedData.survey_score
+        };
+
+        console.log("Final data being sent to Supabase:", dataToSave);
+
         const { error } = await supabase
           .from('iat_results')
-          .insert([formattedData]);
+          .insert([dataToSave]);
 
         if (error) {
           console.error('Supabase error:', error);
