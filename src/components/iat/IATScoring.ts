@@ -1,4 +1,3 @@
-
 import type { Response } from "./IATTypes";
 
 export const calculateDScore = (responses: Response[]) => {
@@ -12,9 +11,12 @@ export const calculateDScore = (responses: Response[]) => {
   const fastTrials = validResponses.filter(r => r.responseTime < 0.3);
   console.log(`Found ${fastTrials.length} fast trials (< 300ms) out of ${validResponses.length} valid trials`);
   
-  if (fastTrials.length / validResponses.length > 0.1) {
-    console.log("Invalid data - too many fast responses (>10%)");
-    return null; // Invalid data - too many fast responses
+  // Instead of returning null for invalid data, we'll still calculate a D-score
+  // but we'll add a flag to indicate the data is potentially invalid
+  const tooManyFastResponses = fastTrials.length / validResponses.length > 0.1;
+  if (tooManyFastResponses) {
+    console.log("Warning: Too many fast responses (>10%), results may be unreliable");
+    // We continue with calculation but will mark this in the result
   }
 
   // Get responses for each block
@@ -25,11 +27,13 @@ export const calculateDScore = (responses: Response[]) => {
 
   console.log(`Block counts: B3=${block3Responses.length}, B4=${block4Responses.length}, B6=${block6Responses.length}, B7=${block7Responses.length}`);
 
-  // Ensure we have minimum number of responses for each critical block (at least 1 for testing)
-  if (!block3Responses.length || !block4Responses.length || 
-      !block6Responses.length || !block7Responses.length) {
-    console.log("Missing responses for one or more critical blocks");
-    return 0; // Return 0 instead of null to ensure we can save data
+  // If we're missing responses from critical blocks, use a default value
+  const missingCriticalResponses = !block3Responses.length || !block4Responses.length || 
+                                   !block6Responses.length || !block7Responses.length;
+  
+  if (missingCriticalResponses) {
+    console.log("Missing responses for one or more critical blocks, using default D-Score");
+    return 0;
   }
 
   // Step 3: Compute inclusive standard deviations
@@ -57,8 +61,13 @@ export const calculateDScore = (responses: Response[]) => {
   const dScore = (d1 + d2) / 2;
   console.log(`D scores: D1=${d1.toFixed(3)}, D2=${d2.toFixed(3)}, Final D=${dScore.toFixed(3)}`);
   
-  // Return a valid number or 0 to ensure we can save data
-  return isNaN(dScore) ? 0 : dScore;
+  // Handle NaN cases
+  if (isNaN(dScore)) {
+    console.log("Calculated D-Score is NaN, returning 0 instead");
+    return 0;
+  }
+  
+  return dScore;
 };
 
 const calculateMean = (responses: Response[]): number => {

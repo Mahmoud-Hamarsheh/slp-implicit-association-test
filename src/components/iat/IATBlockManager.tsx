@@ -55,25 +55,29 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
       const tooFastResponsesPercentage = responses.filter(r => r.responseTime < 0.3).length / responses.length;
       const validData = tooFastResponsesPercentage <= 0.1;
 
-      // Get gender as numerical value (should already be formatted from Survey component)
-      const gender = typeof surveyData.gender === 'string' 
-        ? (surveyData.gender === 'male' ? 1 : 2)
-        : surveyData.gender;
+      // Ensure all demographic data is formatted as integers
+      let formattedGender = 1; // Default to male (1)
+      if (typeof surveyData.gender === 'number') {
+        formattedGender = surveyData.gender;
+      } else if (typeof surveyData.gender === 'string') {
+        formattedGender = surveyData.gender === 'female' ? 2 : 1;
+      }
 
-      // Ensure all data is properly formatted
+      // Ensure all data is properly formatted with appropriate defaults
       const formattedData = {
-        d_score: dScore,
-        // Use the pre-formatted values from the survey component
+        d_score: dScore || 0, // Ensure we never save null or undefined
+        // Format all demographic data as integers
         age: Number(surveyData.age) || 1, // Default to 1 if missing
         years_experience: Number(surveyData.yearsExperience) || 1, // Default to 1 if missing
-        degree: surveyData.degree || "1", // Default to "1" if missing
-        gender: gender, // Already should be 1 or 2
+        degree: typeof surveyData.degree === 'string' ? surveyData.degree : "1", // Default to "1" if missing
+        gender: formattedGender, // Should be 1 or 2
         survey_responses: surveyData.biasAwarenessResponses || {},
         survey_score: surveyData.biasAwarenessResponses?.biasScore 
           ? parseFloat(surveyData.biasAwarenessResponses.biasScore)
           : null,
         response_times: correctResponseTimes,
-        responses: responses
+        responses: responses,
+        valid_data: validData
       };
 
       // Log what we're going to save
@@ -98,24 +102,28 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
             description: "حدث خطأ أثناء حفظ النتائج: " + error.message,
             variant: "destructive",
           });
+          
+          // We still complete the test even if saving fails
+          // This ensures users can always proceed with the study
+          onComplete(dScore);
         } else {
           console.log("Results saved successfully");
           toast({
             title: "تم حفظ النتائج بنجاح",
             description: "تم تسجيل إجاباتك في قاعدة البيانات",
           });
+          onComplete(dScore);
         }
-        onComplete(dScore);
       }
     } catch (error) {
       console.error('Error saving results:', error);
       toast({
         title: "خطأ في حفظ النتائج",
-        description: "حدث خطأ أثناء حفظ النتائج، يرجى المحاولة مرة أخرى",
+        description: "حدث خطأ أثناء حفظ النتائج، ولكن يمكنك المتابعة مع الدراسة",
         variant: "destructive",
       });
       // Still proceed to next step despite error
-      onComplete(0);
+      onComplete(dScore);
     }
   };
 
@@ -131,20 +139,12 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         setCurrentBlock(currentBlock + 1);
       } else {
         console.log("All blocks completed, calculating D-score");
-        const dScore = calculateDScore([...responses, response]);
-        console.log(`Final D-score: ${dScore !== null ? dScore.toFixed(3) : 'invalid'}`);
+        // Always get a valid D-score (never null)
+        const dScore = calculateDScore([...responses, response]) || 0;
+        console.log(`Final D-score: ${dScore.toFixed(3)}`);
         
-        if (dScore !== null) {
-          saveResults(dScore);
-        } else {
-          toast({
-            title: "نتائج غير صالحة",
-            description: "لم تكن ا��تجاباتك ضمن معايير الصلاحية للاختبار",
-            variant: "destructive",
-          });
-          // Even with invalid data, we proceed to the next step
-          onComplete(0);
-        }
+        // Always save results, even if D-score is 0
+        saveResults(dScore);
       }
     } else {
       setCurrentTrial(currentTrial + 1);
