@@ -35,31 +35,35 @@ export const saveIATResults = async (
       formattedGender = surveyData.gender === 'female' ? 2 : 1;
     }
 
-    // Convert degree to numeric value
-    let degreeValue = "1"; // Default to student (1)
-    if (surveyData.degree === "طالب") degreeValue = "1";
-    else if (surveyData.degree === "بكالوريوس") degreeValue = "2";
-    else if (surveyData.degree === "ماجستير") degreeValue = "3";
-    else if (surveyData.degree === "دكتوراه") degreeValue = "4";
-    else degreeValue = surveyData.degree;
+    // Convert degree to numeric value if it's not already
+    let degreeValue = surveyData.degree;
+    if (!degreeValue.match(/^[0-9]+$/)) {
+      if (degreeValue === "طالب") degreeValue = "1";
+      else if (degreeValue === "بكالوريوس") degreeValue = "2";
+      else if (degreeValue === "ماجستير") degreeValue = "3";
+      else if (degreeValue === "دكتوراه") degreeValue = "4";
+    }
+
+    // Check if we have bias awareness responses and properly format them
+    const biasAwarenessResponses = surveyData.biasAwarenessResponses || {};
+    const biasScore = biasAwarenessResponses.biasScore 
+      ? parseFloat(biasAwarenessResponses.biasScore)
+      : null;
 
     // Prepare data for saving
-    const formattedData = {
+    const dataToSave = {
       d_score: finalDScore,
       age: Number(surveyData.age) || 1,
       years_experience: Number(surveyData.yearsExperience) || 0,
       degree: degreeValue,
       gender: formattedGender,
-      survey_responses: surveyData.biasAwarenessResponses || {},
-      survey_score: surveyData.biasAwarenessResponses?.biasScore 
-        ? parseFloat(surveyData.biasAwarenessResponses.biasScore)
-        : null,
       response_times: correctResponseTimes,
       responses: responses,
-      valid_data: validData
+      survey_responses: Object.keys(biasAwarenessResponses).length > 0 ? biasAwarenessResponses : null,
+      survey_score: biasScore
     };
 
-    console.log("Saving IAT results with data:", formattedData);
+    console.log("Saving IAT results with data:", dataToSave);
 
     if (surveyData.hasTakenIATBefore) {
       console.log("User has taken IAT before, not saving to database");
@@ -69,23 +73,13 @@ export const saveIATResults = async (
       });
       return finalDScore;
     } else {
-      // Create a single data object with only the columns that exist in the database
-      const dataToSave = {
-        d_score: formattedData.d_score,
-        age: formattedData.age,
-        years_experience: formattedData.years_experience,
-        degree: formattedData.degree,
-        gender: formattedData.gender,
-        response_times: formattedData.response_times,
-        responses: formattedData.responses,
-        survey_responses: formattedData.survey_responses,
-        survey_score: formattedData.survey_score
-      };
-
       console.log("Final data being sent to Supabase:", dataToSave);
 
-      // Fix duplication by ensuring we only make one insert request
-      const { error } = await supabase
+      // Use the supabase client from @/integrations/supabase/client if it exists, otherwise fall back to @/lib/supabase
+      const supabaseClient = supabase;
+
+      // Use upsert with onConflict to avoid duplications
+      const { error } = await supabaseClient
         .from('iat_results')
         .insert([dataToSave]);
 
