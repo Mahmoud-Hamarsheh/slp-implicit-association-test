@@ -17,7 +17,7 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <div className="bg-gray-50 p-4 rounded-lg">
           <h3 className="font-bold mb-2">تواصل طبيعي</h3>
-          <p>وضوح الكلام، انسيابية الكلام، طلاقة التعبير، تواصل فعال، معبر، كلام مترابط، الاستماع الفعال</p>
+          <p>وضوح الكلام، انسيابية الكلام، طلاقة التعبير، تواصل فعال، مُعبّر، كلام مترابط، الاستماع الفعال</p>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
           <h3 className="font-bold mb-2">اضطراب تواصل</h3>
