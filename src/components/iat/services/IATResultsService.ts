@@ -47,8 +47,17 @@ export const saveIATResults = async (
 
     // Properly extract and format bias awareness data
     const biasAwarenessResponses = surveyData.biasAwarenessResponses || {};
-    const biasScore = biasAwarenessResponses.biasScore 
-      ? parseFloat(biasAwarenessResponses.biasScore)
+    
+    // Ensure biasScore is properly extracted and formatted
+    let biasScore: number | null = null;
+    if (biasAwarenessResponses.biasScore) {
+      biasScore = parseFloat(biasAwarenessResponses.biasScore);
+      if (isNaN(biasScore)) biasScore = null;
+    }
+
+    // Ensure survey responses are properly formatted
+    const formattedSurveyResponses = Object.keys(biasAwarenessResponses).length > 0 
+      ? biasAwarenessResponses 
       : null;
 
     // Prepare data for saving
@@ -60,9 +69,7 @@ export const saveIATResults = async (
       gender: formattedGender,
       response_times: correctResponseTimes,
       responses: JSON.stringify(responses),
-      survey_responses: Object.keys(biasAwarenessResponses).length > 0 
-        ? JSON.stringify(biasAwarenessResponses) 
-        : null,
+      survey_responses: formattedSurveyResponses ? JSON.stringify(formattedSurveyResponses) : null,
       survey_score: biasScore
     };
 
