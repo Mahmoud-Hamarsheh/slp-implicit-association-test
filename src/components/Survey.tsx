@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
@@ -19,11 +20,10 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
   const formatAge = (age: string): number => {
     // Convert age ranges to numerical values for database
     switch (age) {
-      case "18-30": return 1;
+      case "20-30": return 1;
       case "31-40": return 2;
       case "41-50": return 3;
-      case "51-60": return 4;
-      case "61+": return 5;
+      case "51+": return 4;
       default: return 1;
     }
   };
@@ -32,10 +32,10 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
     // Convert experience ranges to numerical values for database
     switch (years) {
       case "لا يوجد خبرة/طالب": return 0;
-      case "1-3 سنوات": return 1;
-      case "4-6 سنوات": return 2;
-      case "7-10 سنوات": return 3;
-      case "أكثر من 10 سنوات": return 4;
+      case "1-2": return 1;
+      case "2-4": return 2;
+      case "5-10": return 3;
+      case "10+": return 4;
       default: return 0;
     }
   };

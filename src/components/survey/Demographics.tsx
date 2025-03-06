@@ -24,12 +24,13 @@ export const Demographics: React.FC<DemographicsProps> = ({ onComplete }) => {
   };
 
   return (
-    <Card>
+    <Card className="shadow-sm">
       <CardContent className="pt-6">
+        <h2 className="text-xl font-bold text-right mb-6">البيانات الديموغرافية</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="gender" className="block text-right">الجنس</Label>
+              <Label htmlFor="gender" className="block text-right font-medium">الجنس</Label>
               <RadioGroup
                 value={gender}
                 onValueChange={(value) => setGender(value as 'male' | 'female')}
@@ -47,44 +48,43 @@ export const Demographics: React.FC<DemographicsProps> = ({ onComplete }) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="age" className="block text-right">العمر</Label>
+              <Label htmlFor="age" className="block text-right font-medium">العمر</Label>
               <Select value={age} onValueChange={setAge}>
-                <SelectTrigger>
+                <SelectTrigger className="text-right">
                   <SelectValue placeholder="اختر الفئة العمرية" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="18-30">18-30</SelectItem>
+                <SelectContent className="bg-white border shadow-md">
+                  <SelectItem value="20-30">20-30</SelectItem>
                   <SelectItem value="31-40">31-40</SelectItem>
                   <SelectItem value="41-50">41-50</SelectItem>
-                  <SelectItem value="51-60">51-60</SelectItem>
-                  <SelectItem value="61+">61+</SelectItem>
+                  <SelectItem value="51+">51+</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="yearsExperience" className="block text-right">سنوات الخبرة</Label>
+              <Label htmlFor="yearsExperience" className="block text-right font-medium">سنوات الخبرة</Label>
               <Select value={yearsExperience} onValueChange={setYearsExperience}>
-                <SelectTrigger>
+                <SelectTrigger className="text-right">
                   <SelectValue placeholder="اختر سنوات الخبرة" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border shadow-md">
                   <SelectItem value="لا يوجد خبرة/طالب">لا يوجد خبرة/طالب</SelectItem>
-                  <SelectItem value="1-3 سنوات">1-3 سنوات</SelectItem>
-                  <SelectItem value="4-6 سنوات">4-6 سنوات</SelectItem>
-                  <SelectItem value="7-10 سنوات">7-10 سنوات</SelectItem>
-                  <SelectItem value="أكثر من 10 سنوات">أكثر من 10 سنوات</SelectItem>
+                  <SelectItem value="1-2">1-2</SelectItem>
+                  <SelectItem value="2-4">2-4</SelectItem>
+                  <SelectItem value="5-10">5-10</SelectItem>
+                  <SelectItem value="10+">10+</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="degree" className="block text-right">الدرجة العلمية</Label>
+              <Label htmlFor="degree" className="block text-right font-medium">الدرجة العلمية</Label>
               <Select value={degree} onValueChange={setDegree}>
-                <SelectTrigger>
+                <SelectTrigger className="text-right">
                   <SelectValue placeholder="اختر الدرجة العلمية" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border shadow-md">
                   <SelectItem value="طالب">طالب</SelectItem>
                   <SelectItem value="بكالوريوس">بكالوريوس</SelectItem>
                   <SelectItem value="ماجستير">ماجستير</SelectItem>
@@ -94,7 +94,7 @@ export const Demographics: React.FC<DemographicsProps> = ({ onComplete }) => {
             </div>
           </div>
 
-          <Button type="submit" className="w-full">متابعة إلى اختبار IAT</Button>
+          <Button type="submit" className="w-full bg-primary text-white">متابعة إلى اختبار IAT</Button>
         </form>
       </CardContent>
     </Card>
