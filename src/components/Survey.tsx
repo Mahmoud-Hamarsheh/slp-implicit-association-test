@@ -1,6 +1,4 @@
-
 import React from "react";
-import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Demographics } from "./survey/Demographics";
@@ -19,17 +17,32 @@ export interface SurveyData {
 
 export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
   const formatAge = (age: string): number => {
-    const parsedAge = parseInt(age, 10);
-    return isNaN(parsedAge) ? 18 : parsedAge;
+    // Convert age ranges to numerical values for database
+    switch (age) {
+      case "18-30": return 1;
+      case "31-40": return 2;
+      case "41-50": return 3;
+      case "51-60": return 4;
+      case "61+": return 5;
+      default: return 1;
+    }
   };
 
   const formatExperience = (years: string): number => {
-    const parsedYears = parseInt(years, 10);
-    return isNaN(parsedYears) ? 0 : parsedYears;
+    // Convert experience ranges to numerical values for database
+    switch (years) {
+      case "لا يوجد خبرة/طالب": return 0;
+      case "1-3 سنوات": return 1;
+      case "4-6 سنوات": return 2;
+      case "7-10 سنوات": return 3;
+      case "أكثر من 10 سنوات": return 4;
+      default: return 0;
+    }
   };
 
   const formatDegree = (degree: string): string => {
-    return degree || "N/A";
+    // Keep degree as string but ensure consistency
+    return degree || "طالب";
   };
 
   const handleComplete = (data: DemographicData) => {
@@ -46,7 +59,7 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
     <Card className="w-full max-w-3xl p-8 mx-auto mt-8 animate-fadeIn">
       <Tabs defaultValue="demographics" className="w-full">
         <TabsList>
-          <TabsTrigger value="demographics">معلومات أساسية</TabsTrigger>
+          <TabsTrigger value="demographics">البيانات الديموغرافية</TabsTrigger>
         </TabsList>
         <TabsContent value="demographics">
           <Demographics onComplete={handleComplete} />
