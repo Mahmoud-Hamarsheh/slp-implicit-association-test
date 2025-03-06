@@ -1,3 +1,4 @@
+
 import { supabase } from "@/lib/supabase";
 import { Response } from "../IATTypes";
 import { IATProps } from "../IATTypes";
@@ -58,8 +59,11 @@ export const saveIATResults = async (
       degree: degreeValue,
       gender: formattedGender,
       response_times: correctResponseTimes,
-      responses: responses,
-      survey_responses: Object.keys(biasAwarenessResponses).length > 0 ? biasAwarenessResponses : null,
+      // Convert responses to JSON compatible format
+      responses: JSON.parse(JSON.stringify(responses)),
+      survey_responses: Object.keys(biasAwarenessResponses).length > 0 
+        ? JSON.parse(JSON.stringify(biasAwarenessResponses)) 
+        : null,
       survey_score: biasScore
     };
 
@@ -78,10 +82,10 @@ export const saveIATResults = async (
       // Use the supabase client from @/integrations/supabase/client if it exists, otherwise fall back to @/lib/supabase
       const supabaseClient = supabase;
 
-      // Use upsert with onConflict to avoid duplications
+      // Use insert with a single object (not an array) to avoid duplications
       const { error } = await supabaseClient
         .from('iat_results')
-        .insert([dataToSave]);
+        .insert(dataToSave);
 
       if (error) {
         console.error('Supabase error:', error);
