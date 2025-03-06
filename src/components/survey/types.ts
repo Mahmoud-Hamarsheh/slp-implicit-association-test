@@ -21,13 +21,13 @@ export interface BiasAwarenessSurveyProps {
   onComplete: (responses: SurveyResponses) => void;
 }
 
+export interface DemographicsProps {
+  onComplete: (data: DemographicData) => void;
+}
+
 export interface DemographicData {
   age: string;
   yearsExperience: string;
   degree: string;
   gender: "male" | "female";
-}
-
-export interface DemographicsProps {
-  onComplete: (data: DemographicData) => void;
 }

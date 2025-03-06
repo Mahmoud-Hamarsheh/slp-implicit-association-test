@@ -3,7 +3,6 @@ import React from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { BiasAwarenessForm } from "./survey/BiasAwarenessForm";
 import { Demographics } from "./survey/Demographics";
 import { DemographicData } from "./survey/types";
 
