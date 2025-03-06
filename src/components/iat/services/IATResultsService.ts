@@ -45,7 +45,7 @@ export const saveIATResults = async (
       else if (degreeValue === "دكتوراه") degreeValue = "4";
     }
 
-    // Check if we have bias awareness responses and properly format them
+    // Properly extract and format bias awareness data
     const biasAwarenessResponses = surveyData.biasAwarenessResponses || {};
     const biasScore = biasAwarenessResponses.biasScore 
       ? parseFloat(biasAwarenessResponses.biasScore)
@@ -59,10 +59,9 @@ export const saveIATResults = async (
       degree: degreeValue,
       gender: formattedGender,
       response_times: correctResponseTimes,
-      // Convert responses to JSON compatible format
-      responses: JSON.parse(JSON.stringify(responses)),
+      responses: JSON.stringify(responses),
       survey_responses: Object.keys(biasAwarenessResponses).length > 0 
-        ? JSON.parse(JSON.stringify(biasAwarenessResponses)) 
+        ? JSON.stringify(biasAwarenessResponses) 
         : null,
       survey_score: biasScore
     };
@@ -82,20 +81,44 @@ export const saveIATResults = async (
       // Use the supabase client from @/integrations/supabase/client if it exists, otherwise fall back to @/lib/supabase
       const supabaseClient = supabase;
 
-      // Use insert with a single object (not an array) to avoid duplications
-      const { error } = await supabaseClient
+      // Check if there's already a record for this user before inserting
+      // Without a user ID (anonymous usage), we'll use other identifying data
+      const { data: existingEntries, error: searchError } = await supabaseClient
         .from('iat_results')
-        .insert(dataToSave);
+        .select('id')
+        .eq('d_score', dataToSave.d_score)
+        .eq('age', dataToSave.age)
+        .eq('years_experience', dataToSave.years_experience)
+        .eq('gender', dataToSave.gender)
+        .order('created_at', { ascending: false })
+        .limit(1);
+        
+      if (searchError) {
+        console.error('Error checking for existing entries:', searchError);
+      }
+      
+      // Only insert if no similar record exists
+      if (!existingEntries || existingEntries.length === 0) {
+        const { error } = await supabaseClient
+          .from('iat_results')
+          .insert(dataToSave);
 
-      if (error) {
-        console.error('Supabase error:', error);
-        toast({
-          title: "خطأ في حفظ النتائج",
-          description: "حدث خطأ أثناء حفظ النتائج: " + error.message,
-          variant: "destructive",
-        });
+        if (error) {
+          console.error('Supabase error:', error);
+          toast({
+            title: "خطأ في حفظ النتائج",
+            description: "حدث خطأ أثناء حفظ النتائج: " + error.message,
+            variant: "destructive",
+          });
+        } else {
+          console.log("Results saved successfully");
+          toast({
+            title: "تم حفظ النتائج بنجاح",
+            description: "تم تسجيل إجاباتك في قاعدة البيانات",
+          });
+        }
       } else {
-        console.log("Results saved successfully");
+        console.log("Skipping insert - similar record already exists:", existingEntries[0]);
         toast({
           title: "تم حفظ النتائج بنجاح",
           description: "تم تسجيل إجاباتك في قاعدة البيانات",
