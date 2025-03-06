@@ -41,8 +41,14 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
   };
 
   const formatDegree = (degree: string): string => {
-    // Keep degree as string but ensure consistency
-    return degree || "طالب";
+    // Convert degree to numerical values for database
+    switch (degree) {
+      case "طالب": return "1";
+      case "بكالوريوس": return "2";
+      case "ماجستير": return "3";
+      case "دكتوراه": return "4";
+      default: return "1";
+    }
   };
 
   const handleComplete = (data: DemographicData) => {

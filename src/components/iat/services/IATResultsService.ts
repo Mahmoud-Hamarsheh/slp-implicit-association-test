@@ -15,16 +15,19 @@ export const saveIATResults = async (
   toast: ToastFunction
 ) => {
   try {
-    // Only keep response times for correct responses
+    // Ensure valid D-score (never null)
+    const finalDScore = dScore || 0;
+    
+    // Only keep response times for correct responses (in seconds)
     const correctResponseTimes = responses
       .filter(r => r.correct)
       .map(r => Number(r.responseTime.toFixed(3)));
     
-    // Check if more than 10% of trials are below threshold
+    // Check for too many fast responses
     const tooFastResponsesPercentage = responses.filter(r => r.responseTime < 0.3).length / responses.length;
     const validData = tooFastResponsesPercentage <= 0.1;
 
-    // Ensure all demographic data is formatted as integers
+    // Format demographic data properly
     let formattedGender = 1; // Default to male (1)
     if (typeof surveyData.gender === 'number') {
       formattedGender = surveyData.gender;
@@ -32,14 +35,21 @@ export const saveIATResults = async (
       formattedGender = surveyData.gender === 'female' ? 2 : 1;
     }
 
-    // Ensure all data is properly formatted with appropriate defaults
+    // Convert degree to numeric value
+    let degreeValue = "1"; // Default to student (1)
+    if (surveyData.degree === "طالب") degreeValue = "1";
+    else if (surveyData.degree === "بكالوريوس") degreeValue = "2";
+    else if (surveyData.degree === "ماجستير") degreeValue = "3";
+    else if (surveyData.degree === "دكتوراه") degreeValue = "4";
+    else degreeValue = surveyData.degree;
+
+    // Prepare data for saving
     const formattedData = {
-      d_score: dScore || 0, // Ensure we never save null or undefined
-      // Format all demographic data as integers
-      age: Number(surveyData.age) || 1, // Default to 1 if missing
-      years_experience: Number(surveyData.yearsExperience) || 1, // Default to 1 if missing
-      degree: typeof surveyData.degree === 'string' ? surveyData.degree : "1", // Default to "1" if missing
-      gender: formattedGender, // Should be 1 or 2
+      d_score: finalDScore,
+      age: Number(surveyData.age) || 1,
+      years_experience: Number(surveyData.yearsExperience) || 0,
+      degree: degreeValue,
+      gender: formattedGender,
       survey_responses: surveyData.biasAwarenessResponses || {},
       survey_score: surveyData.biasAwarenessResponses?.biasScore 
         ? parseFloat(surveyData.biasAwarenessResponses.biasScore)
@@ -49,7 +59,6 @@ export const saveIATResults = async (
       valid_data: validData
     };
 
-    // Log what we're going to save
     console.log("Saving IAT results with data:", formattedData);
 
     if (surveyData.hasTakenIATBefore) {
@@ -58,15 +67,15 @@ export const saveIATResults = async (
         title: "اكتمل الاختبار",
         description: "بما أنك قمت بالاختبار مسبقًا، لن يتم حفظ نتائجك في قاعدة البيانات.",
       });
-      return dScore;
+      return finalDScore;
     } else {
-      // Modified version that saves only the columns that exist in the database
+      // Create a single data object with only the columns that exist in the database
       const dataToSave = {
         d_score: formattedData.d_score,
         age: formattedData.age,
         years_experience: formattedData.years_experience,
         degree: formattedData.degree,
-        gender: formattedData.gender, // Now including the gender field
+        gender: formattedData.gender,
         response_times: formattedData.response_times,
         responses: formattedData.responses,
         survey_responses: formattedData.survey_responses,
@@ -75,6 +84,7 @@ export const saveIATResults = async (
 
       console.log("Final data being sent to Supabase:", dataToSave);
 
+      // Fix duplication by ensuring we only make one insert request
       const { error } = await supabase
         .from('iat_results')
         .insert([dataToSave]);
@@ -93,7 +103,7 @@ export const saveIATResults = async (
           description: "تم تسجيل إجاباتك في قاعدة البيانات",
         });
       }
-      return dScore;
+      return finalDScore;
     }
   } catch (error) {
     console.error('Error saving results:', error);
@@ -102,6 +112,6 @@ export const saveIATResults = async (
       description: "حدث خطأ أثناء حفظ النتائج، ولكن يمكنك المتابعة مع الدراسة",
       variant: "destructive",
     });
-    return dScore;
+    return dScore || 0;
   }
 };
