@@ -12,6 +12,7 @@ import { IATWelcome } from "@/components/stages/IATWelcome";
 import { Instructions } from "@/components/stages/Instructions";
 import { TestStage } from "@/components/stages/TestStage";
 import { Complete } from "@/components/stages/Complete";
+import { saveIATResults } from "@/components/iat/services/IATResultsService";
 
 type Stage = 
   | "welcome" 
@@ -39,7 +40,7 @@ const Index = () => {
 
   const handleIATComplete = (result: number) => {
     setTestResult(result);
-    // Move directly to bias-awareness survey
+    // Just store the result, don't save to database yet
     setStage("bias-awareness");
   };
 
@@ -47,14 +48,33 @@ const Index = () => {
     console.log("Bias awareness survey completed with data:", data);
     setBiasAwarenessData(data);
     
-    // Save the test results with the survey data
-    setStage("complete");
-    
-    // Show toast for successful completion
-    toast({
-      title: "تم الانتهاء من الاستبيان",
-      description: "شكراً لإكمال جميع مراحل الدراسة"
-    });
+    // Save all data to the database at the end of the flow
+    if (surveyData && testResult !== null) {
+      // Combine all data together
+      const completeData = {
+        ...surveyData,
+        biasAwarenessResponses: data,
+        hasTakenIATBefore
+      };
+      
+      // Save everything to the database
+      saveIATResults(testResult, [], completeData, toast)
+        .then(() => {
+          setStage("complete");
+          // Show toast for successful completion
+          toast({
+            title: "تم الانتهاء من الاستبيان",
+            description: "شكراً لإكمال جميع مراحل الدراسة"
+          });
+        });
+    } else {
+      // In case there's missing data, still move to complete stage
+      setStage("complete");
+      toast({
+        title: "تم الانتهاء من الاستبيان",
+        description: "شكراً لإكمال جميع مراحل الدراسة"
+      });
+    }
   };
 
   return (

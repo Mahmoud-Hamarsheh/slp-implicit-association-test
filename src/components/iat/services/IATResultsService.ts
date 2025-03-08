@@ -1,3 +1,4 @@
+
 import { supabase } from "@/lib/supabase";
 import { Response } from "../IATTypes";
 import { IATProps } from "../IATTypes";
@@ -15,18 +16,13 @@ export const saveIATResults = async (
   toast: ToastFunction
 ) => {
   try {
+    console.log("=== SAVING COMPLETE STUDY RESULTS ===");
+    console.log("D-Score:", dScore);
+    console.log("Survey data:", JSON.stringify(surveyData, null, 2));
+    
     // Ensure valid D-score (never null)
     const finalDScore = dScore || 0;
     
-    // Only keep response times for correct responses (in seconds)
-    const correctResponseTimes = responses
-      .filter(r => r.correct)
-      .map(r => Number(r.responseTime.toFixed(3)));
-    
-    // Check for too many fast responses
-    const tooFastResponsesPercentage = responses.filter(r => r.responseTime < 0.3).length / responses.length;
-    const validData = tooFastResponsesPercentage <= 0.1;
-
     // Format demographic data properly
     let formattedGender = 1; // Default to male (1)
     if (typeof surveyData.gender === 'number') {
@@ -44,10 +40,6 @@ export const saveIATResults = async (
       else if (degreeValue === "دكتوراه") degreeValue = "4";
     }
 
-    // CRITICAL FIX: Extract the survey responses and score properly
-    console.log("=== DEBUGGING SURVEY DATA EXTRACTION ===");
-    console.log("Complete survey data object:", JSON.stringify(surveyData, null, 2));
-    
     // Extract only the question responses from biasAwarenessResponses
     const biasAwarenessResponses = surveyData.biasAwarenessResponses || {};
     
@@ -136,8 +128,8 @@ export const saveIATResults = async (
       years_experience: Number(surveyData.yearsExperience) || 0,
       degree: degreeValue,
       gender: formattedGender,
-      response_times: correctResponseTimes,
-      responses: JSON.stringify(responses),
+      response_times: [], // We don't have response times in this flow
+      responses: JSON.stringify([]), // We don't have detailed responses in this flow
       survey_responses: formattedSurveyResponses,
       survey_score: biasScore
     };
@@ -153,7 +145,7 @@ export const saveIATResults = async (
       });
       return finalDScore;
     } else {
-      // Insert the data directly without checking for duplication
+      // Insert the data
       const { data, error } = await supabase
         .from('iat_results')
         .insert([dataToSave]) // Using array notation to ensure proper insert format

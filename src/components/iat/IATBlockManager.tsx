@@ -5,7 +5,6 @@ import { IATTrialRunner } from "./IATTrialRunner";
 import { IATProps } from "./IATTypes";
 import { BlockChangeAlert } from "./BlockChangeAlert";
 import { useIATTest } from "./hooks/useIATTest";
-import { saveIATResults } from "./services/IATResultsService";
 
 interface IATBlockManagerProps {
   onComplete: (result: number) => void;
@@ -35,9 +34,9 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
     handleStartBlock,
     handleCloseAlert
   } = useIATTest((result) => {
-    // When test is complete, save results and notify parent component
-    saveIATResults(result, responses, surveyData, toast)
-      .then(finalResult => onComplete(finalResult));
+    // When test is complete, just pass the result to parent component
+    // No saving to database here
+    onComplete(result);
   });
 
   if (!trials.length) return null;
