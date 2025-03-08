@@ -1,4 +1,3 @@
-
 import { supabase } from "@/lib/supabase";
 import { Response } from "../IATTypes";
 import { IATProps } from "../IATTypes";
@@ -45,24 +44,36 @@ export const saveIATResults = async (
       else if (degreeValue === "دكتوراه") degreeValue = "4";
     }
 
-    // Get bias awareness data from surveyData
+    // Process the bias awareness data
+    console.log("Raw survey data structure:", JSON.stringify(surveyData, null, 2));
+    
     const biasAwarenessResponses = surveyData.biasAwarenessResponses || {};
+    console.log("Extracted biasAwarenessResponses:", JSON.stringify(biasAwarenessResponses, null, 2));
     
-    console.log("Original biasAwarenessResponses:", biasAwarenessResponses);
+    // Get just the question responses (q1, q2, etc.)
+    const questionResponses = {};
+    Object.keys(biasAwarenessResponses).forEach(key => {
+      // Only include actual question responses (not metadata like biasScore or biasLevel)
+      if (key.startsWith('q') && !isNaN(parseInt(key.substring(1)))) {
+        questionResponses[key] = biasAwarenessResponses[key];
+      }
+    });
     
-    // Extract and format the bias score correctly
+    // Extract bias score directly
     let biasScore = null;
-    if (biasAwarenessResponses && biasAwarenessResponses.biasScore) {
-      const parsedScore = parseFloat(biasAwarenessResponses.biasScore);
-      biasScore = !isNaN(parsedScore) ? parsedScore : null;
-      console.log("Parsed bias score:", biasScore);
+    if (biasAwarenessResponses && typeof biasAwarenessResponses.biasScore === 'string') {
+      biasScore = parseFloat(biasAwarenessResponses.biasScore);
+      // Ensure it's a valid number
+      if (isNaN(biasScore)) biasScore = null;
     }
     
-    // Ensure we have valid survey responses to save
+    console.log("Extracted question responses:", JSON.stringify(questionResponses, null, 2));
+    console.log("Extracted bias score:", biasScore);
+    
+    // Only stringify if we have actual responses
     let formattedSurveyResponses = null;
-    if (biasAwarenessResponses && Object.keys(biasAwarenessResponses).length > 0) {
-      formattedSurveyResponses = JSON.stringify(biasAwarenessResponses);
-      console.log("Formatted survey responses:", formattedSurveyResponses);
+    if (Object.keys(questionResponses).length > 0) {
+      formattedSurveyResponses = JSON.stringify(questionResponses);
     }
 
     // Prepare data for saving
@@ -78,7 +89,7 @@ export const saveIATResults = async (
       survey_score: biasScore
     };
 
-    console.log("Saving IAT results with data:", dataToSave);
+    console.log("Final data being saved to database:", JSON.stringify(dataToSave, null, 2));
 
     if (surveyData.hasTakenIATBefore) {
       console.log("User has taken IAT before, not saving to database");
@@ -88,21 +99,14 @@ export const saveIATResults = async (
       });
       return finalDScore;
     } else {
-      console.log("Final data being sent to Supabase:", dataToSave);
-
-      // Use the supabase client from @/integrations/supabase/client if it exists, otherwise fall back to @/lib/supabase
-      const supabaseClient = supabase;
-
-      // Check if there's already a record for this user before inserting
-      // Without a user ID (anonymous usage), we'll use other identifying data
-      const { data: existingEntries, error: searchError } = await supabaseClient
+      // Check if there's already a record before inserting to prevent duplicates
+      // We'll compare key values to determine if this is likely a duplicate submission
+      const { data: existingEntries, error: searchError } = await supabase
         .from('iat_results')
         .select('id')
         .eq('d_score', dataToSave.d_score)
         .eq('age', dataToSave.age)
-        .eq('years_experience', dataToSave.years_experience)
         .eq('gender', dataToSave.gender)
-        .order('created_at', { ascending: false })
         .limit(1);
         
       if (searchError) {
@@ -111,9 +115,9 @@ export const saveIATResults = async (
       
       // Only insert if no similar record exists
       if (!existingEntries || existingEntries.length === 0) {
-        const { error } = await supabaseClient
+        const { error } = await supabase
           .from('iat_results')
-          .insert(dataToSave);
+          .insert([dataToSave]); // Use array to ensure proper insert format
 
         if (error) {
           console.error('Supabase error:', error);
@@ -130,7 +134,7 @@ export const saveIATResults = async (
           });
         }
       } else {
-        console.log("Skipping insert - similar record already exists:", existingEntries[0]);
+        console.log("Skipping insert - similar record already exists");
         toast({
           title: "تم حفظ النتائج بنجاح",
           description: "تم تسجيل إجاباتك في قاعدة البيانات",
