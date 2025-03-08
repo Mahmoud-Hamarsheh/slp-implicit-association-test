@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Survey, SurveyData } from "@/components/Survey";
 import BiasAwarenessSurvey, { SurveyResponses } from "@/components/BiasAwarenessSurvey";
@@ -38,11 +39,15 @@ const Index = () => {
 
   const handleIATComplete = (result: number) => {
     setTestResult(result);
+    // Move directly to bias-awareness survey
     setStage("bias-awareness");
   };
 
   const handleBiasAwarenessComplete = (data: SurveyResponses) => {
+    console.log("Bias awareness survey completed with data:", data);
     setBiasAwarenessData(data);
+    
+    // Save the test results with the survey data
     setStage("complete");
     
     // Show toast for successful completion

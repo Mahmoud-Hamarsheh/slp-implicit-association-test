@@ -49,6 +49,8 @@ export const calculateBiasScore = (responses: SurveyResponses): { biasScore: num
     biasLevel = 'مرتفع';
   }
 
+  console.log(`Calculated bias score: ${averageScore.toFixed(2)}, level: ${biasLevel}`);
+
   return { 
     biasScore: Number(averageScore.toFixed(2)), 
     biasLevel 

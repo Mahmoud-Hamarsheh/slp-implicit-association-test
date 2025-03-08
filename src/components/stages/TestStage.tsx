@@ -17,11 +17,13 @@ export const TestStage: React.FC<TestStageProps> = ({
   hasTakenIATBefore,
   biasAwarenessData
 }) => {
+  console.log("Bias awareness data in TestStage:", biasAwarenessData);
+  
   // Ensure surveyData is properly formatted for IAT component
   const formattedSurveyData = {
     ...surveyData,
     hasTakenIATBefore,
-    biasAwarenessResponses: biasAwarenessData || {} as SurveyResponses
+    biasAwarenessResponses: biasAwarenessData || {}
   };
 
   return (

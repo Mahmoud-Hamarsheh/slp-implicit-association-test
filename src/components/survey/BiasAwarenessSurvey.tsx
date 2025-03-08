@@ -51,11 +51,13 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
       
       // Calculate the bias score
       const { biasScore, biasLevel } = calculateBiasScore(responses);
+      console.log(`Final bias score: ${biasScore}, level: ${biasLevel}`);
 
       // Include bias level and score in the responses
       responses.biasLevel = biasLevel;
       responses.biasScore = biasScore.toString();
       
+      console.log("Final survey responses with score:", responses);
       onComplete(responses);
     }
   };

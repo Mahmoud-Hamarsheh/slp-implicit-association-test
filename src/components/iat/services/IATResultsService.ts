@@ -45,20 +45,25 @@ export const saveIATResults = async (
       else if (degreeValue === "دكتوراه") degreeValue = "4";
     }
 
-    // Properly extract and format bias awareness data
+    // Get bias awareness data from surveyData
     const biasAwarenessResponses = surveyData.biasAwarenessResponses || {};
     
-    // Ensure biasScore is properly extracted and formatted
-    let biasScore: number | null = null;
-    if (biasAwarenessResponses.biasScore) {
-      biasScore = parseFloat(biasAwarenessResponses.biasScore);
-      if (isNaN(biasScore)) biasScore = null;
+    console.log("Original biasAwarenessResponses:", biasAwarenessResponses);
+    
+    // Extract and format the bias score correctly
+    let biasScore = null;
+    if (biasAwarenessResponses && biasAwarenessResponses.biasScore) {
+      const parsedScore = parseFloat(biasAwarenessResponses.biasScore);
+      biasScore = !isNaN(parsedScore) ? parsedScore : null;
+      console.log("Parsed bias score:", biasScore);
     }
-
-    // Ensure survey responses are properly formatted
-    const formattedSurveyResponses = Object.keys(biasAwarenessResponses).length > 0 
-      ? biasAwarenessResponses 
-      : null;
+    
+    // Ensure we have valid survey responses to save
+    let formattedSurveyResponses = null;
+    if (biasAwarenessResponses && Object.keys(biasAwarenessResponses).length > 0) {
+      formattedSurveyResponses = JSON.stringify(biasAwarenessResponses);
+      console.log("Formatted survey responses:", formattedSurveyResponses);
+    }
 
     // Prepare data for saving
     const dataToSave = {
@@ -69,7 +74,7 @@ export const saveIATResults = async (
       gender: formattedGender,
       response_times: correctResponseTimes,
       responses: JSON.stringify(responses),
-      survey_responses: formattedSurveyResponses ? JSON.stringify(formattedSurveyResponses) : null,
+      survey_responses: formattedSurveyResponses,
       survey_score: biasScore
     };
 
