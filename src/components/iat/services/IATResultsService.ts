@@ -1,4 +1,3 @@
-
 import { supabase } from "@/lib/supabase";
 import { Response } from "../IATTypes";
 import { IATProps } from "../IATTypes";
@@ -64,12 +63,11 @@ export const saveIATResults = async (
     
     console.log("Question responses only:", JSON.stringify(questionResponsesOnly, null, 2));
     
-    // Extract bias score directly
+    // Extract bias score directly from the biasAwarenessResponses
     let biasScore = null;
     
-    // Check all possible places the score might be
+    // Check if biasScore exists in biasAwarenessResponses
     if (biasAwarenessResponses.biasScore !== undefined) {
-      // If it's in the biasAwarenessResponses directly
       if (typeof biasAwarenessResponses.biasScore === 'number') {
         biasScore = biasAwarenessResponses.biasScore;
       } else if (typeof biasAwarenessResponses.biasScore === 'string') {
@@ -77,19 +75,47 @@ export const saveIATResults = async (
       }
     }
     
-    // If we still don't have a score, check if it might be available elsewhere
-    if (biasScore === null && surveyData.biasScore !== undefined) {
-      if (typeof surveyData.biasScore === 'number') {
-        biasScore = surveyData.biasScore;
-      } else if (typeof surveyData.biasScore === 'string') {
-        biasScore = parseFloat(surveyData.biasScore);
-      }
-    }
-    
-    // Set a hardcoded fallback if needed
+    // Check if we have a valid score, if not, calculate it
     if (biasScore === null || isNaN(biasScore)) {
-      biasScore = 3.58; // Hardcoded as seen in the image
-      console.log("Using hardcoded bias score: 3.58");
+      console.log("No valid bias score found, calculating from responses");
+      
+      // Use the same calculation logic as in scoreUtils.ts
+      const responseValues = {
+        'أوافق بشدة': 5,
+        'أوافق': 4,
+        'محايد': 3,
+        'لا أوافق': 2,
+        'لا أوافق بشدة': 1,
+      };
+      
+      const reverseItems = ['q5', 'q8'];
+      let totalScore = 0;
+      let answeredQuestions = 0;
+      
+      for (let i = 1; i <= 12; i++) {
+        const questionId = `q${i}`;
+        const response = biasAwarenessResponses[questionId];
+        
+        if (response) {
+          answeredQuestions++;
+          let score = responseValues[response] || 0;
+          
+          if (reverseItems.includes(questionId)) {
+            score = 6 - score;
+          }
+          
+          totalScore += score;
+        }
+      }
+      
+      // Calculate average score
+      if (answeredQuestions > 0) {
+        biasScore = Number((totalScore / answeredQuestions).toFixed(2));
+      } else {
+        biasScore = 3.0; // Default fallback if no questions answered
+      }
+      
+      console.log("Calculated bias score:", biasScore);
     }
     
     console.log("Final extracted bias score:", biasScore);
@@ -128,7 +154,6 @@ export const saveIATResults = async (
       return finalDScore;
     } else {
       // Insert the data directly without checking for duplication
-      // This is the critical fix to prevent multiple null values or duplicates
       const { data, error } = await supabase
         .from('iat_results')
         .insert([dataToSave]) // Using array notation to ensure proper insert format
