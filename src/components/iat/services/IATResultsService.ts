@@ -18,6 +18,7 @@ export const saveIATResults = async (
   try {
     console.log("=== SAVING COMPLETE STUDY RESULTS ===");
     console.log("D-Score:", dScore);
+    console.log("Responses:", responses);
     console.log("Survey data:", JSON.stringify(surveyData, null, 2));
     
     // Ensure valid D-score (never null)
@@ -121,6 +122,10 @@ export const saveIATResults = async (
     console.log("Survey responses to save:", formattedSurveyResponses);
     console.log("Bias score to save:", biasScore);
 
+    // Extract response times as an array for the database
+    const responseTimes = responses.map(r => r.responseTime);
+    console.log("Response times to save:", responseTimes);
+
     // Prepare data for saving
     const dataToSave = {
       d_score: finalDScore,
@@ -128,8 +133,8 @@ export const saveIATResults = async (
       years_experience: Number(surveyData.yearsExperience) || 0,
       degree: degreeValue,
       gender: formattedGender,
-      response_times: [], // We don't have response times in this flow
-      responses: JSON.stringify([]), // We don't have detailed responses in this flow
+      response_times: responseTimes, // Save the response times array
+      responses: JSON.stringify(responses), // Save all detailed responses
       survey_responses: formattedSurveyResponses,
       survey_score: biasScore
     };

@@ -9,9 +9,9 @@ export const IAT: React.FC<IATProps> = ({ onComplete, surveyData }) => {
   const { toast } = useToast();
   const [testResult, setTestResult] = useState<number | null>(null);
   
-  const handleTestComplete = (result: number) => {
+  const handleTestComplete = (result: number, allResponses: any[]) => {
     setTestResult(result);
-    onComplete(result);
+    onComplete(result, allResponses);
   };
 
   return (

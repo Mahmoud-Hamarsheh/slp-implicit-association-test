@@ -30,6 +30,7 @@ const Index = () => {
   const [surveyData, setSurveyData] = useState<SurveyData | null>(null);
   const [biasAwarenessData, setBiasAwarenessData] = useState<SurveyResponses | null>(null);
   const [testResult, setTestResult] = useState<number | null>(null);
+  const [testResponses, setTestResponses] = useState<any[]>([]);
   const [hasTakenIATBefore, setHasTakenIATBefore] = useState(false);
   const { toast } = useToast();
 
@@ -38,9 +39,10 @@ const Index = () => {
     setStage("iat-welcome");
   };
 
-  const handleIATComplete = (result: number) => {
+  const handleIATComplete = (result: number, responses: any[]) => {
     setTestResult(result);
-    // Just store the result, don't save to database yet
+    setTestResponses(responses);
+    // Just store the result and responses, don't save to database yet
     setStage("bias-awareness");
   };
 
@@ -57,8 +59,11 @@ const Index = () => {
         hasTakenIATBefore
       };
       
+      // Extract response times from responses for the database
+      const responseTimes = testResponses.map(response => response.responseTime);
+      
       // Save everything to the database
-      saveIATResults(testResult, [], completeData, toast)
+      saveIATResults(testResult, testResponses, completeData, toast)
         .then(() => {
           setStage("complete");
           // Show toast for successful completion

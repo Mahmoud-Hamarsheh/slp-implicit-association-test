@@ -7,7 +7,7 @@ import { BlockChangeAlert } from "./BlockChangeAlert";
 import { useIATTest } from "./hooks/useIATTest";
 
 interface IATBlockManagerProps {
-  onComplete: (result: number) => void;
+  onComplete: (result: number, allResponses: any[]) => void;
   surveyData: IATProps["surveyData"];
   toast: (props: { 
     title: string; 
@@ -33,10 +33,9 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
     handleTrialComplete,
     handleStartBlock,
     handleCloseAlert
-  } = useIATTest((result) => {
-    // When test is complete, just pass the result to parent component
-    // No saving to database here
-    onComplete(result);
+  } = useIATTest((result, allResponses) => {
+    // When test is complete, pass the result AND all responses to parent component
+    onComplete(result, allResponses);
   });
 
   if (!trials.length) return null;

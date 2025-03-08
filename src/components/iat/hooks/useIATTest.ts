@@ -4,7 +4,7 @@ import { Trial, Response } from "../IATTypes";
 import { TrialGenerator } from "../TrialGenerator";
 import { calculateDScore } from "../IATScoring";
 
-export const useIATTest = (onComplete: (result: number) => void) => {
+export const useIATTest = (onComplete: (result: number, allResponses: Response[]) => void) => {
   const [currentBlock, setCurrentBlock] = useState(1);
   const [trials, setTrials] = useState<Trial[]>([]);
   const [currentTrial, setCurrentTrial] = useState(0);
@@ -28,7 +28,8 @@ export const useIATTest = (onComplete: (result: number) => void) => {
 
   const handleTrialComplete = (response: Response) => {
     // Add response to the list
-    setResponses(prev => [...prev, response]);
+    const updatedResponses = [...responses, response];
+    setResponses(updatedResponses);
     console.log(`Completed trial in block ${response.block}, correct: ${response.correct}, time: ${response.responseTime.toFixed(3)}s`);
 
     // Move to next trial or block
@@ -39,11 +40,11 @@ export const useIATTest = (onComplete: (result: number) => void) => {
       } else {
         console.log("All blocks completed, calculating D-score");
         // Always get a valid D-score (never null)
-        const dScore = calculateDScore([...responses, response]) || 0;
+        const dScore = calculateDScore(updatedResponses) || 0;
         console.log(`Final D-score: ${dScore.toFixed(3)}`);
         
-        // Send the score to the parent component
-        onComplete(dScore);
+        // Send the score AND all responses to the parent component
+        onComplete(dScore, updatedResponses);
       }
     } else {
       setCurrentTrial(currentTrial + 1);

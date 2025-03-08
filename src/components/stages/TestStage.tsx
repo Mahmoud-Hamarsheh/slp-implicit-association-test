@@ -5,7 +5,7 @@ import { SurveyData } from "@/components/Survey";
 import { SurveyResponses } from "@/components/BiasAwarenessSurvey";
 
 interface TestStageProps {
-  onComplete: (result: number) => void;
+  onComplete: (result: number, responses: any[]) => void;
   surveyData: SurveyData;
   hasTakenIATBefore: boolean;
   biasAwarenessData: SurveyResponses | null;
@@ -26,9 +26,13 @@ export const TestStage: React.FC<TestStageProps> = ({
     biasAwarenessResponses: biasAwarenessData || {}
   };
 
+  const handleIATComplete = (result: number, responses: any[]) => {
+    onComplete(result, responses);
+  };
+
   return (
     <IAT 
-      onComplete={onComplete}
+      onComplete={handleIATComplete}
       surveyData={formattedSurveyData}
     />
   );
