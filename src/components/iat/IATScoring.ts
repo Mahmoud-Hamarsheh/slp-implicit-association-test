@@ -48,11 +48,13 @@ export const calculateDScore = (responses: Response[]) => {
   console.log(`Means: B3=${mean3.toFixed(3)}, B4=${mean4.toFixed(3)}, B6=${mean6.toFixed(3)}, B7=${mean7.toFixed(3)}`);
   console.log(`SDs: SD1=${sd1.toFixed(3)}, SD2=${sd2.toFixed(3)}`);
 
-  // Step 5: Compute the two mean differences
+  // Step 5: Compute the two mean differences (incompatible - compatible)
+  // Blocks 6 & 3: (incompatible - compatible)
   const diff1 = mean6 - mean3;
+  // Blocks 7 & 4: (incompatible - compatible)
   const diff2 = mean7 - mean4;
 
-  // Step 6: Divide each difference by its associated inclusive standard deviation
+  // Step 6: Divide each difference score by its associated "inclusive" standard deviation
   const d1 = diff1 / sd1;
   const d2 = diff2 / sd2;
 
