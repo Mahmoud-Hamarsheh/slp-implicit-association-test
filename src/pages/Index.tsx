@@ -7,6 +7,11 @@ import { Button } from "@/components/ui/button";
 const Index = () => {
   const navigate = useNavigate();
 
+  const handleSurveyComplete = () => {
+    // Handle survey completion if needed
+    console.log("Survey completed");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary to-background">
       <div className="container mx-auto py-8">
@@ -21,7 +26,7 @@ const Index = () => {
             </Button>
           </div>
         </div>
-        <BiasAwarenessSurvey />
+        <BiasAwarenessSurvey onComplete={handleSurveyComplete} />
       </div>
     </div>
   );
