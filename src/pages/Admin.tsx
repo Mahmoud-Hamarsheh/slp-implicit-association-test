@@ -13,6 +13,9 @@ import { useDataExport } from "@/utils/export-data";
 import Dashboard from "@/components/admin/Dashboard";
 import DetailedResults from "@/components/admin/DetailedResults";
 
+// Set this to true to bypass authentication during development
+const BYPASS_AUTH = true;
+
 const Admin = () => {
   const [results, setResults] = useState<IATResult[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +30,9 @@ const Admin = () => {
   const { handleExportData } = useDataExport();
 
   useEffect(() => {
-    checkAuth();
+    if (!BYPASS_AUTH) {
+      checkAuth();
+    }
     fetchResults();
   }, []);
 
@@ -87,9 +92,11 @@ const Admin = () => {
               <Download className="mr-2 h-4 w-4" />
               تصدير البيانات
             </Button>
-            <Button onClick={handleLogout} variant="outline" size="sm">
-              تسجيل الخروج
-            </Button>
+            {!BYPASS_AUTH && (
+              <Button onClick={handleLogout} variant="outline" size="sm">
+                تسجيل الخروج
+              </Button>
+            )}
           </div>
         </div>
 
