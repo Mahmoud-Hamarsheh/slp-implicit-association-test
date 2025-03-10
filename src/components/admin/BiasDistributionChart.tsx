@@ -1,5 +1,5 @@
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 
 interface BiasCategory {
   name: string;
@@ -19,6 +19,28 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
     percent: total > 0 ? Math.round((item.value / total) * 100) : 0
   }));
 
+  // Custom label renderer that shows name and percentage outside the pie chart
+  const renderCustomizedLabel = ({ cx, cy, midAngle, outerRadius, name, percent }: any) => {
+    const RADIAN = Math.PI / 180;
+    const radius = outerRadius * 1.35;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill={name.includes("محايد") ? "#ff8c00" : "#0080ff"} // Orange for محايد, Blue for others
+        textAnchor={x > cx ? 'start' : 'end'}
+        dominantBaseline="central"
+        fontSize={12}
+        fontWeight="500"
+      >
+        {`${name} (${percent}%)`}
+      </text>
+    );
+  };
+
   return (
     <div className="h-[300px] w-full">
       <ResponsiveContainer width="100%" height="100%">
@@ -27,30 +49,29 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
             data={dataWithPercent}
             cx="50%"
             cy="50%"
-            labelLine={true}
+            labelLine={false}
             outerRadius={80}
             fill="#8884d8"
             dataKey="value"
             nameKey="name"
-            label={({ name, percent }) => `${name} (${percent}%)`}
+            label={renderCustomizedLabel}
           >
             {dataWithPercent.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip 
-            formatter={(value: number) => [
-              `${value} (${Math.round((value / total) * 100)}%)`, 
-              'عدد المشاركين'
-            ]} 
-          />
           <Legend 
             layout="horizontal" 
             verticalAlign="bottom" 
             align="center"
-            formatter={(value, entry, index) => (
-              <span style={{ color: data[index].color }}>
-                {value} ({dataWithPercent[index].percent}%)
+            iconType="circle"
+            formatter={(value) => (
+              <span style={{ 
+                color: dataWithPercent.find(item => item.name === value)?.color, 
+                fontSize: 14,
+                fontWeight: 500
+              }}>
+                {value}
               </span>
             )}
           />

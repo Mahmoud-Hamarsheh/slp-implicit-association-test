@@ -63,7 +63,7 @@ export const prepareBiasData = (results: IATResult[]) => {
 
   results.forEach(result => {
     const dScore = result.d_score;
-    // Updated categorization based on the correct D-score ranges
+    // Updated categorization based on the D-score ranges
     if (dScore > 0.65) {
       biasCategories["تحيز قوي (سلبي)"]++;
     } else if (dScore > 0.35) {
@@ -71,16 +71,16 @@ export const prepareBiasData = (results: IATResult[]) => {
     } else if (dScore > 0.15) {
       biasCategories["تحيز خفيف (سلبي)"]++;
     } else {
-      biasCategories["محايد"]++; // Both neutral zone and slight positive bias
+      biasCategories["محايد"]++;
     }
   });
 
-  // Define better distinct colors
+  // Define colors that match the image
   const biasColors = {
-    "تحيز قوي (سلبي)": "#ef476f",
-    "تحيز متوسط (سلبي)": "#ffd166",
-    "تحيز خفيف (سلبي)": "#06d6a0",
-    "محايد": "#118ab2"
+    "تحيز قوي (سلبي)": "#1E88E5", // Blue
+    "تحيز متوسط (سلبي)": "#26C6DA", // Teal/Green
+    "تحيز خفيف (سلبي)": "#FFC107", // Yellow/Gold
+    "محايد": "#FF7043" // Orange/Coral
   };
 
   return Object.entries(biasCategories).map(([name, value]) => ({
