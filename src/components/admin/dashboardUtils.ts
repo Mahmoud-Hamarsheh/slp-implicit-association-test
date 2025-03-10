@@ -75,7 +75,7 @@ export const prepareBiasData = (results: IATResult[]) => {
     }
   });
 
-  // Define colors that match the image
+  // Define colors that match the image exactly
   const biasColors = {
     "تحيز قوي (سلبي)": "#1E88E5", // Blue
     "تحيز متوسط (سلبي)": "#26C6DA", // Teal/Green
