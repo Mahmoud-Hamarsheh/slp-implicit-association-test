@@ -18,12 +18,28 @@ const Auth = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    
     try {
+      // Check if it's the admin credential
+      if (email === "admin" && password === "admin@123") {
+        // Set admin flag in localStorage
+        localStorage.setItem("isAdmin", "true");
+        navigate("/admin");
+        toast({
+          title: "تم تسجيل الدخول بنجاح",
+          description: "مرحباً بك في لوحة التحكم",
+        });
+        return;
+      }
+      
+      // Regular Supabase authentication
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
+      
       if (error) throw error;
+      
       navigate("/admin");
       toast({
         title: "تم تسجيل الدخول بنجاح",
@@ -49,10 +65,10 @@ const Auth = () => {
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">البريد الإلكتروني</Label>
+              <Label htmlFor="email">اسم المستخدم / البريد الإلكتروني</Label>
               <Input
                 id="email"
-                type="email"
+                type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
