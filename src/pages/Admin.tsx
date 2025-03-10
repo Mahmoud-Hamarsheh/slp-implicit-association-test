@@ -27,7 +27,6 @@ interface IATResult {
 const Admin = () => {
   const [results, setResults] = useState<IATResult[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -37,16 +36,9 @@ const Admin = () => {
   }, []);
 
   const checkAuth = async () => {
-    // First check for Supabase auth
     const { data: { session } } = await supabase.auth.getSession();
-    
-    // Check local storage for our admin flag that we'd set during login
-    const adminFlag = localStorage.getItem('isAdmin');
-    
-    if (!session && !adminFlag) {
+    if (!session) {
       navigate("/auth");
-    } else if (adminFlag) {
-      setIsAdmin(true);
     }
   };
 
@@ -80,7 +72,6 @@ const Admin = () => {
   };
 
   const handleLogout = async () => {
-    localStorage.removeItem('isAdmin');
     await supabase.auth.signOut();
     navigate("/auth");
   };
