@@ -20,13 +20,6 @@ const Auth = () => {
             >
               الذهاب للاختبار
             </Button>
-            <Button 
-              variant="secondary"
-              onClick={() => navigate("/admin")}
-              size="sm"
-            >
-              لوحة التحكم
-            </Button>
           </div>
         </CardHeader>
         <CardContent>
