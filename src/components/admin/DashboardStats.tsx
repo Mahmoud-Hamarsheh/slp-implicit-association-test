@@ -15,26 +15,35 @@ export const DashboardStats = ({
   minDScore 
 }: DashboardStatsProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <StatCard 
         title="إجمالي المشاركين" 
-        value={totalParticipants} 
+        value={totalParticipants.toString()} 
+        valueColor="text-primary"
+        iconColor="bg-primary/10"
+        icon="👥"
       />
       <StatCard 
         title="متوسط نتيجة D-Score" 
         value={avgDScore.toFixed(2)} 
-        valueColor="text-red-500"
-        subtext="تحيز متوسط مع السلوكيات التواصل مع السليمة"
+        valueColor={avgDScore < -0.35 ? "text-red-500" : "text-gray-600"}
+        subtext={avgDScore < -0.35 ? "تحيز متوسط" : "تحيز خفيف أو محايد"}
+        iconColor="bg-blue-100"
+        icon="📊"
       />
       <StatCard 
         title="أعلى نتيجة" 
         value={maxDScore.toFixed(2)} 
-        valueColor="text-red-600"
+        valueColor="text-green-600"
+        iconColor="bg-green-100"
+        icon="⬆️"
       />
       <StatCard 
         title="أقل نتيجة" 
         value={minDScore.toFixed(2)} 
-        valueColor="text-gray-500"
+        valueColor="text-red-600"
+        iconColor="bg-red-100"
+        icon="⬇️"
       />
     </div>
   );

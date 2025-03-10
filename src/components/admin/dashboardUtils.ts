@@ -1,4 +1,6 @@
 
+import { format } from "date-fns";
+
 interface IATResult {
   id: string;
   created_at: string;
@@ -36,41 +38,54 @@ export const prepareDegreeData = (results: IATResult[]) => {
     degreeCount[degree] = (degreeCount[degree] || 0) + 1;
   });
 
+  // Define consistent colors for degrees
+  const degreeColors: { [key: string]: string } = {
+    "طالب": "#4EA8DE",
+    "بكالوريوس": "#56CFE1",
+    "ماجستير": "#5E60CE",
+    "دكتوراه": "#7400B8"
+  };
+
   return Object.entries(degreeCount).map(([name, value]) => ({
     name,
     value,
-    color: name === "بكالوريوس" ? "#4cc9f0" : name === "ماجستير" ? "#3a86ff" : "#0077b6"
+    color: degreeColors[name] || "#0077b6"
   }));
 };
 
 export const prepareBiasData = (results: IATResult[]) => {
   const biasCategories: { [key: string]: number } = {
-    "تحيز قوي (سلبي)": 0,
-    "تحيز متوسط (سلبي)": 0,
-    "تحيز خفيف (سلبي)": 0,
+    "تحيز قوي": 0,
+    "تحيز متوسط": 0,
+    "تحيز خفيف": 0,
     "محايد": 0
   };
 
   results.forEach(result => {
     const dScore = result.d_score;
     if (dScore < -0.65) {
-      biasCategories["تحيز قوي (سلبي)"]++;
+      biasCategories["تحيز قوي"]++;
     } else if (dScore < -0.35) {
-      biasCategories["تحيز متوسط (سلبي)"]++;
+      biasCategories["تحيز متوسط"]++;
     } else if (dScore < -0.15) {
-      biasCategories["تحيز خفيف (سلبي)"]++;
+      biasCategories["تحيز خفيف"]++;
     } else {
       biasCategories["محايد"]++;
     }
   });
 
+  // Define better distinct colors
+  const biasColors = {
+    "تحيز قوي": "#ef476f",
+    "تحيز متوسط": "#ffd166",
+    "تحيز خفيف": "#06d6a0",
+    "محايد": "#118ab2"
+  };
+
   return Object.entries(biasCategories).map(([name, value]) => ({
     name,
     value,
-    color: name === "تحيز قوي (سلبي)" ? "#3a86ff" : 
-           name === "تحيز متوسط (سلبي)" ? "#4cc9f0" : 
-           name === "تحيز خفيف (سلبي)" ? "#ffd166" : 
-           "#ff7b25"
+    color: biasColors[name as keyof typeof biasColors]
   }));
 };
 
@@ -78,10 +93,10 @@ export const prepareDScoreData = (results: IATResult[]) => {
   return results.slice(0, 20).map(result => ({
     id: result.id.substring(0, 8),
     value: result.d_score,
-    color: result.d_score < 0 ? "#adb5bd" : 
-           result.d_score < 0.3 ? "#ff9e00" : 
-           result.d_score < 0.6 ? "#ff5d73" : 
-           "#ff4d6d"
+    color: result.d_score < -0.65 ? "#ef476f" : 
+           result.d_score < -0.35 ? "#ffd166" : 
+           result.d_score < -0.15 ? "#06d6a0" : 
+           "#118ab2"
   }));
 };
 
@@ -97,8 +112,8 @@ export const exportToCsv = (results: IATResult[], onSuccess: () => void, onError
         result.d_score.toString(),
         result.age.toString(),
         result.years_experience.toString(),
-        result.degree,
-        new Date(result.created_at).toLocaleDateString('ar-SA')
+        degreeMapping[result.degree] || result.degree,
+        format(new Date(result.created_at), "yyyy-MM-dd")
       ];
       csvRows.push(row.join(","));
     });

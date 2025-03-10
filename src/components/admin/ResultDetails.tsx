@@ -1,5 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { format } from "date-fns";
+import { ar } from "date-fns/locale";
 
 interface IATResult {
   id: string;
@@ -21,26 +23,45 @@ export const ResultDetails = ({ results, degreeMapping }: ResultDetailsProps) =>
   return (
     <div className="grid gap-6">
       {results.map((result) => (
-        <Card key={result.id}>
-          <CardHeader>
-            <CardTitle className="text-xl">
-              نتيجة IAT: {result.d_score.toFixed(2)}
+        <Card key={result.id} className="animate-fadeIn">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xl flex justify-between items-center flex-wrap">
+              <span>نتيجة IAT: <span className={`${result.d_score < -0.35 ? 'text-red-500' : 'text-gray-600'}`}>
+                {result.d_score.toFixed(2)}
+              </span></span>
+              <span className="text-sm text-muted-foreground">
+                {format(new Date(result.created_at), "d MMMM yyyy", { locale: ar })}
+              </span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p><strong>العمر:</strong> {result.age}</p>
-                <p><strong>سنوات الخبرة:</strong> {result.years_experience}</p>
-                <p><strong>الدرجة العلمية:</strong> {degreeMapping[result.degree] || result.degree}</p>
-                <p><strong>تاريخ الاختبار:</strong> {new Date(result.created_at).toLocaleDateString('ar-SA')}</p>
+              <div className="space-y-2">
+                <div className="flex justify-between border-b pb-1">
+                  <strong>العمر:</strong> 
+                  <span>{result.age}</span>
+                </div>
+                <div className="flex justify-between border-b pb-1">
+                  <strong>سنوات الخبرة:</strong> 
+                  <span>{result.years_experience}</span>
+                </div>
+                <div className="flex justify-between border-b pb-1">
+                  <strong>الدرجة العلمية:</strong> 
+                  <span>{degreeMapping[result.degree] || result.degree}</span>
+                </div>
               </div>
-              <div>
-                {result.survey_score && (
-                  <p><strong>درجة الوعي بالتحيز:</strong> {result.survey_score.toFixed(2)}</p>
+              <div className="space-y-2">
+                {result.survey_score !== undefined && (
+                  <div className="flex justify-between border-b pb-1">
+                    <strong>درجة الوعي بالتحيز:</strong> 
+                    <span>{result.survey_score.toFixed(2)}</span>
+                  </div>
                 )}
                 {result.survey_responses && Object.entries(result.survey_responses).length > 0 && (
-                  <p><strong>عدد الإجابات على الاستبيان:</strong> {Object.entries(result.survey_responses).length}</p>
+                  <div className="flex justify-between border-b pb-1">
+                    <strong>عدد الإجابات على الاستبيان:</strong> 
+                    <span>{Object.entries(result.survey_responses).length}</span>
+                  </div>
                 )}
               </div>
             </div>

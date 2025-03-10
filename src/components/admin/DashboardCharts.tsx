@@ -25,19 +25,19 @@ interface DashboardChartsProps {
 export const DashboardCharts = ({ degreeData, biasData, dScoreData }: DashboardChartsProps) => {
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>توزيع الدرجة العلمية</CardTitle>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        <Card className="animate-fadeIn">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xl">توزيع الدرجة العلمية</CardTitle>
           </CardHeader>
           <CardContent>
             <DegreeDistributionChart data={degreeData} />
           </CardContent>
         </Card>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>توزيع التحيز</CardTitle>
+        <Card className="animate-fadeIn">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xl">توزيع التحيز</CardTitle>
           </CardHeader>
           <CardContent>
             <BiasDistributionChart data={biasData} />
@@ -45,9 +45,9 @@ export const DashboardCharts = ({ degreeData, biasData, dScoreData }: DashboardC
         </Card>
       </div>
 
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>D-Score توزيع نتائج</CardTitle>
+      <Card className="mt-6 animate-fadeIn">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-xl">D-Score توزيع نتائج</CardTitle>
         </CardHeader>
         <CardContent>
           <DScoreBarChart data={dScoreData} />
