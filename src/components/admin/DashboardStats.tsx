@@ -26,8 +26,8 @@ export const DashboardStats = ({
       <StatCard 
         title="متوسط نتيجة D-Score" 
         value={avgDScore.toFixed(2)} 
-        valueColor={avgDScore < -0.35 ? "text-red-500" : "text-gray-600"}
-        subtext={avgDScore < -0.35 ? "تحيز متوسط" : "تحيز خفيف أو محايد"}
+        valueColor={avgDScore > 0.35 ? "text-red-500" : "text-gray-600"}
+        subtext={avgDScore > 0.35 ? "تحيز متوسط" : "تحيز خفيف أو محايد"}
         iconColor="bg-blue-100"
         icon="📊"
       />

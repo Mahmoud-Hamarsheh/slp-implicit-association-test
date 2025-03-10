@@ -63,14 +63,17 @@ export const prepareBiasData = (results: IATResult[]) => {
 
   results.forEach(result => {
     const dScore = result.d_score;
-    if (dScore < -0.65) {
+    // Updated categorization based on the correct D-score ranges
+    if (dScore > 0.65) {
       biasCategories["تحيز قوي"]++;
-    } else if (dScore < -0.35) {
+    } else if (dScore > 0.35) {
       biasCategories["تحيز متوسط"]++;
-    } else if (dScore < -0.15) {
+    } else if (dScore > 0.15) {
       biasCategories["تحيز خفيف"]++;
+    } else if (dScore < -0.15) {
+      biasCategories["محايد"]++; // Using "محايد" for slight bias associating with positive attributes
     } else {
-      biasCategories["محايد"]++;
+      biasCategories["محايد"]++; // Neutral zone between -0.15 and 0.15
     }
   });
 
@@ -93,9 +96,10 @@ export const prepareDScoreData = (results: IATResult[]) => {
   return results.slice(0, 20).map(result => ({
     id: result.id.substring(0, 8),
     value: result.d_score,
-    color: result.d_score < -0.65 ? "#ef476f" : 
-           result.d_score < -0.35 ? "#ffd166" : 
-           result.d_score < -0.15 ? "#06d6a0" : 
+    // Updated color logic based on the correct D-score ranges
+    color: result.d_score > 0.65 ? "#ef476f" : 
+           result.d_score > 0.35 ? "#ffd166" : 
+           result.d_score > 0.15 ? "#06d6a0" : 
            "#118ab2"
   }));
 };
