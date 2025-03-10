@@ -55,9 +55,9 @@ export const prepareDegreeData = (results: IATResult[]) => {
 
 export const prepareBiasData = (results: IATResult[]) => {
   const biasCategories: { [key: string]: number } = {
-    "تحيز قوي": 0,
-    "تحيز متوسط": 0,
-    "تحيز خفيف": 0,
+    "تحيز قوي (سلبي)": 0,
+    "تحيز متوسط (سلبي)": 0,
+    "تحيز خفيف (سلبي)": 0,
     "محايد": 0
   };
 
@@ -65,23 +65,21 @@ export const prepareBiasData = (results: IATResult[]) => {
     const dScore = result.d_score;
     // Updated categorization based on the correct D-score ranges
     if (dScore > 0.65) {
-      biasCategories["تحيز قوي"]++;
+      biasCategories["تحيز قوي (سلبي)"]++;
     } else if (dScore > 0.35) {
-      biasCategories["تحيز متوسط"]++;
+      biasCategories["تحيز متوسط (سلبي)"]++;
     } else if (dScore > 0.15) {
-      biasCategories["تحيز خفيف"]++;
-    } else if (dScore < -0.15) {
-      biasCategories["محايد"]++; // Using "محايد" for slight bias associating with positive attributes
+      biasCategories["تحيز خفيف (سلبي)"]++;
     } else {
-      biasCategories["محايد"]++; // Neutral zone between -0.15 and 0.15
+      biasCategories["محايد"]++; // Both neutral zone and slight positive bias
     }
   });
 
   // Define better distinct colors
   const biasColors = {
-    "تحيز قوي": "#ef476f",
-    "تحيز متوسط": "#ffd166",
-    "تحيز خفيف": "#06d6a0",
+    "تحيز قوي (سلبي)": "#ef476f",
+    "تحيز متوسط (سلبي)": "#ffd166",
+    "تحيز خفيف (سلبي)": "#06d6a0",
     "محايد": "#118ab2"
   };
 

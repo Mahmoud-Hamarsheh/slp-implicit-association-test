@@ -8,6 +8,15 @@ interface DashboardStatsProps {
   minDScore: number;
 }
 
+// Helper function to get bias level description based on d-score
+const getBiasDescription = (dScore: number): string => {
+  if (dScore > 0.65) return "تحيز قوي (اضطرابات التواصل مع السمات السلبية)";
+  if (dScore > 0.35) return "تحيز متوسط (اضطرابات التواصل مع السمات السلبية)";
+  if (dScore > 0.15) return "تحيز خفيف (اضطرابات التواصل مع السمات السلبية)";
+  if (dScore < -0.15) return "محايد";
+  return "محايد";
+};
+
 export const DashboardStats = ({ 
   totalParticipants, 
   avgDScore, 
@@ -27,7 +36,7 @@ export const DashboardStats = ({
         title="متوسط نتيجة D-Score" 
         value={avgDScore.toFixed(2)} 
         valueColor={avgDScore > 0.35 ? "text-red-500" : "text-gray-600"}
-        subtext={avgDScore > 0.35 ? "تحيز متوسط" : "تحيز خفيف أو محايد"}
+        subtext={getBiasDescription(avgDScore)}
         iconColor="bg-blue-100"
         icon="📊"
       />

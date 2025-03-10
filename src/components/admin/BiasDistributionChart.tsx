@@ -12,29 +12,48 @@ interface BiasDistributionChartProps {
 }
 
 export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
+  // Calculate percentages for each category
+  const total = data.reduce((sum, entry) => sum + entry.value, 0);
+  const dataWithPercent = data.map(item => ({
+    ...item,
+    percent: total > 0 ? Math.round((item.value / total) * 100) : 0
+  }));
+
   return (
     <div className="h-[300px] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
-            data={data}
+            data={dataWithPercent}
             cx="50%"
             cy="50%"
-            labelLine={false}
+            labelLine={true}
             outerRadius={80}
             fill="#8884d8"
             dataKey="value"
-            label={({ name, percent }) => {
-              // Don't show the label if the percentage is too small
-              return percent > 0.05 ? `${name} (${(percent * 100).toFixed(0)}%)` : '';
-            }}
+            nameKey="name"
+            label={({ name, percent }) => `${name} (${percent}%)`}
           >
-            {data.map((entry, index) => (
+            {dataWithPercent.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip formatter={(value: number) => [`${value} (${((value / data.reduce((sum, entry) => sum + entry.value, 0)) * 100).toFixed(0)}%)`, 'عدد المشاركين']} />
-          <Legend layout="horizontal" verticalAlign="bottom" align="center" />
+          <Tooltip 
+            formatter={(value: number) => [
+              `${value} (${Math.round((value / total) * 100)}%)`, 
+              'عدد المشاركين'
+            ]} 
+          />
+          <Legend 
+            layout="horizontal" 
+            verticalAlign="bottom" 
+            align="center"
+            formatter={(value, entry, index) => (
+              <span style={{ color: data[index].color }}>
+                {value} ({dataWithPercent[index].percent}%)
+              </span>
+            )}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>
