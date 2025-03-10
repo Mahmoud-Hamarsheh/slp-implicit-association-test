@@ -1,6 +1,5 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, TooltipProps } from "recharts";
-import { Tooltip as UITooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { useState } from "react";
 
 interface BiasCategory {
@@ -20,60 +19,6 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
     ...item,
     percent: total > 0 ? Math.round((item.value / total) * 100) : 0
   }));
-
-  // State to track which segments to show labels for
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  
-  // Update window width when resized
-  useState(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  });
-
-  // Only show labels on larger screens
-  const showLabels = windowWidth >= 768;
-
-  // Custom label renderer
-  const renderCustomizedLabel = ({ cx, cy, midAngle, outerRadius, name, percent }: any) => {
-    // Don't show labels on small screens
-    if (!showLabels) return null;
-    
-    const RADIAN = Math.PI / 180;
-    const radius = outerRadius * 1.35;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-    
-    let displayName = name;
-    
-    // Format the display text
-    if (name.includes("تحيز قوي")) {
-      displayName = `تحيز قوي (سلبي) (${percent}%)`;
-    } else if (name.includes("تحيز متوسط")) {
-      displayName = `تحيز متوسط (سلبي) (${percent}%)`;
-    } else if (name.includes("تحيز خفيف")) {
-      displayName = `تحيز خفيف (سلبي) (${percent}%)`;
-    } else {
-      displayName = `محايد (${percent}%)`;
-    }
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill={name.includes("محايد") ? "#FF7043" : "#1E88E5"} 
-        textAnchor={x > cx ? 'start' : 'end'}
-        dominantBaseline="central"
-        fontSize={12}
-        fontWeight="500"
-      >
-        {displayName}
-      </text>
-    );
-  };
 
   // Custom tooltip content
   const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
@@ -124,7 +69,7 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
             fill="#8884d8"
             dataKey="value"
             nameKey="name"
-            label={renderCustomizedLabel}
+            label={false}
             startAngle={90}
             endAngle={-270}
           >
