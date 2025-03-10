@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DegreeDistributionChart } from "./DegreeDistributionChart";
 import { BiasDistributionChart } from "./BiasDistributionChart";
 import { DScoreBarChart } from "./DScoreBarChart";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 interface DashboardChartsProps {
   degreeData: Array<{
@@ -24,7 +25,7 @@ interface DashboardChartsProps {
 
 export const DashboardCharts = ({ degreeData, biasData, dScoreData }: DashboardChartsProps) => {
   return (
-    <>
+    <TooltipProvider>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
         <Card className="animate-fadeIn">
           <CardHeader className="pb-2">
@@ -53,6 +54,6 @@ export const DashboardCharts = ({ degreeData, biasData, dScoreData }: DashboardC
           <DScoreBarChart data={dScoreData} />
         </CardContent>
       </Card>
-    </>
+    </TooltipProvider>
   );
 };

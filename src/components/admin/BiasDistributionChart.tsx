@@ -1,4 +1,7 @@
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
+
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, TooltipProps } from "recharts";
+import { Tooltip as UITooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { useState } from "react";
 
 interface BiasCategory {
   name: string;
@@ -18,30 +21,43 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
     percent: total > 0 ? Math.round((item.value / total) * 100) : 0
   }));
 
-  // Custom label renderer that shows name and percentage based on position
+  // State to track which segments to show labels for
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  
+  // Update window width when resized
+  useState(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  });
+
+  // Only show labels on larger screens
+  const showLabels = windowWidth >= 768;
+
+  // Custom label renderer
   const renderCustomizedLabel = ({ cx, cy, midAngle, outerRadius, name, percent }: any) => {
+    // Don't show labels on small screens
+    if (!showLabels) return null;
+    
     const RADIAN = Math.PI / 180;
-    // Position the labels further away from the pie
     const radius = outerRadius * 1.35;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
     
-    // Determine quadrant and adjust text
-    const quadrant = Math.floor((-midAngle % 360) / 90) + 1;
     let displayName = name;
     
-    // Keep only the main text and percentage for display
-    // For labels on right side (quadrants 1 and 4)
-    if (x > cx) {
-      if (name.includes("تحيز قوي")) {
-        displayName = `تحيز قوي (سلبي) (${percent}%)`;
-      } else if (name.includes("تحيز متوسط")) {
-        displayName = `تحيز متوسط (سلبي) (${percent}%)`;
-      } else if (name.includes("تحيز خفيف")) {
-        displayName = `تحيز خفيف (سلبي) (${percent}%)`;
-      } else {
-        displayName = `محايد (${percent}%)`;
-      }
+    // Format the display text
+    if (name.includes("تحيز قوي")) {
+      displayName = `تحيز قوي (سلبي) (${percent}%)`;
+    } else if (name.includes("تحيز متوسط")) {
+      displayName = `تحيز متوسط (سلبي) (${percent}%)`;
+    } else if (name.includes("تحيز خفيف")) {
+      displayName = `تحيز خفيف (سلبي) (${percent}%)`;
+    } else {
+      displayName = `محايد (${percent}%)`;
     }
 
     return (
@@ -56,6 +72,42 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
       >
         {displayName}
       </text>
+    );
+  };
+
+  // Custom tooltip content
+  const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-white p-2 border rounded shadow text-sm">
+          <p className="font-bold" style={{ color: data.color }}>{data.name}</p>
+          <p>{data.percent}%</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Simplified content for Legend to only show colors
+  const renderLegendContent = (value: string, entry: any) => {
+    const { color } = entry;
+    
+    let displayName = value;
+    if (value.includes("تحيز قوي")) {
+      displayName = "تحيز قوي (سلبي)";
+    } else if (value.includes("تحيز متوسط")) {
+      displayName = "تحيز متوسط (سلبي)";
+    } else if (value.includes("تحيز خفيف")) {
+      displayName = "تحيز خفيف (سلبي)";
+    } else {
+      displayName = "محايد";
+    }
+    
+    return (
+      <span style={{ color, marginRight: 10 }}>
+        {displayName} ({entry.payload.percent}%)
+      </span>
     );
   };
 
@@ -80,20 +132,13 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
+          <Tooltip content={<CustomTooltip />} />
           <Legend 
             layout="horizontal" 
             verticalAlign="bottom" 
             align="center"
             iconType="circle"
-            formatter={(value) => (
-              <span style={{ 
-                color: dataWithPercent.find(item => item.name === value)?.color, 
-                fontSize: 14,
-                fontWeight: 500
-              }}>
-                {value}
-              </span>
-            )}
+            formatter={renderLegendContent}
           />
         </PieChart>
       </ResponsiveContainer>
