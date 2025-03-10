@@ -1,38 +1,37 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Download, RefreshCw } from "lucide-react";
-import { IATResult, DashboardStats } from "@/types/iat-types";
-import { calculateStats } from "@/utils/stats-calculator";
-import { useDataExport } from "@/utils/export-data";
-import Dashboard from "@/components/admin/Dashboard";
-import DetailedResults from "@/components/admin/DetailedResults";
 
-// Set this to true to bypass authentication during development
-const BYPASS_AUTH = true;
+interface SurveyResponses {
+  implicitBiasAwareness: number[];
+  positiveAttitudes: number[];
+  negativeAttitudes: number[];
+  normalCommunication: string[];
+  communicationDisorders: string[];
+}
+
+interface IATResult {
+  id: string;
+  created_at: string;
+  d_score: number;
+  age: number;
+  years_experience: number;
+  degree: string;
+  survey_responses: SurveyResponses;
+}
 
 const Admin = () => {
   const [results, setResults] = useState<IATResult[]>([]);
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<DashboardStats>({
-    totalParticipants: 0,
-    averageDScore: 0,
-    degreeDistribution: [],
-    biasDistribution: []
-  });
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { handleExportData } = useDataExport();
 
   useEffect(() => {
-    if (!BYPASS_AUTH) {
-      checkAuth();
-    }
+    checkAuth();
     fetchResults();
   }, []);
 
@@ -61,7 +60,6 @@ const Admin = () => {
       })) as IATResult[];
       
       setResults(parsedData || []);
-      setStats(calculateStats(parsedData || []));
     } catch (error: any) {
       toast({
         title: "خطأ في جلب النتائج",
@@ -83,21 +81,7 @@ const Admin = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">لوحة تحكم نتائج IAT</h1>
-          <div className="flex gap-2">
-            <Button onClick={fetchResults} variant="outline" size="sm">
-              <RefreshCw className="mr-2 h-4 w-4" />
-              تحديث
-            </Button>
-            <Button onClick={() => handleExportData(results)} variant="outline" size="sm">
-              <Download className="mr-2 h-4 w-4" />
-              تصدير البيانات
-            </Button>
-            {!BYPASS_AUTH && (
-              <Button onClick={handleLogout} variant="outline" size="sm">
-                تسجيل الخروج
-              </Button>
-            )}
-          </div>
+          <Button onClick={handleLogout} variant="outline">تسجيل الخروج</Button>
         </div>
 
         {loading ? (
@@ -109,20 +93,32 @@ const Admin = () => {
             <p className="text-center">لا توجد نتائج حتى الآن</p>
           </Card>
         ) : (
-          <Tabs defaultValue="dashboard" className="w-full">
-            <TabsList className="mb-4">
-              <TabsTrigger value="dashboard">لوحة التحكم</TabsTrigger>
-              <TabsTrigger value="results">النتائج التفصيلية</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="dashboard">
-              <Dashboard stats={stats} results={results} />
-            </TabsContent>
-            
-            <TabsContent value="results">
-              <DetailedResults results={results} />
-            </TabsContent>
-          </Tabs>
+          <div className="grid gap-6">
+            {results.map((result) => (
+              <Card key={result.id}>
+                <CardHeader>
+                  <CardTitle className="text-xl">
+                    نتيجة IAT: {result.d_score.toFixed(2)}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p><strong>العمر:</strong> {result.age}</p>
+                      <p><strong>سنوات الخبرة:</strong> {result.years_experience}</p>
+                      <p><strong>الدرجة العلمية:</strong> {result.degree}</p>
+                      <p><strong>تاريخ الاختبار:</strong> {new Date(result.created_at).toLocaleDateString('ar-SA')}</p>
+                    </div>
+                    <div>
+                      <p><strong>الوعي بالتحيز الضمني:</strong> {result.survey_responses?.implicitBiasAwareness?.join(', ')}</p>
+                      <p><strong>المواقف الإيجابية:</strong> {result.survey_responses?.positiveAttitudes?.join(', ')}</p>
+                      <p><strong>المواقف السلبية:</strong> {result.survey_responses?.negativeAttitudes?.join(', ')}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         )}
       </div>
     </div>
