@@ -16,13 +16,13 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-b from-secondary to-background">
       <div className="container mx-auto py-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-4">استبيان الوعي بالتحيز</h1>
+          <h1 className="text-3xl font-bold mb-4">Bias Awareness Survey</h1>
           <p className="text-lg text-muted-foreground mb-6">
-            استكشاف وفهم تحيزاتك الصريحة المتعلقة باضطرابات التواصل
+            Explore and understand your explicit biases related to communication disorders
           </p>
           <div className="flex justify-center gap-4 mb-8">
             <Button onClick={() => navigate("/")} variant="default" className="bg-primary text-white">
-              العودة إلى اختبار IAT
+              Back to IAT Test
             </Button>
           </div>
         </div>
