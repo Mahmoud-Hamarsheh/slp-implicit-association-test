@@ -18,25 +18,25 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
         };
       case 2:
         return {
-          left: "صفات إيجابية",
-          right: "صفات سلبية"
+          left: "",
+          right: ""
         };
       case 3:
       case 4:
         return {
-          left: "تواصل طبيعي\nأو\nصفات إيجابية",
-          right: "اضطراب تواصل\nأو\nصفات سلبية"
+          left: "تواصل طبيعي\nأو\n",
+          right: "اضطراب تواصل\nأو\n"
         };
       case 5:
         return {
-          left: "صفات سلبية",
-          right: "صفات إيجابية"
+          left: "",
+          right: ""
         };
       case 6:
       case 7:
         return {
-          left: "تواصل طبيعي\nأو\nصفات سلبية",
-          right: "اضطراب تواصل\nأو\nصفات إيجابية"
+          left: "تواصل طبيعي\nأو\n",
+          right: "اضطراب تواصل\nأو\n"
         };
       default:
         return {
@@ -46,9 +46,11 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
     }
   };
 
-  // Determine if category includes positive/negative attributes
-  const hasPositiveAttributes = (category: string) => category.includes("صفات إيجابية");
-  const hasNegativeAttributes = (category: string) => category.includes("صفات سلبية");
+  // Determine if block displays positive/negative attributes
+  const hasPositiveAttributesLeft = (trial.block === 2) || (trial.block === 3) || (trial.block === 4);
+  const hasPositiveAttributesRight = (trial.block === 5) || (trial.block === 6) || (trial.block === 7);
+  const hasNegativeAttributesLeft = (trial.block === 5) || (trial.block === 6) || (trial.block === 7);
+  const hasNegativeAttributesRight = (trial.block === 2) || (trial.block === 3) || (trial.block === 4);
 
   const categories = getTrialCategories(trial);
 
@@ -57,39 +59,57 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
       <div className="grid grid-cols-2 gap-8 mb-12">
         <div className="text-center flex flex-col items-center">
           <div className="text-4xl font-bold mb-4">K</div>
-          <div className="whitespace-pre-line text-xl text-green-600 mb-2">{categories.left}</div>
-          {hasPositiveAttributes(categories.left) && (
-            <div className="flex flex-wrap gap-2 justify-center mb-2">
-              <img src="/lovable-uploads/3d280a97-f40f-42c4-8095-644ba45df460.png" alt="Positive attribute 1" className="h-8 w-8" />
-              <img src="/lovable-uploads/4ec5761a-9111-4ed1-87e2-cfd914be2cac.png" alt="Positive attribute 2" className="h-8 w-8" />
-              <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
-              <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
-            </div>
+          {categories.left && <div className="whitespace-pre-line text-xl text-green-600 mb-2">{categories.left}</div>}
+          {hasPositiveAttributesLeft && (
+            <>
+              {trial.block === 2 && <div className="whitespace-pre-line text-xl text-green-600 mb-2">صفات إيجابية</div>}
+              <div className="flex flex-wrap gap-2 justify-center mb-2">
+                <img src="/lovable-uploads/3d280a97-f40f-42c4-8095-644ba45df460.png" alt="Positive attribute 1" className="h-8 w-8" />
+                <img src="/lovable-uploads/4ec5761a-9111-4ed1-87e2-cfd914be2cac.png" alt="Positive attribute 2" className="h-8 w-8" />
+                <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
+                <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
+                <img src="/lovable-uploads/80d66870-170b-4907-b25b-fa6a9181c7c9.png" alt="Additional positive" className="h-8 w-8" />
+              </div>
+            </>
           )}
-          {hasNegativeAttributes(categories.left) && (
-            <div className="flex flex-wrap gap-2 justify-center mb-2">
-              <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
-              <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
-            </div>
+          {hasNegativeAttributesLeft && (
+            <>
+              {trial.block === 5 && <div className="whitespace-pre-line text-xl text-green-600 mb-2">صفات سلبية</div>}
+              <div className="flex flex-wrap gap-2 justify-center mb-2">
+                <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
+                <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
+                <img src="/lovable-uploads/0ad74854-9e13-4400-b348-cf97697cadc7.png" alt="Additional negative 1" className="h-8 w-8" />
+                <img src="/lovable-uploads/2df0738b-33e7-4fbe-9bd5-785fbb2f81dc.png" alt="Additional negative 2" className="h-8 w-8" />
+              </div>
+            </>
           )}
           <div className="text-lg">اضغط "K"</div>
         </div>
         <div className="text-center flex flex-col items-center">
           <div className="text-4xl font-bold mb-4">D</div>
-          <div className="whitespace-pre-line text-xl text-green-600 mb-2">{categories.right}</div>
-          {hasPositiveAttributes(categories.right) && (
-            <div className="flex flex-wrap gap-2 justify-center mb-2">
-              <img src="/lovable-uploads/3d280a97-f40f-42c4-8095-644ba45df460.png" alt="Positive attribute 1" className="h-8 w-8" />
-              <img src="/lovable-uploads/4ec5761a-9111-4ed1-87e2-cfd914be2cac.png" alt="Positive attribute 2" className="h-8 w-8" />
-              <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
-              <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
-            </div>
+          {categories.right && <div className="whitespace-pre-line text-xl text-green-600 mb-2">{categories.right}</div>}
+          {hasPositiveAttributesRight && (
+            <>
+              {trial.block === 5 && <div className="whitespace-pre-line text-xl text-green-600 mb-2">صفات إيجابية</div>}
+              <div className="flex flex-wrap gap-2 justify-center mb-2">
+                <img src="/lovable-uploads/3d280a97-f40f-42c4-8095-644ba45df460.png" alt="Positive attribute 1" className="h-8 w-8" />
+                <img src="/lovable-uploads/4ec5761a-9111-4ed1-87e2-cfd914be2cac.png" alt="Positive attribute 2" className="h-8 w-8" />
+                <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
+                <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
+                <img src="/lovable-uploads/80d66870-170b-4907-b25b-fa6a9181c7c9.png" alt="Additional positive" className="h-8 w-8" />
+              </div>
+            </>
           )}
-          {hasNegativeAttributes(categories.right) && (
-            <div className="flex flex-wrap gap-2 justify-center mb-2">
-              <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
-              <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
-            </div>
+          {hasNegativeAttributesRight && (
+            <>
+              {trial.block === 2 && <div className="whitespace-pre-line text-xl text-green-600 mb-2">صفات سلبية</div>}
+              <div className="flex flex-wrap gap-2 justify-center mb-2">
+                <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
+                <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
+                <img src="/lovable-uploads/0ad74854-9e13-4400-b348-cf97697cadc7.png" alt="Additional negative 1" className="h-8 w-8" />
+                <img src="/lovable-uploads/2df0738b-33e7-4fbe-9bd5-785fbb2f81dc.png" alt="Additional negative 2" className="h-8 w-8" />
+              </div>
+            </>
           )}
           <div className="text-lg">اضغط "D"</div>
         </div>
