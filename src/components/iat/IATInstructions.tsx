@@ -94,6 +94,10 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
   };
 
   const instructions = getInstructionsForBlock(block);
+  
+  // Determine if category includes positive/negative attributes
+  const hasPositive = (text: string) => text.includes("صفة إيجابية") || text.includes("صفات إيجابية");
+  const hasNegative = (text: string) => text.includes("صفة سلبية") || text.includes("صفات سلبية");
 
   return (
     <div className="p-6 text-center space-y-4 max-w-3xl mx-auto animate-slideUpFade">
@@ -107,9 +111,38 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
       
       <div className="bg-gray-50 p-6 rounded-lg mb-6">
         <h3 className="text-xl font-bold mb-4">التصنيفات:</h3>
-        <div className="space-y-3">
-          <p className="text-lg">اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
-          <p className="text-lg">اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
+        <div className="space-y-5">
+          <div className="flex flex-col items-center">
+            <p className="text-lg mb-2">اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
+            {hasPositive(instructions.leftKey) && (
+              <div className="flex gap-4 mt-1">
+                <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
+                <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
+              </div>
+            )}
+            {hasNegative(instructions.leftKey) && (
+              <div className="flex gap-4 mt-1">
+                <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
+                <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
+              </div>
+            )}
+          </div>
+          
+          <div className="flex flex-col items-center">
+            <p className="text-lg mb-2">اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
+            {hasPositive(instructions.rightKey) && (
+              <div className="flex gap-4 mt-1">
+                <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
+                <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
+              </div>
+            )}
+            {hasNegative(instructions.rightKey) && (
+              <div className="flex gap-4 mt-1">
+                <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
+                <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
