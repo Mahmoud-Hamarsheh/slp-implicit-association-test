@@ -54,11 +54,13 @@ export const useIATTest = (onComplete: (result: number, allResponses: Response[]
   const handleStartBlock = () => {
     setShowInstructions(false);
     setIsBlockStarted(true);
+    console.log(`Block ${currentBlock} started`);
   };
 
   const handleCloseAlert = () => {
     setShowCategoryChangeAlert(false);
     setIsBlockStarted(true);
+    console.log("Category change alert closed, block started");
   };
 
   return {
