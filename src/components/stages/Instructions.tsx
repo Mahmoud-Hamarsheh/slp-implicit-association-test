@@ -32,7 +32,6 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue }) => {
             <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
             <img src="/lovable-uploads/80d66870-170b-4907-b25b-fa6a9181c7c9.png" alt="Additional positive" className="h-8 w-8" />
           </div>
-          <p className="mt-2">كفؤ/قادر، قوي، واثق، ذكي، منتبه، سريع، مرن، متعاون</p>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
           <h3 className="font-bold mb-2">صفات سلبية</h3>
@@ -42,7 +41,6 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue }) => {
             <img src="/lovable-uploads/0ad74854-9e13-4400-b348-cf97697cadc7.png" alt="Additional negative 1" className="h-8 w-8" />
             <img src="/lovable-uploads/2df0738b-33e7-4fbe-9bd5-785fbb2f81dc.png" alt="Additional negative 2" className="h-8 w-8" />
           </div>
-          <p className="mt-2">محدود، ضعيف، سلبي، أخرق، مشتت، بطيء، متوتر، متردد</p>
         </div>
       </div>
       <Button onClick={onContinue}>متابعة</Button>
