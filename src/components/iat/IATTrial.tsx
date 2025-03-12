@@ -104,7 +104,13 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
       </div>
 
       <div className="text-center space-y-8">
-        <div className="text-4xl font-bold">{trial.stimulus}</div>
+        {trial.isImage ? (
+          <div className="flex justify-center">
+            <img src={trial.stimulus} alt="Attribute" className="h-24 w-24" />
+          </div>
+        ) : (
+          <div className="text-4xl font-bold">{trial.stimulus}</div>
+        )}
         {showFeedback && !isCorrect && (
           <div className="text-red-500 text-6xl font-bold">X</div>
         )}

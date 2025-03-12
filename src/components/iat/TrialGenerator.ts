@@ -28,13 +28,15 @@ export class TrialGenerator {
             stimulus: item,
             category: "negative",
             correctKey: getCorrectKeyForBlock(block, "negative"),
-            block: block
+            block: block,
+            isImage: true
           })),
           ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "positive",
             correctKey: getCorrectKeyForBlock(block, "positive"),
-            block: block
+            block: block,
+            isImage: true
           }))
         ];
         break;
@@ -57,13 +59,15 @@ export class TrialGenerator {
             stimulus: item,
             category: "negative",
             correctKey: getCorrectKeyForBlock(block, "negative"),
-            block: block
+            block: block,
+            isImage: true
           })),
           ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "positive",
             correctKey: getCorrectKeyForBlock(block, "positive"),
-            block: block
+            block: block,
+            isImage: true
           }))
         ];
         break;
@@ -74,13 +78,15 @@ export class TrialGenerator {
             stimulus: item,
             category: "negative",
             correctKey: getCorrectKeyForBlock(block, "negative"),
-            block: block
+            block: block,
+            isImage: true
           })),
           ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "positive",
             correctKey: getCorrectKeyForBlock(block, "positive"),
-            block: block
+            block: block,
+            isImage: true
           }))
         ];
         break;
@@ -103,13 +109,15 @@ export class TrialGenerator {
             stimulus: item,
             category: "negative",
             correctKey: getCorrectKeyForBlock(block, "negative"),
-            block: block
+            block: block,
+            isImage: true
           })),
           ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "positive",
             correctKey: getCorrectKeyForBlock(block, "positive"),
-            block: block
+            block: block,
+            isImage: true
           }))
         ];
         break;

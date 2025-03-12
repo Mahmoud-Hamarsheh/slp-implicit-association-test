@@ -22,6 +22,7 @@ export const IATTrialRunner: React.FC<IATTrialRunnerProps> = ({
   useEffect(() => {
     if (isBlockStarted && !showFeedback) {
       setStartTime(Date.now());
+      console.log("Trial started: ", trial.stimulus);
     }
   }, [trial, showFeedback, isBlockStarted]);
 
@@ -29,6 +30,7 @@ export const IATTrialRunner: React.FC<IATTrialRunnerProps> = ({
     if (!isBlockStarted || !startTime || showFeedback) return;
 
     const responseTime = (Date.now() - startTime) / 1000;
+    console.log(`Key pressed: ${e.key}, for stimulus: ${trial.stimulus}`);
 
     if (e.key.toLowerCase() === "d" || e.key.toLowerCase() === "k") {
       const correct = e.key.toLowerCase() === trial.correctKey;
@@ -41,11 +43,10 @@ export const IATTrialRunner: React.FC<IATTrialRunnerProps> = ({
         correct
       };
       
+      // Always move to the next trial after feedback, regardless of correctness
       setTimeout(() => {
         setShowFeedback(false);
-        if (correct) {
-          onTrialComplete(newResponse);
-        }
+        onTrialComplete(newResponse);
       }, 500);
     }
   }, [trial, startTime, showFeedback, isBlockStarted, onTrialComplete]);
