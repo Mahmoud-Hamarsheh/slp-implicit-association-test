@@ -59,15 +59,17 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
           <div className="text-4xl font-bold mb-4">K</div>
           <div className="whitespace-pre-line text-xl text-green-600 mb-2">{categories.left}</div>
           {hasPositiveAttributes(categories.left) && (
-            <div className="flex gap-4 justify-center mb-2">
-              <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-10 w-10" />
-              <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-10 w-10" />
+            <div className="flex flex-wrap gap-2 justify-center mb-2">
+              <img src="/lovable-uploads/3d280a97-f40f-42c4-8095-644ba45df460.png" alt="Positive attribute 1" className="h-8 w-8" />
+              <img src="/lovable-uploads/4ec5761a-9111-4ed1-87e2-cfd914be2cac.png" alt="Positive attribute 2" className="h-8 w-8" />
+              <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
+              <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
             </div>
           )}
           {hasNegativeAttributes(categories.left) && (
-            <div className="flex gap-4 justify-center mb-2">
-              <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-10 w-10" />
-              <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-10 w-10" />
+            <div className="flex flex-wrap gap-2 justify-center mb-2">
+              <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
+              <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
             </div>
           )}
           <div className="text-lg">اضغط "K"</div>
@@ -76,15 +78,17 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
           <div className="text-4xl font-bold mb-4">D</div>
           <div className="whitespace-pre-line text-xl text-green-600 mb-2">{categories.right}</div>
           {hasPositiveAttributes(categories.right) && (
-            <div className="flex gap-4 justify-center mb-2">
-              <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-10 w-10" />
-              <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-10 w-10" />
+            <div className="flex flex-wrap gap-2 justify-center mb-2">
+              <img src="/lovable-uploads/3d280a97-f40f-42c4-8095-644ba45df460.png" alt="Positive attribute 1" className="h-8 w-8" />
+              <img src="/lovable-uploads/4ec5761a-9111-4ed1-87e2-cfd914be2cac.png" alt="Positive attribute 2" className="h-8 w-8" />
+              <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
+              <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
             </div>
           )}
           {hasNegativeAttributes(categories.right) && (
-            <div className="flex gap-4 justify-center mb-2">
-              <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-10 w-10" />
-              <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-10 w-10" />
+            <div className="flex flex-wrap gap-2 justify-center mb-2">
+              <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
+              <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
             </div>
           )}
           <div className="text-lg">اضغط "D"</div>

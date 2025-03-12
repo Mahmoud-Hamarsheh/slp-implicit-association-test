@@ -115,13 +115,15 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
           <div className="flex flex-col items-center">
             <p className="text-lg mb-2">اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
             {hasPositive(instructions.leftKey) && (
-              <div className="flex gap-4 mt-1">
+              <div className="flex flex-wrap gap-2 mt-1 justify-center">
+                <img src="/lovable-uploads/3d280a97-f40f-42c4-8095-644ba45df460.png" alt="Positive attribute 1" className="h-8 w-8" />
+                <img src="/lovable-uploads/4ec5761a-9111-4ed1-87e2-cfd914be2cac.png" alt="Positive attribute 2" className="h-8 w-8" />
                 <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
                 <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
               </div>
             )}
             {hasNegative(instructions.leftKey) && (
-              <div className="flex gap-4 mt-1">
+              <div className="flex flex-wrap gap-2 mt-1 justify-center">
                 <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
                 <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
               </div>
@@ -131,13 +133,15 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
           <div className="flex flex-col items-center">
             <p className="text-lg mb-2">اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
             {hasPositive(instructions.rightKey) && (
-              <div className="flex gap-4 mt-1">
+              <div className="flex flex-wrap gap-2 mt-1 justify-center">
+                <img src="/lovable-uploads/3d280a97-f40f-42c4-8095-644ba45df460.png" alt="Positive attribute 1" className="h-8 w-8" />
+                <img src="/lovable-uploads/4ec5761a-9111-4ed1-87e2-cfd914be2cac.png" alt="Positive attribute 2" className="h-8 w-8" />
                 <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
                 <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
               </div>
             )}
             {hasNegative(instructions.rightKey) && (
-              <div className="flex gap-4 mt-1">
+              <div className="flex flex-wrap gap-2 mt-1 justify-center">
                 <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
                 <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
               </div>
