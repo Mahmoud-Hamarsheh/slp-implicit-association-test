@@ -24,7 +24,7 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue }) => {
           <p>أفيزيا، أبراكسيا، ديسارثريا (عسر النطق)، تأخر لغوي، اضطراب صوت، تأتأة</p>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-bold mb-2">صفات إيجابية</h3>
+          <h3 className="font-bold mb-2">إيجابي</h3>
           <div className="flex flex-wrap gap-2 justify-center mt-2">
             <img src="/lovable-uploads/9b147b57-aafb-4241-94ff-3a9c352503b0.png" alt="A+ student" className="h-8 w-8" />
             <img src="/lovable-uploads/1fae69a3-a257-4e39-9d7e-92e71d89316b.png" alt="Graduate" className="h-8 w-8" />
@@ -34,7 +34,7 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue }) => {
           </div>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-bold mb-2">صفات سلبية</h3>
+          <h3 className="font-bold mb-2">سلبي</h3>
           <div className="flex flex-wrap gap-2 justify-center mt-2">
             <img src="/lovable-uploads/30bf4690-6613-4357-8236-b485afbf6cf9.png" alt="Frustrated person" className="h-8 w-8" />
             <img src="/lovable-uploads/3d4fef15-cf7d-40d1-8a29-7d4cfbde6b31.png" alt="Sad person" className="h-8 w-8" />

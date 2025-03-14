@@ -39,48 +39,48 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
         return {
           title: "٢ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الصور، ومهمتك هي تصنيفها بأسرع ما يمكن.",
-          leftKey: "",
-          rightKey: "",
+          leftKey: "إيجابي",
+          rightKey: "سلبي",
           reminder: reminders
         };
       case 3:
         return {
           title: "٣ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الكلمات والصور، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
-          leftKey: "تواصل طبيعي",
-          rightKey: "اضطراب تواصل",
+          leftKey: "تواصل طبيعي أو إيجابي",
+          rightKey: "اضطراب تواصل أو سلبي",
           reminder: reminders
         };
       case 4:
         return {
           title: "٤ من اصل ٧",
           description: "هذا مماثل للجزء السابق\nستظهر لك على الشاشة مجموعة من الكلمات والصور، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
-          leftKey: "تواصل طبيعي",
-          rightKey: "اضطراب تواصل",
+          leftKey: "تواصل طبيعي أو إيجابي",
+          rightKey: "اضطراب تواصل أو سلبي",
           reminder: reminders
         };
       case 5:
         return {
           title: "٥ من اصل ٧",
           description: "انتبه، لقد تغيرت أماكن التسميات!",
-          leftKey: "",
-          rightKey: "",
+          leftKey: "سلبي",
+          rightKey: "إيجابي",
           reminder: reminders
         };
       case 6:
         return {
           title: "٦ من اصل ٧",
           description: "ستظهر لك على الشاشة مجموعة من الكلمات والصور، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
-          leftKey: "تواصل طبيعي",
-          rightKey: "اضطراب تواصل",
+          leftKey: "تواصل طبيعي أو سلبي",
+          rightKey: "اضطراب تواصل أو إيجابي",
           reminder: reminders
         };
       case 7:
         return {
           title: "٧ من اصل ٧",
           description: "هذا مماثل للجزء السابق",
-          leftKey: "تواصل طبيعي",
-          rightKey: "اضطراب تواصل",
+          leftKey: "تواصل طبيعي أو سلبي",
+          rightKey: "اضطراب تواصل أو إيجابي",
           reminder: reminders
         };
       default:
@@ -106,62 +106,62 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
   const showCommunicationOnRight = block === 1 || block === 3 || block === 4 || block === 6 || block === 7;
 
   return (
-    <div className="p-6 text-center space-y-4 max-w-3xl mx-auto animate-slideUpFade">
-      <h2 className="text-2xl font-bold">{instructions.title}</h2>
+    <div className="p-4 md:p-6 text-center space-y-4 max-w-3xl mx-auto animate-slideUpFade">
+      <h2 className="text-xl md:text-2xl font-bold">{instructions.title}</h2>
       
       {instructions.description && (
-        <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg">
+        <div className="bg-amber-50 border border-amber-200 p-3 md:p-4 rounded-lg">
           <p className="text-amber-800 whitespace-pre-line">{instructions.description}</p>
         </div>
       )}
       
-      <div className="bg-gray-50 p-6 rounded-lg mb-6">
-        <h3 className="text-xl font-bold mb-4">التصنيفات:</h3>
-        <div className="space-y-5">
+      <div className="bg-gray-50 p-4 md:p-6 rounded-lg mb-4 md:mb-6">
+        <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4">التصنيفات:</h3>
+        <div className="space-y-4 md:space-y-5">
           <div className="flex flex-col items-center">
             {showCommunicationOnLeft && (
-              <p className="text-lg mb-2">اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
+              <p className="text-base md:text-lg mb-1 md:mb-2">اضغط على (K) إذا كانت الكلمة تنتمي إلى {instructions.leftKey}</p>
             )}
             {isPositiveOnLeft && (
-              <div className="flex flex-wrap gap-2 mt-1 justify-center">
-                <img src="/lovable-uploads/9b147b57-aafb-4241-94ff-3a9c352503b0.png" alt="A+ student" className="h-8 w-8" />
-                <img src="/lovable-uploads/1fae69a3-a257-4e39-9d7e-92e71d89316b.png" alt="Graduate" className="h-8 w-8" />
-                <img src="/lovable-uploads/f12e4381-84c6-45f6-8cde-62d1721d3509.png" alt="Business person" className="h-8 w-8" />
-                <img src="/lovable-uploads/c0bdba02-284f-47d1-a891-9edbf0a2af61.png" alt="Friends group" className="h-8 w-8" />
-                <img src="/lovable-uploads/dfc82370-e222-4fd8-9fd4-702c4d7ec161.png" alt="Weight lifter" className="h-8 w-8" />
+              <div className="flex flex-wrap gap-1 md:gap-2 mt-1 justify-center">
+                <img src="/lovable-uploads/9b147b57-aafb-4241-94ff-3a9c352503b0.png" alt="A+ student" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/1fae69a3-a257-4e39-9d7e-92e71d89316b.png" alt="Graduate" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/f12e4381-84c6-45f6-8cde-62d1721d3509.png" alt="Business person" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/c0bdba02-284f-47d1-a891-9edbf0a2af61.png" alt="Friends group" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/dfc82370-e222-4fd8-9fd4-702c4d7ec161.png" alt="Weight lifter" className="h-6 w-6 md:h-8 md:w-8" />
               </div>
             )}
             {isNegativeOnLeft && (
-              <div className="flex flex-wrap gap-2 mt-1 justify-center">
-                <img src="/lovable-uploads/30bf4690-6613-4357-8236-b485afbf6cf9.png" alt="Frustrated person" className="h-8 w-8" />
-                <img src="/lovable-uploads/3d4fef15-cf7d-40d1-8a29-7d4cfbde6b31.png" alt="Sad person" className="h-8 w-8" />
-                <img src="/lovable-uploads/ebd1f283-efcd-4a89-8d86-c7c08dbb8edc.png" alt="Tired worker" className="h-8 w-8" />
-                <img src="/lovable-uploads/9ff773ad-fd12-4ff4-acd5-6817aeb3a60d.png" alt="Bullying" className="h-8 w-8" />
-                <img src="/lovable-uploads/93575d6b-370c-40dc-aae0-0709a7f52560.png" alt="Pointing blame" className="h-8 w-8" />
+              <div className="flex flex-wrap gap-1 md:gap-2 mt-1 justify-center">
+                <img src="/lovable-uploads/30bf4690-6613-4357-8236-b485afbf6cf9.png" alt="Frustrated person" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/3d4fef15-cf7d-40d1-8a29-7d4cfbde6b31.png" alt="Sad person" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/ebd1f283-efcd-4a89-8d86-c7c08dbb8edc.png" alt="Tired worker" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/9ff773ad-fd12-4ff4-acd5-6817aeb3a60d.png" alt="Bullying" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/93575d6b-370c-40dc-aae0-0709a7f52560.png" alt="Pointing blame" className="h-6 w-6 md:h-8 md:w-8" />
               </div>
             )}
           </div>
           
           <div className="flex flex-col items-center">
             {showCommunicationOnRight && (
-              <p className="text-lg mb-2">اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
+              <p className="text-base md:text-lg mb-1 md:mb-2">اضغط على (D) إذا كانت الكلمة تنتمي إلى {instructions.rightKey}</p>
             )}
             {isPositiveOnRight && (
-              <div className="flex flex-wrap gap-2 mt-1 justify-center">
-                <img src="/lovable-uploads/9b147b57-aafb-4241-94ff-3a9c352503b0.png" alt="A+ student" className="h-8 w-8" />
-                <img src="/lovable-uploads/1fae69a3-a257-4e39-9d7e-92e71d89316b.png" alt="Graduate" className="h-8 w-8" />
-                <img src="/lovable-uploads/f12e4381-84c6-45f6-8cde-62d1721d3509.png" alt="Business person" className="h-8 w-8" />
-                <img src="/lovable-uploads/c0bdba02-284f-47d1-a891-9edbf0a2af61.png" alt="Friends group" className="h-8 w-8" />
-                <img src="/lovable-uploads/dfc82370-e222-4fd8-9fd4-702c4d7ec161.png" alt="Weight lifter" className="h-8 w-8" />
+              <div className="flex flex-wrap gap-1 md:gap-2 mt-1 justify-center">
+                <img src="/lovable-uploads/9b147b57-aafb-4241-94ff-3a9c352503b0.png" alt="A+ student" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/1fae69a3-a257-4e39-9d7e-92e71d89316b.png" alt="Graduate" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/f12e4381-84c6-45f6-8cde-62d1721d3509.png" alt="Business person" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/c0bdba02-284f-47d1-a891-9edbf0a2af61.png" alt="Friends group" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/dfc82370-e222-4fd8-9fd4-702c4d7ec161.png" alt="Weight lifter" className="h-6 w-6 md:h-8 md:w-8" />
               </div>
             )}
             {isNegativeOnRight && (
-              <div className="flex flex-wrap gap-2 mt-1 justify-center">
-                <img src="/lovable-uploads/30bf4690-6613-4357-8236-b485afbf6cf9.png" alt="Frustrated person" className="h-8 w-8" />
-                <img src="/lovable-uploads/3d4fef15-cf7d-40d1-8a29-7d4cfbde6b31.png" alt="Sad person" className="h-8 w-8" />
-                <img src="/lovable-uploads/ebd1f283-efcd-4a89-8d86-c7c08dbb8edc.png" alt="Tired worker" className="h-8 w-8" />
-                <img src="/lovable-uploads/9ff773ad-fd12-4ff4-acd5-6817aeb3a60d.png" alt="Bullying" className="h-8 w-8" />
-                <img src="/lovable-uploads/93575d6b-370c-40dc-aae0-0709a7f52560.png" alt="Pointing blame" className="h-8 w-8" />
+              <div className="flex flex-wrap gap-1 md:gap-2 mt-1 justify-center">
+                <img src="/lovable-uploads/30bf4690-6613-4357-8236-b485afbf6cf9.png" alt="Frustrated person" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/3d4fef15-cf7d-40d1-8a29-7d4cfbde6b31.png" alt="Sad person" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/ebd1f283-efcd-4a89-8d86-c7c08dbb8edc.png" alt="Tired worker" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/9ff773ad-fd12-4ff4-acd5-6817aeb3a60d.png" alt="Bullying" className="h-6 w-6 md:h-8 md:w-8" />
+                <img src="/lovable-uploads/93575d6b-370c-40dc-aae0-0709a7f52560.png" alt="Pointing blame" className="h-6 w-6 md:h-8 md:w-8" />
               </div>
             )}
           </div>
@@ -169,9 +169,9 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
       </div>
 
       {instructions.reminder && (
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+        <div className="bg-blue-50 p-3 md:p-4 rounded-lg border border-blue-200">
           <h3 className="font-bold mb-2">تذكر:</h3>
-          <div className="text-right space-y-2">
+          <div className="text-right space-y-1 md:space-y-2">
             {instructions.reminder.map((item, index) => (
               <p key={index} className="text-blue-700">{item}</p>
             ))}
