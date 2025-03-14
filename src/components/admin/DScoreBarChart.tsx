@@ -8,7 +8,8 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
-  ReferenceLine
+  ReferenceLine,
+  Legend
 } from "recharts";
 
 interface DScoreDataPoint {
@@ -59,11 +60,12 @@ export const DScoreBarChart = ({ data }: DScoreBarChartProps) => {
             labelFormatter={(id) => `ID: ${id}`}
           />
           <ReferenceLine y={0} stroke="#000" strokeDasharray="3 3" />
-          <Bar dataKey="value" name="D-Score قيمة" fill="#8884d8" radius={[2, 2, 0, 0]}>
+          <Bar dataKey="value" name="D-Score" fill="#8884d8" radius={[2, 2, 0, 0]}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Bar>
+          <Legend />
         </BarChart>
       </ResponsiveContainer>
     </div>

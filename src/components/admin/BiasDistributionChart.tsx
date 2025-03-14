@@ -1,5 +1,5 @@
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, TooltipProps } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 
 interface BiasCategory {
   name: string;
@@ -20,25 +20,25 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
     percent: total > 0 ? Math.round((item.value / total) * 100) : 0
   }));
 
-  // Custom label renderer to show name + percentage
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name }: any) => {
+  // Custom label renderer to show percentage
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
     const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 1.1;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-    return (
+    return percent > 0.05 ? (
       <text 
         x={x} 
         y={y} 
-        fill={dataWithPercent[index].color}
-        textAnchor={x > cx ? 'start' : 'end'} 
+        fill="#fff"
+        textAnchor="middle" 
         dominantBaseline="central"
-        className="text-xs font-medium"
+        className="font-semibold"
       >
-        {`${name} (${(percent * 100).toFixed(0)}%)`}
+        {`${(percent * 100).toFixed(0)}%`}
       </text>
-    );
+    ) : null;
   };
 
   // Custom legend that matches the design
@@ -53,8 +53,8 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
               className="w-3 h-3 mr-1" 
               style={{ backgroundColor: entry.color }}
             />
-            <span style={{ color: entry.color }}>
-              {entry.value}
+            <span>
+              {entry.value} ({dataWithPercent[index].percent}%)
             </span>
           </div>
         ))}
@@ -70,7 +70,7 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
             data={dataWithPercent}
             cx="50%"
             cy="45%"
-            labelLine={true}
+            labelLine={false}
             outerRadius={80}
             fill="#8884d8"
             dataKey="value"
