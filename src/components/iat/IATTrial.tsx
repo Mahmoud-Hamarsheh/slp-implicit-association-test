@@ -71,10 +71,11 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
           )}
           {hasNegativeAttributesLeft && (
             <div className="flex flex-wrap gap-2 justify-center mb-2">
-              <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
-              <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
-              <img src="/lovable-uploads/0ad74854-9e13-4400-b348-cf97697cadc7.png" alt="Additional negative 1" className="h-8 w-8" />
-              <img src="/lovable-uploads/2df0738b-33e7-4fbe-9bd5-785fbb2f81dc.png" alt="Additional negative 2" className="h-8 w-8" />
+              <img src="/lovable-uploads/30bf4690-6613-4357-8236-b485afbf6cf9.png" alt="Frustrated person" className="h-8 w-8" />
+              <img src="/lovable-uploads/3d4fef15-cf7d-40d1-8a29-7d4cfbde6b31.png" alt="Sad person" className="h-8 w-8" />
+              <img src="/lovable-uploads/ebd1f283-efcd-4a89-8d86-c7c08dbb8edc.png" alt="Tired worker" className="h-8 w-8" />
+              <img src="/lovable-uploads/9ff773ad-fd12-4ff4-acd5-6817aeb3a60d.png" alt="Bullying" className="h-8 w-8" />
+              <img src="/lovable-uploads/93575d6b-370c-40dc-aae0-0709a7f52560.png" alt="Pointing blame" className="h-8 w-8" />
             </div>
           )}
           <div className="text-lg">اضغط "K"</div>
@@ -93,10 +94,11 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
           )}
           {hasNegativeAttributesRight && (
             <div className="flex flex-wrap gap-2 justify-center mb-2">
-              <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
-              <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
-              <img src="/lovable-uploads/0ad74854-9e13-4400-b348-cf97697cadc7.png" alt="Additional negative 1" className="h-8 w-8" />
-              <img src="/lovable-uploads/2df0738b-33e7-4fbe-9bd5-785fbb2f81dc.png" alt="Additional negative 2" className="h-8 w-8" />
+              <img src="/lovable-uploads/30bf4690-6613-4357-8236-b485afbf6cf9.png" alt="Frustrated person" className="h-8 w-8" />
+              <img src="/lovable-uploads/3d4fef15-cf7d-40d1-8a29-7d4cfbde6b31.png" alt="Sad person" className="h-8 w-8" />
+              <img src="/lovable-uploads/ebd1f283-efcd-4a89-8d86-c7c08dbb8edc.png" alt="Tired worker" className="h-8 w-8" />
+              <img src="/lovable-uploads/9ff773ad-fd12-4ff4-acd5-6817aeb3a60d.png" alt="Bullying" className="h-8 w-8" />
+              <img src="/lovable-uploads/93575d6b-370c-40dc-aae0-0709a7f52560.png" alt="Pointing blame" className="h-8 w-8" />
             </div>
           )}
           <div className="text-lg">اضغط "D"</div>

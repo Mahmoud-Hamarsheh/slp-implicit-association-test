@@ -47,7 +47,7 @@ export const IATTrialRunner: React.FC<IATTrialRunnerProps> = ({
       setTimeout(() => {
         setShowFeedback(false);
         onTrialComplete(newResponse);
-      }, 500);
+      }, correct ? 500 : 1000); // Give slightly more time for incorrect answers
     }
   }, [trial, startTime, showFeedback, isBlockStarted, onTrialComplete]);
 

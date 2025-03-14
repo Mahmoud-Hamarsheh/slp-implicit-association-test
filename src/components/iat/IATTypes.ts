@@ -40,10 +40,14 @@ export const BLOCKS = {
     "/lovable-uploads/80d66870-170b-4907-b25b-fa6a9181c7c9.png"
   ],
   NEGATIVE_ATTRIBUTES: [
-    "/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png",
-    "/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png",
-    "/lovable-uploads/0ad74854-9e13-4400-b348-cf97697cadc7.png",
-    "/lovable-uploads/2df0738b-33e7-4fbe-9bd5-785fbb2f81dc.png"
+    "/lovable-uploads/30bf4690-6613-4357-8236-b485afbf6cf9.png",
+    "/lovable-uploads/3d4fef15-cf7d-40d1-8a29-7d4cfbde6b31.png",
+    "/lovable-uploads/ebd1f283-efcd-4a89-8d86-c7c08dbb8edc.png",
+    "/lovable-uploads/9ff773ad-fd12-4ff4-acd5-6817aeb3a60d.png",
+    "/lovable-uploads/93575d6b-370c-40dc-aae0-0709a7f52560.png",
+    "/lovable-uploads/a0fcd957-3f2e-4e39-877d-4b966025da02.png", 
+    "/lovable-uploads/2dcdf403-f786-42e2-a082-d5fec49e0c3b.png",
+    "/lovable-uploads/2d46afb5-2cde-4105-bf61-cd9fa437456c.png"
   ]
 };
 
