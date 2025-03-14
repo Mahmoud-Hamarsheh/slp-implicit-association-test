@@ -20,27 +20,6 @@ export const DegreeDistributionChart = ({ data }: DegreeDistributionChartProps) 
     percent: total > 0 ? Math.round((item.value / total) * 100) : 0
   }));
 
-  // Custom label renderer to show only percentage
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
-    const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return percent > 0.05 ? (
-      <text 
-        x={x} 
-        y={y} 
-        fill="#fff"
-        textAnchor="middle" 
-        dominantBaseline="central"
-        className="font-semibold"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    ) : null;
-  };
-
   // Custom legend that only shows name and percentage
   const CustomLegend = ({ payload }: any) => {
     if (!payload) return null;
@@ -75,7 +54,6 @@ export const DegreeDistributionChart = ({ data }: DegreeDistributionChartProps) 
             fill="#8884d8"
             dataKey="value"
             nameKey="name"
-            label={renderCustomizedLabel}
           >
             {dataWithPercent.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
