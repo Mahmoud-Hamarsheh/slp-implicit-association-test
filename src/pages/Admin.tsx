@@ -42,11 +42,11 @@ const Admin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-secondary to-background p-6" dir="rtl">
+    <div className="min-h-screen bg-slate-50 p-4 md:p-6" dir="rtl">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">لوحة تحكم نتائج IAT</h1>
-          <Button onClick={handleLogout} variant="outline">تسجيل الخروج</Button>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-800">لوحة تحكم نتائج IAT</h1>
+          <Button onClick={handleLogout} variant="outline" className="hover:bg-slate-100">تسجيل الخروج</Button>
         </div>
 
         {loading ? (

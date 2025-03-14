@@ -27,18 +27,18 @@ export const DashboardCharts = ({ degreeData, biasData, dScoreData }: DashboardC
   return (
     <TooltipProvider>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        <Card className="animate-fadeIn">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xl">توزيع الدرجة العلمية</CardTitle>
+        <Card className="bg-white shadow-sm">
+          <CardHeader className="pb-0">
+            <CardTitle className="text-xl font-bold">توزيع الدرجة العلمية</CardTitle>
           </CardHeader>
           <CardContent>
             <DegreeDistributionChart data={degreeData} />
           </CardContent>
         </Card>
         
-        <Card className="animate-fadeIn">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xl">توزيع التحيز</CardTitle>
+        <Card className="bg-white shadow-sm">
+          <CardHeader className="pb-0">
+            <CardTitle className="text-xl font-bold">توزيع التحيز</CardTitle>
           </CardHeader>
           <CardContent>
             <BiasDistributionChart data={biasData} />
@@ -46,9 +46,9 @@ export const DashboardCharts = ({ degreeData, biasData, dScoreData }: DashboardC
         </Card>
       </div>
 
-      <Card className="mt-6 animate-fadeIn">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-xl">D-Score توزيع نتائج</CardTitle>
+      <Card className="mt-6 bg-white shadow-sm">
+        <CardHeader className="pb-0">
+          <CardTitle className="text-xl font-bold">D-Score توزيع نتائج</CardTitle>
         </CardHeader>
         <CardContent>
           <DScoreBarChart data={dScoreData} />

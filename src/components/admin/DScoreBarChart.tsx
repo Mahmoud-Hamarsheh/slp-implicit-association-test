@@ -8,7 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
-  Legend
+  ReferenceLine
 } from "recharts";
 
 interface DScoreDataPoint {
@@ -30,7 +30,7 @@ export const DScoreBarChart = ({ data }: DScoreBarChartProps) => {
           margin={{
             top: 20,
             right: 30,
-            left: 20,
+            left: 40,
             bottom: 60,
           }}
         >
@@ -44,16 +44,22 @@ export const DScoreBarChart = ({ data }: DScoreBarChartProps) => {
             tick={{ fontSize: 10 }}
           />
           <YAxis 
-            domain={[-0.3, 0.9]} 
-            ticks={[-0.3, 0, 0.3, 0.6, 0.9]} 
+            domain={[-0.6, 1.2]} 
+            ticks={[-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2]} 
             tick={{ fontSize: 12 }}
+            label={{ 
+              value: 'D-Score', 
+              angle: -90, 
+              position: 'insideLeft',
+              style: { textAnchor: 'middle', fontSize: 12 }
+            }}
           />
           <Tooltip 
             formatter={(value: number) => [value.toFixed(2), "D-Score"]}
             labelFormatter={(id) => `ID: ${id}`}
           />
-          <Legend />
-          <Bar dataKey="value" name="D-Score قيمة" fill="#8884d8">
+          <ReferenceLine y={0} stroke="#000" strokeDasharray="3 3" />
+          <Bar dataKey="value" name="D-Score قيمة" fill="#8884d8" radius={[2, 2, 0, 0]}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}

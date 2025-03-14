@@ -1,3 +1,4 @@
+
 import { format } from "date-fns";
 
 interface IATResult {
@@ -37,12 +38,12 @@ export const prepareDegreeData = (results: IATResult[]) => {
     degreeCount[degree] = (degreeCount[degree] || 0) + 1;
   });
 
-  // Define consistent colors for degrees
+  // Define consistent colors for degrees matching the image
   const degreeColors: { [key: string]: string } = {
-    "طالب": "#4EA8DE",
-    "بكالوريوس": "#56CFE1",
-    "ماجستير": "#5E60CE",
-    "دكتوراه": "#7400B8"
+    "طالب": "#1E88E5", // Blue
+    "بكالوريوس": "#FF7043", // Orange
+    "ماجستير": "#26C6DA", // Teal/Green
+    "دكتوراه": "#FFC107" // Yellow/Gold
   };
 
   return Object.entries(degreeCount).map(([name, value]) => ({
@@ -57,46 +58,53 @@ export const prepareBiasData = (results: IATResult[]) => {
     "تحيز قوي (سلبي)": 0,
     "تحيز متوسط (سلبي)": 0,
     "تحيز خفيف (سلبي)": 0,
-    "محايد": 0
+    "محايد": 0,
+    "تحيز خفيف (إيجابي)": 0
   };
 
   results.forEach(result => {
     const dScore = result.d_score;
-    // Updated categorization based on the D-score ranges
+    // Updated categorization based on the image
     if (dScore > 0.65) {
       biasCategories["تحيز قوي (سلبي)"]++;
     } else if (dScore > 0.35) {
       biasCategories["تحيز متوسط (سلبي)"]++;
     } else if (dScore > 0.15) {
       biasCategories["تحيز خفيف (سلبي)"]++;
-    } else {
+    } else if (dScore > -0.15) {
       biasCategories["محايد"]++;
+    } else {
+      biasCategories["تحيز خفيف (إيجابي)"]++;
     }
   });
 
-  // Define colors that match the image exactly
+  // Define colors to match the image exactly
   const biasColors = {
     "تحيز قوي (سلبي)": "#1E88E5", // Blue
     "تحيز متوسط (سلبي)": "#26C6DA", // Teal/Green
     "تحيز خفيف (سلبي)": "#FFC107", // Yellow/Gold
-    "محايد": "#FF7043" // Orange/Coral
+    "محايد": "#FF7043", // Orange/Coral
+    "تحيز خفيف (إيجابي)": "#8E24AA" // Purple
   };
 
-  return Object.entries(biasCategories).map(([name, value]) => ({
-    name,
-    value,
-    color: biasColors[name as keyof typeof biasColors]
-  }));
+  return Object.entries(biasCategories)
+    .filter(([_, value]) => value > 0) // Only include categories with data
+    .map(([name, value]) => ({
+      name,
+      value,
+      color: biasColors[name as keyof typeof biasColors]
+    }));
 };
 
 export const prepareDScoreData = (results: IATResult[]) => {
   return results.slice(0, 20).map(result => ({
     id: result.id.substring(0, 8),
     value: result.d_score,
-    // Updated color logic based on the correct D-score ranges
+    // Updated color logic to match the chart in the image
     color: result.d_score > 0.65 ? "#ef476f" : 
-           result.d_score > 0.35 ? "#ffd166" : 
-           result.d_score > 0.15 ? "#06d6a0" : 
+           result.d_score > 0.35 ? "#ffa15f" :
+           result.d_score > 0.15 ? "#ffd166" : 
+           result.d_score > -0.15 ? "#06d6a0" : 
            "#118ab2"
   }));
 };

@@ -1,11 +1,11 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, TooltipProps } from "recharts";
-import { useState } from "react";
 
 interface BiasCategory {
   name: string;
   value: number;
   color: string;
+  percent?: number;
 }
 
 interface BiasDistributionChartProps {
@@ -20,39 +20,45 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
     percent: total > 0 ? Math.round((item.value / total) * 100) : 0
   }));
 
-  // Custom tooltip content
-  const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-white p-2 border rounded shadow text-sm">
-          <p className="font-bold" style={{ color: data.color }}>{data.name}</p>
-          <p>{data.percent}%</p>
-        </div>
-      );
-    }
-    return null;
+  // Custom label renderer to show name + percentage
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name }: any) => {
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 1.1;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text 
+        x={x} 
+        y={y} 
+        fill={dataWithPercent[index].color}
+        textAnchor={x > cx ? 'start' : 'end'} 
+        dominantBaseline="central"
+        className="text-xs font-medium"
+      >
+        {`${name} (${(percent * 100).toFixed(0)}%)`}
+      </text>
+    );
   };
 
-  // Simplified content for Legend to only show colors
-  const renderLegendContent = (value: string, entry: any) => {
-    const { color } = entry;
-    
-    let displayName = value;
-    if (value.includes("تحيز قوي")) {
-      displayName = "تحيز قوي (سلبي)";
-    } else if (value.includes("تحيز متوسط")) {
-      displayName = "تحيز متوسط (سلبي)";
-    } else if (value.includes("تحيز خفيف")) {
-      displayName = "تحيز خفيف (سلبي)";
-    } else {
-      displayName = "محايد";
-    }
+  // Custom legend that matches the design
+  const CustomLegend = ({ payload }: any) => {
+    if (!payload) return null;
     
     return (
-      <span style={{ color, marginRight: 10 }}>
-        {displayName} ({entry.payload.percent}%)
-      </span>
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4 text-xs">
+        {payload.map((entry: any, index: number) => (
+          <div key={`legend-${index}`} className="flex items-center">
+            <div 
+              className="w-3 h-3 mr-1" 
+              style={{ backgroundColor: entry.color }}
+            />
+            <span style={{ color: entry.color }}>
+              {entry.value}
+            </span>
+          </div>
+        ))}
+      </div>
     );
   };
 
@@ -63,13 +69,13 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
           <Pie
             data={dataWithPercent}
             cx="50%"
-            cy="50%"
-            labelLine={false}
+            cy="45%"
+            labelLine={true}
             outerRadius={80}
             fill="#8884d8"
             dataKey="value"
             nameKey="name"
-            label={false}
+            label={renderCustomizedLabel}
             startAngle={90}
             endAngle={-270}
           >
@@ -77,14 +83,13 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip content={<CustomTooltip />} />
-          <Legend 
-            layout="horizontal" 
-            verticalAlign="bottom" 
-            align="center"
-            iconType="circle"
-            formatter={renderLegendContent}
+          <Tooltip 
+            formatter={(value: number) => [
+              `${value} (${Math.round((value / total) * 100)}%)`, 
+              'عدد المشاركين'
+            ]} 
           />
+          <Legend content={<CustomLegend />} />
         </PieChart>
       </ResponsiveContainer>
     </div>
