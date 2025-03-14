@@ -20,7 +20,7 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
     percent: total > 0 ? Math.round((item.value / total) * 100) : 0
   }));
 
-  // Custom label renderer to show percentage
+  // Custom label renderer to show only percentage
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
     const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -41,7 +41,7 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
     ) : null;
   };
 
-  // Custom legend that matches the design
+  // Custom legend that only shows name and percentage
   const CustomLegend = ({ payload }: any) => {
     if (!payload) return null;
     
@@ -85,8 +85,8 @@ export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
           </Pie>
           <Tooltip 
             formatter={(value: number) => [
-              `${value} (${Math.round((value / total) * 100)}%)`, 
-              'عدد المشاركين'
+              `${Math.round((value / total) * 100)}%`, 
+              'النسبة'
             ]} 
           />
           <Legend content={<CustomLegend />} />
