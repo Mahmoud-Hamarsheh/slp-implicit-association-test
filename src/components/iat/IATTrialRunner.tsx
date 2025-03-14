@@ -43,11 +43,20 @@ export const IATTrialRunner: React.FC<IATTrialRunnerProps> = ({
         correct
       };
       
-      // Always move to the next trial after feedback, regardless of correctness
-      setTimeout(() => {
-        setShowFeedback(false);
-        onTrialComplete(newResponse);
-      }, correct ? 500 : 1000); // Give slightly more time for incorrect answers
+      // Only move to the next trial if the answer is correct
+      if (correct) {
+        setTimeout(() => {
+          setShowFeedback(false);
+          onTrialComplete(newResponse);
+        }, 500); // Correct answers proceed after 500ms
+      } else {
+        // For incorrect answers, just show feedback and reset to try again
+        setTimeout(() => {
+          setShowFeedback(false);
+          // Reset the start time so they can try again
+          setStartTime(Date.now());
+        }, 1000); // Give slightly more time (1000ms) to see error feedback
+      }
     }
   }, [trial, startTime, showFeedback, isBlockStarted, onTrialComplete]);
 

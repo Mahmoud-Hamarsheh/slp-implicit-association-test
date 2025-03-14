@@ -22,7 +22,7 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
   const getInstructionsForBlock = (block: number): BlockInstructions => {
     const reminders = [
       "✔ حاول الإجابة بسرعة ودون تردد.",
-      "✔ إذا أخطأت سيظهر رمز X أحمر. ويمكنك المحاولة مرة أخرى.",
+      "✔ إذا أخطأت سيظهر رمز X أحمر. ويجب تصحيح الإجابة للمتابعة.",
       "✔ ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة."
     ];
 
@@ -38,7 +38,7 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
       case 2:
         return {
           title: "٢ من اصل ٧",
-          description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها بأسرع ما يمكن.",
+          description: "ستظهر لك على الشاشة مجموعة من الصور، ومهمتك هي تصنيفها بأسرع ما يمكن.",
           leftKey: "",
           rightKey: "",
           reminder: reminders
@@ -46,7 +46,7 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
       case 3:
         return {
           title: "٣ من اصل ٧",
-          description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
+          description: "ستظهر لك على الشاشة مجموعة من الكلمات والصور، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
           leftKey: "تواصل طبيعي",
           rightKey: "اضطراب تواصل",
           reminder: reminders
@@ -54,7 +54,7 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
       case 4:
         return {
           title: "٤ من اصل ٧",
-          description: "هذا مماثل للجزء السابق\nستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
+          description: "هذا مماثل للجزء السابق\nستظهر لك على الشاشة مجموعة من الكلمات والصور، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
           leftKey: "تواصل طبيعي",
           rightKey: "اضطراب تواصل",
           reminder: reminders
@@ -70,7 +70,7 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
       case 6:
         return {
           title: "٦ من اصل ٧",
-          description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
+          description: "ستظهر لك على الشاشة مجموعة من الكلمات والصور، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
           leftKey: "تواصل طبيعي",
           rightKey: "اضطراب تواصل",
           reminder: reminders
@@ -124,19 +124,20 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
             )}
             {isPositiveOnLeft && (
               <div className="flex flex-wrap gap-2 mt-1 justify-center">
-                <img src="/lovable-uploads/3d280a97-f40f-42c4-8095-644ba45df460.png" alt="Positive attribute 1" className="h-8 w-8" />
-                <img src="/lovable-uploads/4ec5761a-9111-4ed1-87e2-cfd914be2cac.png" alt="Positive attribute 2" className="h-8 w-8" />
-                <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
-                <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
-                <img src="/lovable-uploads/80d66870-170b-4907-b25b-fa6a9181c7c9.png" alt="Additional positive" className="h-8 w-8" />
+                <img src="/lovable-uploads/9b147b57-aafb-4241-94ff-3a9c352503b0.png" alt="A+ student" className="h-8 w-8" />
+                <img src="/lovable-uploads/1fae69a3-a257-4e39-9d7e-92e71d89316b.png" alt="Graduate" className="h-8 w-8" />
+                <img src="/lovable-uploads/f12e4381-84c6-45f6-8cde-62d1721d3509.png" alt="Business person" className="h-8 w-8" />
+                <img src="/lovable-uploads/c0bdba02-284f-47d1-a891-9edbf0a2af61.png" alt="Friends group" className="h-8 w-8" />
+                <img src="/lovable-uploads/dfc82370-e222-4fd8-9fd4-702c4d7ec161.png" alt="Weight lifter" className="h-8 w-8" />
               </div>
             )}
             {isNegativeOnLeft && (
               <div className="flex flex-wrap gap-2 mt-1 justify-center">
-                <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
-                <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
-                <img src="/lovable-uploads/0ad74854-9e13-4400-b348-cf97697cadc7.png" alt="Additional negative 1" className="h-8 w-8" />
-                <img src="/lovable-uploads/2df0738b-33e7-4fbe-9bd5-785fbb2f81dc.png" alt="Additional negative 2" className="h-8 w-8" />
+                <img src="/lovable-uploads/30bf4690-6613-4357-8236-b485afbf6cf9.png" alt="Frustrated person" className="h-8 w-8" />
+                <img src="/lovable-uploads/3d4fef15-cf7d-40d1-8a29-7d4cfbde6b31.png" alt="Sad person" className="h-8 w-8" />
+                <img src="/lovable-uploads/ebd1f283-efcd-4a89-8d86-c7c08dbb8edc.png" alt="Tired worker" className="h-8 w-8" />
+                <img src="/lovable-uploads/9ff773ad-fd12-4ff4-acd5-6817aeb3a60d.png" alt="Bullying" className="h-8 w-8" />
+                <img src="/lovable-uploads/93575d6b-370c-40dc-aae0-0709a7f52560.png" alt="Pointing blame" className="h-8 w-8" />
               </div>
             )}
           </div>
@@ -147,19 +148,20 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
             )}
             {isPositiveOnRight && (
               <div className="flex flex-wrap gap-2 mt-1 justify-center">
-                <img src="/lovable-uploads/3d280a97-f40f-42c4-8095-644ba45df460.png" alt="Positive attribute 1" className="h-8 w-8" />
-                <img src="/lovable-uploads/4ec5761a-9111-4ed1-87e2-cfd914be2cac.png" alt="Positive attribute 2" className="h-8 w-8" />
-                <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
-                <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
-                <img src="/lovable-uploads/80d66870-170b-4907-b25b-fa6a9181c7c9.png" alt="Additional positive" className="h-8 w-8" />
+                <img src="/lovable-uploads/9b147b57-aafb-4241-94ff-3a9c352503b0.png" alt="A+ student" className="h-8 w-8" />
+                <img src="/lovable-uploads/1fae69a3-a257-4e39-9d7e-92e71d89316b.png" alt="Graduate" className="h-8 w-8" />
+                <img src="/lovable-uploads/f12e4381-84c6-45f6-8cde-62d1721d3509.png" alt="Business person" className="h-8 w-8" />
+                <img src="/lovable-uploads/c0bdba02-284f-47d1-a891-9edbf0a2af61.png" alt="Friends group" className="h-8 w-8" />
+                <img src="/lovable-uploads/dfc82370-e222-4fd8-9fd4-702c4d7ec161.png" alt="Weight lifter" className="h-8 w-8" />
               </div>
             )}
             {isNegativeOnRight && (
               <div className="flex flex-wrap gap-2 mt-1 justify-center">
-                <img src="/lovable-uploads/c5746857-ee51-4e54-b918-f49f50369faf.png" alt="Sad face" className="h-8 w-8" />
-                <img src="/lovable-uploads/901566ad-77e2-4163-aa28-528697bcf20d.png" alt="Timer clock" className="h-8 w-8" />
-                <img src="/lovable-uploads/0ad74854-9e13-4400-b348-cf97697cadc7.png" alt="Additional negative 1" className="h-8 w-8" />
-                <img src="/lovable-uploads/2df0738b-33e7-4fbe-9bd5-785fbb2f81dc.png" alt="Additional negative 2" className="h-8 w-8" />
+                <img src="/lovable-uploads/30bf4690-6613-4357-8236-b485afbf6cf9.png" alt="Frustrated person" className="h-8 w-8" />
+                <img src="/lovable-uploads/3d4fef15-cf7d-40d1-8a29-7d4cfbde6b31.png" alt="Sad person" className="h-8 w-8" />
+                <img src="/lovable-uploads/ebd1f283-efcd-4a89-8d86-c7c08dbb8edc.png" alt="Tired worker" className="h-8 w-8" />
+                <img src="/lovable-uploads/9ff773ad-fd12-4ff4-acd5-6817aeb3a60d.png" alt="Bullying" className="h-8 w-8" />
+                <img src="/lovable-uploads/93575d6b-370c-40dc-aae0-0709a7f52560.png" alt="Pointing blame" className="h-8 w-8" />
               </div>
             )}
           </div>

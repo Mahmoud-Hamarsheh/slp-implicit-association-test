@@ -62,11 +62,11 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
           {categories.left && <div className="whitespace-pre-line text-xl text-green-600 mb-2">{categories.left}</div>}
           {hasPositiveAttributesLeft && (
             <div className="flex flex-wrap gap-2 justify-center mb-2">
-              <img src="/lovable-uploads/3d280a97-f40f-42c4-8095-644ba45df460.png" alt="Positive attribute 1" className="h-8 w-8" />
-              <img src="/lovable-uploads/4ec5761a-9111-4ed1-87e2-cfd914be2cac.png" alt="Positive attribute 2" className="h-8 w-8" />
-              <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
-              <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
-              <img src="/lovable-uploads/80d66870-170b-4907-b25b-fa6a9181c7c9.png" alt="Additional positive" className="h-8 w-8" />
+              <img src="/lovable-uploads/9b147b57-aafb-4241-94ff-3a9c352503b0.png" alt="A+ student" className="h-8 w-8" />
+              <img src="/lovable-uploads/1fae69a3-a257-4e39-9d7e-92e71d89316b.png" alt="Graduate" className="h-8 w-8" />
+              <img src="/lovable-uploads/f12e4381-84c6-45f6-8cde-62d1721d3509.png" alt="Business person" className="h-8 w-8" />
+              <img src="/lovable-uploads/c0bdba02-284f-47d1-a891-9edbf0a2af61.png" alt="Friends group" className="h-8 w-8" />
+              <img src="/lovable-uploads/dfc82370-e222-4fd8-9fd4-702c4d7ec161.png" alt="Weight lifter" className="h-8 w-8" />
             </div>
           )}
           {hasNegativeAttributesLeft && (
@@ -85,11 +85,11 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
           {categories.right && <div className="whitespace-pre-line text-xl text-green-600 mb-2">{categories.right}</div>}
           {hasPositiveAttributesRight && (
             <div className="flex flex-wrap gap-2 justify-center mb-2">
-              <img src="/lovable-uploads/3d280a97-f40f-42c4-8095-644ba45df460.png" alt="Positive attribute 1" className="h-8 w-8" />
-              <img src="/lovable-uploads/4ec5761a-9111-4ed1-87e2-cfd914be2cac.png" alt="Positive attribute 2" className="h-8 w-8" />
-              <img src="/lovable-uploads/0614e6dd-0a9e-4360-9278-dbba71cc546b.png" alt="Light bulb idea" className="h-8 w-8" />
-              <img src="/lovable-uploads/2e29f911-0a75-4712-8eea-e2e98db244cb.png" alt="Strong person" className="h-8 w-8" />
-              <img src="/lovable-uploads/80d66870-170b-4907-b25b-fa6a9181c7c9.png" alt="Additional positive" className="h-8 w-8" />
+              <img src="/lovable-uploads/9b147b57-aafb-4241-94ff-3a9c352503b0.png" alt="A+ student" className="h-8 w-8" />
+              <img src="/lovable-uploads/1fae69a3-a257-4e39-9d7e-92e71d89316b.png" alt="Graduate" className="h-8 w-8" />
+              <img src="/lovable-uploads/f12e4381-84c6-45f6-8cde-62d1721d3509.png" alt="Business person" className="h-8 w-8" />
+              <img src="/lovable-uploads/c0bdba02-284f-47d1-a891-9edbf0a2af61.png" alt="Friends group" className="h-8 w-8" />
+              <img src="/lovable-uploads/dfc82370-e222-4fd8-9fd4-702c4d7ec161.png" alt="Weight lifter" className="h-8 w-8" />
             </div>
           )}
           {hasNegativeAttributesRight && (
