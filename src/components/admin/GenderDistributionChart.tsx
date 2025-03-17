@@ -32,15 +32,16 @@ export const GenderDistributionChart = ({ data }: GenderChartProps) => {
               />
             ))}
           </Pie>
-          <ChartTooltip 
-            content={
+          <Tooltip 
+            content={(props) => (
               <ChartTooltipContent 
                 formatter={(value: number, name: string) => [
                   `${value} (${((value / total) * 100).toFixed(1)}%)`,
                   name
                 ]}
+                {...props}
               />
-            }
+            )}
           />
         </PieChart>
       </ResponsiveContainer>

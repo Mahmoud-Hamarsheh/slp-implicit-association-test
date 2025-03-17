@@ -17,6 +17,7 @@ import {
   prepareSurveyData,
   prepareAgeData,
   prepareExperienceData,
+  prepareTestModelData,
   exportToCsv
 } from "./dashboardUtils";
 import { RefreshCw, Download } from "lucide-react";
@@ -31,6 +32,7 @@ interface IATResult {
   gender?: number | null;
   survey_responses: any;
   survey_score?: number;
+  test_model?: "A" | "B";
 }
 
 export const Dashboard = () => {
@@ -109,6 +111,7 @@ export const Dashboard = () => {
   const surveyData = prepareSurveyData(results);
   const ageData = prepareAgeData(results);
   const experienceData = prepareExperienceData(results);
+  const testModelData = prepareTestModelData(results);
 
   const tabs = [
     { id: "dashboard", label: "لوحة التحكم" },
@@ -153,7 +156,7 @@ export const Dashboard = () => {
 
       {activeTab === "dashboard" ? (
         <>
-          <DashboardStats {...stats} />
+          <DashboardStats {...stats} testModelData={testModelData} />
           <DashboardCharts 
             degreeData={degreeData}
             biasData={biasData}
@@ -162,6 +165,7 @@ export const Dashboard = () => {
             surveyData={surveyData}
             ageData={ageData}
             experienceData={experienceData}
+            testModelData={testModelData}
           />
         </>
       ) : (

@@ -54,7 +54,9 @@ export const saveIATResults = async (
       }
     });
     
-    console.log("Question responses only:", JSON.stringify(questionResponsesOnly, null, 2));
+    // Capture the test model used (A or B)
+    const testModel = surveyData.testModel || "A";
+    console.log("Test model used:", testModel);
     
     // Extract bias score directly from the biasAwarenessResponses
     let biasScore = null;
@@ -136,7 +138,8 @@ export const saveIATResults = async (
       response_times: responseTimes, // Save the response times array
       responses: JSON.stringify(responses), // Save all detailed responses
       survey_responses: formattedSurveyResponses,
-      survey_score: biasScore
+      survey_score: biasScore,
+      test_model: testModel // Save the test model (A or B)
     };
 
     console.log("=== FINAL DATA TO SAVE ===");

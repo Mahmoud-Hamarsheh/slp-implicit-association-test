@@ -10,6 +10,7 @@ export interface IATProps {
     gender: "male" | "female" | number;
     biasAwarenessResponses: SurveyResponses;
     hasTakenIATBefore?: boolean;
+    testModel?: "A" | "B"; // Add new field for test model
   };
 }
 
@@ -54,8 +55,20 @@ export const BLOCKS = {
   ]
 };
 
-export const getCorrectKeyForBlock = (block: number, category: string): "d" | "k" => {
-  switch (block) {
+// Add a helper to determine the correct key based on test model and block
+export const getCorrectKeyForBlock = (block: number, category: string, testModel: "A" | "B" = "A"): "d" | "k" => {
+  // For Model B, we swap blocks 2,3,4 with 5,6,7
+  let adjustedBlock = block;
+  
+  if (testModel === "B") {
+    if (block >= 2 && block <= 4) {
+      adjustedBlock = block + 3; // 2->5, 3->6, 4->7
+    } else if (block >= 5 && block <= 7) {
+      adjustedBlock = block - 3; // 5->2, 6->3, 7->4
+    }
+  }
+  
+  switch (adjustedBlock) {
     case 1:
       // Block 1: K = normal, D = disorder
       if (category === "communication_disorder") {

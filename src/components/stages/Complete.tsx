@@ -1,63 +1,61 @@
 
 import React from "react";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { SurveyResponses } from "@/components/BiasAwarenessSurvey";
+import { getIATResultInterpretation } from "@/components/iat/IATScoring";
 
 interface CompleteProps {
   testResult: number | null;
   biasAwarenessData: SurveyResponses | null;
+  testModel?: "A" | "B";
 }
 
-export const Complete: React.FC<CompleteProps> = ({ testResult, biasAwarenessData }) => {
-  // Helper function to get IAT interpretation text
-  const getIATInterpretation = (score: number) => {
-    if (score < -0.15) return "تحيز ضعيف تجاه تواصل طبيعي";
-    if (score >= -0.15 && score <= 0.15) return "لا يوجد تحيز";
-    if (score > 0.15 && score <= 0.35) return "تحيز ضعيف تجاه اضطرابات التواصل";
-    if (score > 0.35 && score <= 0.65) return "تحيز متوسط تجاه اضطرابات التواصل";
-    return "تحيز قوي تجاه اضطرابات التواصل";
-  };
+export const Complete: React.FC<CompleteProps> = ({ 
+  testResult, 
+  biasAwarenessData,
+  testModel = "A"
+}) => {
+  const resultInterpretation = testResult !== null 
+    ? getIATResultInterpretation(testResult) 
+    : "لم يتم إكمال الاختبار";
 
   return (
-    <Card className="p-8 text-center space-y-6 animate-slideIn">
-      <h2 className="text-2xl font-bold">شكراً لك على إتمام الدراسة!</h2>
-      <p>
-        نحن نقدر وقتك وجهودك في المشاركة في هذه الدراسة البحثية. لقد كانت مساهمتك قيمة جداً في مساعدتنا على فهم الارتباطات الضمنية والصريحة في مجال النطق واللغة.
-      </p>
-      {testResult !== null && (
+    <Card className="w-full max-w-4xl mx-auto mt-8 animate-fadeIn">
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl font-bold">شكراً لمشاركتك</CardTitle>
+        <CardDescription>تم الانتهاء من جميع مراحل الدراسة</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
         <div>
-          <div className="text-xl font-semibold mb-4">
-            نتيجة اختبار IAT: {testResult.toFixed(2)}
-          </div>
-          <div className="text-lg">
-            التفسير: {getIATInterpretation(testResult)}
-          </div>
-          <div className="bg-gray-50 p-4 rounded-lg text-right mt-4">
-            <p className="font-bold mb-2">تفسير النتائج:</p>
-            <ul className="list-disc list-inside space-y-1">
-              <li>أقل من -0.15: تحيز ضعيف تجاه تواصل طبيعي</li>
-              <li>بين -0.15 و 0.15: لا يوجد تحيز</li>
-              <li>بين 0.15 و 0.35: تحيز ضعيف تجاه اضطرابات التواصل</li>
-              <li>بين 0.35 و 0.65: تحيز متوسط تجاه اضطرابات التواصل</li>
-              <li>أكبر من 0.65: تحيز قوي تجاه اضطرابات التواصل</li>
-            </ul>
-          </div>
+          <h3 className="text-xl font-semibold mb-2">نتيجة اختبار IAT الخاص بك</h3>
+          {testResult !== null ? (
+            <div className="space-y-4">
+              <p>نموذج الاختبار: {testModel}</p>
+              <p>الدرجة: {testResult.toFixed(2)}</p>
+              <p>التفسير: {resultInterpretation}</p>
+            </div>
+          ) : (
+            <p>لم يتم تسجيل أي نتيجة</p>
+          )}
         </div>
-      )}
-      {biasAwarenessData?.biasLevel && (
-        <div className="bg-gray-50 p-4 rounded-lg text-right mt-4">
-          <p className="font-bold mb-2">مستوى التحيز الصريح: {biasAwarenessData.biasLevel}</p>
-          <p>متوسط درجات الاستبيان: {parseFloat(biasAwarenessData.biasScore || "0").toFixed(2)}</p>
-          <div className="mt-2">
-            <p className="font-bold">تفسير النتائج:</p>
-            <ul className="list-disc list-inside space-y-1">
-              <li>أقل من أو يساوي 2.5: مستوى تحيز منخفض</li>
-              <li>بين 2.6 و 3.5: مستوى تحيز متوسط</li>
-              <li>أكبر من أو يساوي 3.6: مستوى تحيز مرتفع</li>
-            </ul>
+
+        <Separator />
+
+        {biasAwarenessData && biasAwarenessData.biasScore && (
+          <div>
+            <h3 className="text-xl font-semibold mb-2">نتيجة استبيان الوعي بالتحيز</h3>
+            <p>درجة الوعي بالتحيز: {biasAwarenessData.biasScore}</p>
           </div>
+        )}
+
+        <div className="bg-muted p-4 rounded-md">
+          <h3 className="text-xl font-semibold mb-2">ملاحظة</h3>
+          <p>
+            هذه النتائج هي لأغراض البحث فقط ولا ينبغي استخدامها للتشخيص. شكراً لمساهمتك في هذه الدراسة.
+          </p>
         </div>
-      )}
+      </CardContent>
     </Card>
   );
 };

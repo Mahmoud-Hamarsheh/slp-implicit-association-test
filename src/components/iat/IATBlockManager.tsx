@@ -7,7 +7,7 @@ import { BlockChangeAlert } from "./BlockChangeAlert";
 import { useIATTest } from "./hooks/useIATTest";
 
 interface IATBlockManagerProps {
-  onComplete: (result: number, allResponses: any[]) => void;
+  onComplete: (result: number, allResponses: any[], testModel: "A" | "B") => void;
   surveyData: IATProps["surveyData"];
   toast: (props: { 
     title: string; 
@@ -21,6 +21,10 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
   surveyData,
   toast 
 }) => {
+  // If no testModel is assigned, randomly assign one
+  const testModel = surveyData.testModel || (Math.random() < 0.5 ? "A" : "B");
+  console.log(`Using test model: ${testModel}`);
+  
   const { 
     currentBlock,
     trials,
@@ -33,10 +37,10 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
     handleTrialComplete,
     handleStartBlock,
     handleCloseAlert
-  } = useIATTest((result, allResponses) => {
-    // When test is complete, pass the result AND all responses to parent component
-    onComplete(result, allResponses);
-  });
+  } = useIATTest((result, allResponses, model) => {
+    // When test is complete, pass the result, all responses, and test model to parent component
+    onComplete(result, allResponses, model);
+  }, testModel);
 
   if (!trials.length) return null;
 

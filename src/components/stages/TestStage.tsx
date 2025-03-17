@@ -18,6 +18,7 @@ export const TestStage: React.FC<TestStageProps> = ({
   biasAwarenessData
 }) => {
   console.log("Bias awareness data in TestStage:", biasAwarenessData);
+  console.log("Test model in TestStage:", surveyData.testModel || "Not assigned");
   
   // Ensure surveyData is properly formatted for IAT component
   const formattedSurveyData = {

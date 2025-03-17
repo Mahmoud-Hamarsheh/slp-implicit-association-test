@@ -4,7 +4,7 @@ import { Trial, Response } from "../IATTypes";
 import { TrialGenerator } from "../TrialGenerator";
 import { calculateDScore } from "../IATScoring";
 
-export const useIATTest = (onComplete: (result: number, allResponses: Response[]) => void) => {
+export const useIATTest = (onComplete: (result: number, allResponses: Response[], model: "A" | "B") => void, testModel: "A" | "B" = "A") => {
   const [currentBlock, setCurrentBlock] = useState(1);
   const [trials, setTrials] = useState<Trial[]>([]);
   const [currentTrial, setCurrentTrial] = useState(0);
@@ -15,18 +15,19 @@ export const useIATTest = (onComplete: (result: number, allResponses: Response[]
 
   // Generate trials for the current block
   useEffect(() => {
-    const generatedTrials = TrialGenerator.generateTrialsForBlock(currentBlock);
-    console.log(`Generated ${generatedTrials.length} trials for block ${currentBlock}`);
+    const generatedTrials = TrialGenerator.generateTrialsForBlock(currentBlock, testModel);
+    console.log(`Generated ${generatedTrials.length} trials for block ${currentBlock} (Model ${testModel})`);
     setTrials(generatedTrials);
     setCurrentTrial(0);
     setShowInstructions(true);
     setIsBlockStarted(false);
     
     // Show category change alert when moving from block 4 to block 5
-    if (currentBlock === 5) {
+    if ((testModel === "A" && currentBlock === 5) || 
+        (testModel === "B" && currentBlock === 2)) {
       setShowCategoryChangeAlert(true);
     }
-  }, [currentBlock]);
+  }, [currentBlock, testModel]);
 
   const handleTrialComplete = (response: Response) => {
     // Add response to the list
@@ -45,8 +46,8 @@ export const useIATTest = (onComplete: (result: number, allResponses: Response[]
         const dScore = calculateDScore(updatedResponses) || 0;
         console.log(`Final D-score: ${dScore.toFixed(3)}`);
         
-        // Send the score AND all responses to the parent component
-        onComplete(dScore, updatedResponses);
+        // Send the score, all responses, and test model to the parent component
+        onComplete(dScore, updatedResponses, testModel);
       }
     } else {
       setCurrentTrial(currentTrial + 1);
@@ -74,6 +75,7 @@ export const useIATTest = (onComplete: (result: number, allResponses: Response[]
     setShowCategoryChangeAlert,
     handleTrialComplete,
     handleStartBlock,
-    handleCloseAlert
+    handleCloseAlert,
+    testModel
   };
 };

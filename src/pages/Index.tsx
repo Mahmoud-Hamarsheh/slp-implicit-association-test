@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Survey, SurveyData } from "@/components/Survey";
 import BiasAwarenessSurvey, { SurveyResponses } from "@/components/BiasAwarenessSurvey";
 import { useToast } from "@/hooks/use-toast";
@@ -32,10 +32,24 @@ const Index = () => {
   const [testResult, setTestResult] = useState<number | null>(null);
   const [testResponses, setTestResponses] = useState<any[]>([]);
   const [hasTakenIATBefore, setHasTakenIATBefore] = useState(false);
+  const [testModel, setTestModel] = useState<"A" | "B">(Math.random() < 0.5 ? "A" : "B");
   const { toast } = useToast();
 
+  // Assign test model on component mount
+  useEffect(() => {
+    // Randomly assign test model (50% chance for each)
+    const model = Math.random() < 0.5 ? "A" : "B";
+    setTestModel(model);
+    console.log(`Assigned test model: ${model}`);
+  }, []);
+
   const handleSurveyComplete = (data: SurveyData) => {
-    setSurveyData(data);
+    // Add the test model to survey data
+    const enrichedData = {
+      ...data,
+      testModel
+    };
+    setSurveyData(enrichedData);
     setStage("iat-welcome");
   };
 
@@ -56,7 +70,8 @@ const Index = () => {
       const completeData = {
         ...surveyData,
         biasAwarenessResponses: data,
-        hasTakenIATBefore
+        hasTakenIATBefore,
+        testModel  // Include the test model in the saved data
       };
       
       // Extract response times from responses for the database
@@ -130,7 +145,11 @@ const Index = () => {
         )}
 
         {stage === "complete" && (
-          <Complete testResult={testResult} biasAwarenessData={biasAwarenessData} />
+          <Complete 
+            testResult={testResult} 
+            biasAwarenessData={biasAwarenessData} 
+            testModel={testModel} 
+          />
         )}
       </div>
     </div>

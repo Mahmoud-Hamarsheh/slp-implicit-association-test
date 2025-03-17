@@ -249,6 +249,30 @@ export const prepareExperienceData = (results: IATResult[]) => {
     }));
 };
 
+export const prepareTestModelData = (results: any[]) => {
+  const models = {
+    A: 0,
+    B: 0,
+    Unknown: 0
+  };
+
+  results.forEach(result => {
+    if (result.test_model === 'A') {
+      models.A++;
+    } else if (result.test_model === 'B') {
+      models.B++;
+    } else {
+      models.Unknown++;
+    }
+  });
+
+  return [
+    { name: 'نموذج A', value: models.A, color: '#4CAF50' },
+    { name: 'نموذج B', value: models.B, color: '#2196F3' },
+    { name: 'غير معروف', value: models.Unknown, color: '#9E9E9E' }
+  ];
+};
+
 export const exportToCsv = (results: IATResult[], onSuccess: () => void, onError: (error: any) => void) => {
   try {
     const headers = ["ID", "D-Score", "Age", "Experience Years", "Degree", "Created At"];
