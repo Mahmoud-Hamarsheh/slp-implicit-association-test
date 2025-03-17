@@ -1,8 +1,10 @@
 
 import React from "react";
+import { IATInstructions } from "./IATInstructions";
+import { IATTrialRunner } from "./IATTrialRunner";
 import { IATProps } from "./IATTypes";
+import { BlockChangeAlert } from "./BlockChangeAlert";
 import { useIATTest } from "./hooks/useIATTest";
-import { BlockManagerView } from "./block/BlockManagerView";
 
 interface IATBlockManagerProps {
   onComplete: (result: number, allResponses: any[], testModel: "A" | "B") => void;
@@ -41,19 +43,29 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
     onComplete(result, allResponses, model);
   }, testModel);
 
+  if (!trials.length) return null;
+
   return (
-    <BlockManagerView
-      currentBlock={currentBlock}
-      trials={trials}
-      currentTrial={currentTrial}
-      showInstructions={showInstructions}
-      isBlockStarted={isBlockStarted}
-      showCategoryChangeAlert={showCategoryChangeAlert}
-      setShowCategoryChangeAlert={setShowCategoryChangeAlert}
-      handleTrialComplete={handleTrialComplete}
-      handleStartBlock={handleStartBlock}
-      handleCloseAlert={handleCloseAlert}
-      testModel={testModel}
-    />
+    <div className="text-center space-y-6">
+      {showInstructions ? (
+        <IATInstructions 
+          block={currentBlock} 
+          onStart={handleStartBlock}
+          testModel={testModel}
+        />
+      ) : (
+        <IATTrialRunner 
+          trial={trials[currentTrial]} 
+          isBlockStarted={isBlockStarted}
+          onTrialComplete={handleTrialComplete}
+        />
+      )}
+      
+      <BlockChangeAlert
+        open={showCategoryChangeAlert}
+        onOpenChange={setShowCategoryChangeAlert}
+        onClose={handleCloseAlert}
+      />
+    </div>
   );
 };
