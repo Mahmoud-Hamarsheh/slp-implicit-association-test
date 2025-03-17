@@ -34,30 +34,27 @@ export const BLOCKS = {
   COMMUNICATION_DISORDER: ["أفيزيا", "أبراكسيا", "ديسارثريا (عسر النطق)", "تأخر لغوي", "اضطراب صوت", "تأتأة"],
   NORMAL_COMMUNICATION: ["وضوح الكلام", "انسيابية الكلام", "طلاقة التعبير", "تواصل فعال", "مُعبّر", "كلام مترابط", "الاستماع الفعال"],
   POSITIVE_ATTRIBUTES: [
-    "/lovable-uploads/4e511310-63b0-4dc6-97c6-08f559b7f288.png", // Superhero
-    "/lovable-uploads/17922e80-7727-4e77-ba76-efcb82e55f31.png", // Weight lifter
-    "/lovable-uploads/b6c9ca5e-a51f-4bd7-98e4-689a021c4de1.png", // Friends group
-    "/lovable-uploads/4ee1dd40-8b8f-434f-8e90-709c1f2a4812.png", // Thumbs up
-    "/lovable-uploads/013b45f6-a99e-48fe-98fc-74537c635a43.png", // Trophy winner
-    "/lovable-uploads/1777ddc4-3ab8-4cee-b00d-a535001407fb.png", // Business person
-    "/lovable-uploads/8b94a936-48f9-47fb-ab67-f328191b15be.png", // Graduate
-    "/lovable-uploads/d0f34a2b-987a-44aa-b114-924258deff18.png"  // A+ student
+    "/lovable-uploads/945065f2-66e4-47c9-83cf-d30d843f2880.png", // Trophy winner
+    "/lovable-uploads/832847ee-de90-45c6-9cf1-e6d83d774cff.png", // Superhero
+    "/lovable-uploads/d44a6ddc-8a05-44d0-97ac-2d59134c11b3.png", // Weight lifter
+    "/lovable-uploads/b5753873-d6c1-4491-8965-4f8a34bce71c.png", // Business person at podium
+    "/lovable-uploads/19ccbedc-8914-489f-8189-677f2f3d5287.png", // Graduate
+    "/lovable-uploads/58c8ba40-c526-4de9-915a-234eca14af40.png", // A+ student
+    "/lovable-uploads/4b8acb79-67cc-45a6-91ec-1c64c0df9646.png", // Thumbs up
+    "/lovable-uploads/2f6d9505-8ede-45ec-8b81-a31baef68a7c.png", // Friends group
   ],
   NEGATIVE_ATTRIBUTES: [
-    "/lovable-uploads/7b1dc96e-d083-46e9-be18-1d7a21122d40.png", // sad person
-    "/lovable-uploads/4d29ef76-64fb-4508-8d76-2b27461fd844.png", // crying person
-    "/lovable-uploads/a3279a90-96f3-4e35-aff6-00a3f84b6355.png", // thumbs down
-    "/lovable-uploads/b786a712-7b99-484d-8a15-f2f80241dd1c.png", // depressed walk
-    "/lovable-uploads/7f658006-b81a-4da1-ba18-fd5c3d2e88dd.png", // pointing boss
-    "/lovable-uploads/21cd29b5-16be-4f4a-aacd-227f025d8bc5.png", // laughing at someone 
-    "/lovable-uploads/1bb6964d-14fe-44eb-9523-14f5fc1b849d.png", // standing sad
-    "/lovable-uploads/6e039dce-2910-41e0-855d-344386d44f90.png", // sad businessman
-    "/lovable-uploads/7c56a99d-9adc-4e25-914f-d94fcfa7e36e.png", // self hugging
-    "/lovable-uploads/d116176d-050d-4bd5-9e87-0a9ae257c677.png"  // person with bad grades
+    "/lovable-uploads/51401776-854b-4100-9139-2aa61e28e3de.png", // Sad person
+    "/lovable-uploads/beb504c8-8742-46aa-93d0-d0a04e515ee2.png", // Crying person
+    "/lovable-uploads/e7aa332a-efe4-47ad-b3fa-203e82a1dd89.png", // Thumbs down
+    "/lovable-uploads/13d3a1dc-cb31-4b1a-b77c-d7f18f424645.png", // Person with boss pointing
+    "/lovable-uploads/fba03378-ed42-41b7-a427-0018e2317e3e.png", // People laughing at someone
+    "/lovable-uploads/9ab2f5fc-7ac7-43fc-ad04-f6d53c1f97bb.png", // Depressed person
+    "/lovable-uploads/2d0c9586-a654-465a-99c7-04a321842952.png", // Sad businessman
+    "/lovable-uploads/59ee5ed7-42af-4a95-8e04-28f248deafa3.png", // Self hugging person
   ]
 };
 
-// Determine the correct key based on test model and block
 export const getCorrectKeyForBlock = (block: number, category: string, testModel: "A" | "B" = "A"): "d" | "k" => {
   // NOTE: block here should be the effective block, NOT the original block number
   
