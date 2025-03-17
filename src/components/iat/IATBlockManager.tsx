@@ -36,7 +36,8 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
     setShowCategoryChangeAlert,
     handleTrialComplete,
     handleStartBlock,
-    handleCloseAlert
+    handleCloseAlert,
+    testModel: assignedTestModel
   } = useIATTest((result, allResponses, model) => {
     // When test is complete, pass the result, all responses, and test model to parent component
     onComplete(result, allResponses, model);
@@ -50,6 +51,7 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
         <IATInstructions 
           block={currentBlock} 
           onStart={handleStartBlock}
+          testModel={testModel}
         />
       ) : (
         <IATTrialRunner 

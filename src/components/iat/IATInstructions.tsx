@@ -13,23 +13,32 @@ interface BlockInstructions {
 interface IATInstructionsProps {
   block: number;
   onStart: () => void;
+  testModel?: "A" | "B";
 }
 
 export const IATInstructions: React.FC<IATInstructionsProps> = ({ 
   block, 
-  onStart 
+  onStart,
+  testModel = "A"
 }) => {
-  const getInstructionsForBlock = (block: number): BlockInstructions => {
+  // Get the effective block number based on test model
+  const effectiveBlock = testModel === "B" && block >= 2 && block <= 7 
+    ? block <= 4 ? block + 3 : block - 3 
+    : block;
+  
+  console.log(`Block ${block}, effective block ${effectiveBlock} for model ${testModel}`);
+
+  const getInstructionsForBlock = (blockNum: number): BlockInstructions => {
     const reminders = [
       "✔ حاول الإجابة بسرعة ودون تردد.",
       "✔ إذا أخطأت سيظهر رمز X أحمر. ويجب تصحيح الإجابة للمتابعة.",
       "✔ ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة."
     ];
 
-    switch (block) {
+    switch (blockNum) {
       case 1:
         return {
-          title: "١ من اصل ٧",
+          title: `١ من اصل ٧`,
           description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها إلى تواصل طبيعي أو اضطراب تواصل بأسرع ما يمكن.",
           leftKey: "تواصل طبيعي",
           rightKey: "اضطراب تواصل",
@@ -37,7 +46,7 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
         };
       case 2:
         return {
-          title: "٢ من اصل ٧",
+          title: `٢ من اصل ٧`,
           description: "ستظهر لك على الشاشة مجموعة من الصور، ومهمتك هي تصنيفها بأسرع ما يمكن.",
           leftKey: "إيجابي",
           rightKey: "سلبي",
@@ -45,7 +54,7 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
         };
       case 3:
         return {
-          title: "٣ من اصل ٧",
+          title: `٣ من اصل ٧`,
           description: "ستظهر لك على الشاشة مجموعة من الكلمات والصور، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
           leftKey: "تواصل طبيعي أو إيجابي",
           rightKey: "اضطراب تواصل أو سلبي",
@@ -53,7 +62,7 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
         };
       case 4:
         return {
-          title: "٤ من اصل ٧",
+          title: `٤ من اصل ٧`,
           description: "هذا مماثل للجزء السابق\nستظهر لك على الشاشة مجموعة من الكلمات والصور، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
           leftKey: "تواصل طبيعي أو إيجابي",
           rightKey: "اضطراب تواصل أو سلبي",
@@ -61,7 +70,7 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
         };
       case 5:
         return {
-          title: "٥ من اصل ٧",
+          title: `٥ من اصل ٧`,
           description: "انتبه، لقد تغيرت أماكن التسميات!",
           leftKey: "سلبي",
           rightKey: "إيجابي",
@@ -69,7 +78,7 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
         };
       case 6:
         return {
-          title: "٦ من اصل ٧",
+          title: `٦ من اصل ٧`,
           description: "ستظهر لك على الشاشة مجموعة من الكلمات والصور، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
           leftKey: "تواصل طبيعي أو سلبي",
           rightKey: "اضطراب تواصل أو إيجابي",
@@ -77,7 +86,7 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
         };
       case 7:
         return {
-          title: "٧ من اصل ٧",
+          title: `٧ من اصل ٧`,
           description: "هذا مماثل للجزء السابق",
           leftKey: "تواصل طبيعي أو سلبي",
           rightKey: "اضطراب تواصل أو إيجابي",
@@ -93,7 +102,8 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
     }
   };
 
-  const instructions = getInstructionsForBlock(block);
+  // Use effective block number to get instructions
+  const instructions = getInstructionsForBlock(effectiveBlock);
 
   return (
     <div className="p-4 md:p-6 text-center space-y-4 max-w-3xl mx-auto animate-slideUpFade">

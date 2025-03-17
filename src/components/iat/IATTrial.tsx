@@ -10,7 +10,10 @@ interface IATTrialProps {
 
 export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorrect }) => {
   const getTrialCategories = (trial: Trial) => {
-    switch (trial.block) {
+    // Use the effective block (which accounts for test model) to determine categories
+    const effectiveBlock = trial.effectiveBlock || trial.block;
+
+    switch (effectiveBlock) {
       case 1:
         return {
           left: "تواصل طبيعي",
