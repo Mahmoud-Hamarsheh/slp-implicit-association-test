@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "../ui/button";
 
@@ -25,11 +26,11 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
     ? block <= 4 ? block + 3 : block - 3 
     : block;
   
-  // For display purposes, we want to show the original block number
-  // But for Model B, we need to keep the actual sequential numbering from 1 to 7
+  // For display purposes, we always show the sequential block number (1-7)
+  // regardless of the test model or effective block
   const displayBlockNumber = block;
   
-  console.log(`Block ${block}, effective block ${effectiveBlock} for model ${testModel}`);
+  console.log(`Block ${block}, effective block ${effectiveBlock} for model ${testModel}, displaying as block ${displayBlockNumber}`);
 
   const getInstructionsForBlock = (blockNum: number): BlockInstructions => {
     const reminders = [
@@ -38,6 +39,8 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
       "✔ ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة."
     ];
 
+    // We'll get the content based on the effective block
+    // but the title will be modified later to show the sequential number
     switch (blockNum) {
       case 1:
         return {
@@ -105,11 +108,15 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
     }
   };
 
-  // Use effective block number to get instructions but display block number for the title
+  // Get instructions based on the effective block (which content to show)
   const instructions = getInstructionsForBlock(effectiveBlock);
   
-  // Modify the title to show the sequential block number (1-7) regardless of test model
-  const displayTitle = instructions.title.replace(/\d+/, displayBlockNumber.toString());
+  // Create Arabic numerals for the block number (1-7)
+  const arabicNumerals = ["١", "٢", "٣", "٤", "٥", "٦", "٧"];
+  
+  // Replace the number in the title with the sequential block number (display block)
+  // This ensures we always show 1-7 in order regardless of the test model
+  const displayTitle = `${arabicNumerals[displayBlockNumber-1]} من اصل ٧`;
 
   return (
     <div className="p-4 md:p-6 text-center space-y-4 max-w-3xl mx-auto animate-slideUpFade">

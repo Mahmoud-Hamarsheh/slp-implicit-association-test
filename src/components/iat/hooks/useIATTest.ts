@@ -22,9 +22,10 @@ export const useIATTest = (onComplete: (result: number, allResponses: Response[]
     setShowInstructions(true);
     setIsBlockStarted(false);
     
-    // Show category change alert when moving from block 4 to block 5
-    if ((testModel === "A" && currentBlock === 5) || 
-        (testModel === "B" && currentBlock === 2)) {
+    // Show category change alert at the appropriate sequential block 
+    // Regardless of test model, we show the alert when switching 
+    // to blocks that require category changes
+    if (currentBlock === 5) {
       setShowCategoryChangeAlert(true);
     }
   }, [currentBlock, testModel]);
