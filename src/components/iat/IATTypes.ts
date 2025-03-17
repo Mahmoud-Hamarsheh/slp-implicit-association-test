@@ -35,14 +35,14 @@ export const BLOCKS = {
   COMMUNICATION_DISORDER: ["أفيزيا", "أبراكسيا", "ديسارثريا (عسر النطق)", "تأخر لغوي", "اضطراب صوت", "تأتأة"],
   NORMAL_COMMUNICATION: ["وضوح الكلام", "انسيابية الكلام", "طلاقة التعبير", "تواصل فعال", "مُعبّر", "كلام مترابط", "الاستماع الفعال"],
   POSITIVE_ATTRIBUTES: [
-    "/lovable-uploads/9b147b57-aafb-4241-94ff-3a9c352503b0.png", // A+ student
-    "/lovable-uploads/1fae69a3-a257-4e39-9d7e-92e71d89316b.png", // Graduate
-    "/lovable-uploads/f12e4381-84c6-45f6-8cde-62d1721d3509.png", // Business person
-    "/lovable-uploads/c0bdba02-284f-47d1-a891-9edbf0a2af61.png", // Friends group
-    "/lovable-uploads/dfc82370-e222-4fd8-9fd4-702c4d7ec161.png", // Weight lifter
-    "/lovable-uploads/ac17eeed-e0ea-41bf-ad17-438e10326d15.png", // Superhero
-    "/lovable-uploads/55a0f431-595a-4b86-9aea-bd6807cdb268.png", // Thumbs up
-    "/lovable-uploads/e012de25-8c46-4112-86d7-da7f81976105.png"  // Trophy winner
+    "/lovable-uploads/4ee1dd40-8b8f-434f-8e90-709c1f2a4812.png", // Thumbs up
+    "/lovable-uploads/b6c9ca5e-a51f-4bd7-98e4-689a021c4de1.png", // Friends group
+    "/lovable-uploads/013b45f6-a99e-48fe-98fc-74537c635a43.png", // Trophy winner
+    "/lovable-uploads/4e511310-63b0-4dc6-97c6-08f559b7f288.png", // Superhero
+    "/lovable-uploads/17922e80-7727-4e77-ba76-efcb82e55f31.png", // Weight lifter
+    "/lovable-uploads/1777ddc4-3ab8-4cee-b00d-a535001407fb.png", // Business person
+    "/lovable-uploads/8b94a936-48f9-47fb-ab67-f328191b15be.png", // Graduate
+    "/lovable-uploads/d0f34a2b-987a-44aa-b114-924258deff18.png"  // A+ student
   ],
   NEGATIVE_ATTRIBUTES: [
     "/lovable-uploads/4d29ef76-64fb-4508-8d76-2b27461fd844.png", // crying person
