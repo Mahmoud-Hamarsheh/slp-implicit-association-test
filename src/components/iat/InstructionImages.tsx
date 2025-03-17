@@ -1,17 +1,17 @@
 
 import React from "react";
 
-interface InstructionImagesProps {
-  images: string[];
+interface InstructionAttributesProps {
+  attributes: string[];
   alt: string;
 }
 
-export const InstructionImages: React.FC<InstructionImagesProps> = ({ images, alt }) => {
+export const InstructionAttributes: React.FC<InstructionAttributesProps> = ({ attributes, alt }) => {
   return (
     <div className="grid grid-cols-2 gap-2 mb-3">
-      {images.map((src, index) => (
+      {attributes.map((text, index) => (
         <div key={`${alt}-${index}`} className="bg-gray-50 p-2 rounded-md">
-          <img src={src} alt={alt} className="w-12 h-12 object-contain mx-auto" />
+          <span className="text-sm font-medium">{text}</span>
         </div>
       ))}
     </div>

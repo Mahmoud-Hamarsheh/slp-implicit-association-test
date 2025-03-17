@@ -5,8 +5,8 @@ export interface BlockInstructions {
   leftKey: string;
   rightKey: string;
   reminder?: string[];
-  showPositiveImages?: boolean;
-  showNegativeImages?: boolean;
+  showPositiveAttributes?: boolean;
+  showNegativeAttributes?: boolean;
 }
 
 export interface IATInstructionsProps {

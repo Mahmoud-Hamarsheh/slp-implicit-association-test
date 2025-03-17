@@ -35,16 +35,14 @@ export class TrialGenerator {
             category: "negative",
             correctKey: getCorrectKeyForBlock(effectiveBlock, "negative", testModel),
             block: block,
-            effectiveBlock: effectiveBlock,
-            isImage: true
+            effectiveBlock: effectiveBlock
           })),
           ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "positive",
             correctKey: getCorrectKeyForBlock(effectiveBlock, "positive", testModel),
             block: block,
-            effectiveBlock: effectiveBlock,
-            isImage: true
+            effectiveBlock: effectiveBlock
           }))
         ];
         break;
@@ -56,16 +54,14 @@ export class TrialGenerator {
             category: "negative",
             correctKey: getCorrectKeyForBlock(effectiveBlock, "negative", testModel),
             block: block,
-            effectiveBlock: effectiveBlock,
-            isImage: true
+            effectiveBlock: effectiveBlock
           })),
           ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "positive",
             correctKey: getCorrectKeyForBlock(effectiveBlock, "positive", testModel),
             block: block,
-            effectiveBlock: effectiveBlock,
-            isImage: true
+            effectiveBlock: effectiveBlock
           }))
         ];
         break;
@@ -94,16 +90,14 @@ export class TrialGenerator {
             category: "negative",
             correctKey: getCorrectKeyForBlock(effectiveBlock, "negative", testModel),
             block: block,
-            effectiveBlock: effectiveBlock,
-            isImage: true
+            effectiveBlock: effectiveBlock
           })),
           ...BLOCKS.POSITIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "positive",
             correctKey: getCorrectKeyForBlock(effectiveBlock, "positive", testModel),
             block: block,
-            effectiveBlock: effectiveBlock,
-            isImage: true
+            effectiveBlock: effectiveBlock
           }))
         ];
         break;

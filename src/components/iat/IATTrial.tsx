@@ -18,72 +18,72 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
         return {
           left: "تواصل طبيعي",
           right: "اضطراب تواصل",
-          showLeftImages: false,
-          showRightImages: false,
-          leftImageType: "",
-          rightImageType: ""
+          showLeftAttributes: false,
+          showRightAttributes: false,
+          leftAttributeType: "",
+          rightAttributeType: ""
         };
       case 2:
         return {
           left: "إيجابي",
           right: "سلبي",
-          showLeftImages: true,
-          showRightImages: true,
-          leftImageType: "positive",
-          rightImageType: "negative"
+          showLeftAttributes: true,
+          showRightAttributes: true,
+          leftAttributeType: "positive",
+          rightAttributeType: "negative"
         };
       case 3:
       case 4:
         return {
           left: "تواصل طبيعي\nأو\nإيجابي",
           right: "اضطراب تواصل\nأو\nسلبي",
-          showLeftImages: true,
-          showRightImages: true,
-          leftImageType: "positive",
-          rightImageType: "negative"
+          showLeftAttributes: true,
+          showRightAttributes: true,
+          leftAttributeType: "positive",
+          rightAttributeType: "negative"
         };
       case 5:
         return {
           left: "سلبي",
           right: "إيجابي",
-          showLeftImages: true,
-          showRightImages: true,
-          leftImageType: "negative",
-          rightImageType: "positive"
+          showLeftAttributes: true,
+          showRightAttributes: true,
+          leftAttributeType: "negative",
+          rightAttributeType: "positive"
         };
       case 6:
       case 7:
         return {
           left: "تواصل طبيعي\nأو\nسلبي",
           right: "اضطراب تواصل\nأو\nإيجابي",
-          showLeftImages: true,
-          showRightImages: true,
-          leftImageType: "negative",
-          rightImageType: "positive"
+          showLeftAttributes: true,
+          showRightAttributes: true,
+          leftAttributeType: "negative",
+          rightAttributeType: "positive"
         };
       default:
         return {
           left: "",
           right: "",
-          showLeftImages: false,
-          showRightImages: false,
-          leftImageType: "",
-          rightImageType: ""
+          showLeftAttributes: false,
+          showRightAttributes: false,
+          leftAttributeType: "",
+          rightAttributeType: ""
         };
     }
   };
 
-  // Sample images for each category
-  const positiveImages = [
-    "/lovable-uploads/4ee1dd40-8b8f-434f-8e90-709c1f2a4812.png", // Thumbs up
-    "/lovable-uploads/013b45f6-a99e-48fe-98fc-74537c635a43.png", // Trophy
-    "/lovable-uploads/4e511310-63b0-4dc6-97c6-08f559b7f288.png", // Superhero
+  // Sample text for each category
+  const positiveAttributes = [
+    "إيجابي", 
+    "ممتاز", 
+    "نجاح"
   ];
 
-  const negativeImages = [
-    "/lovable-uploads/4d29ef76-64fb-4508-8d76-2b27461fd844.png", // crying person
-    "/lovable-uploads/a3279a90-96f3-4e35-aff6-00a3f84b6355.png", // thumbs down
-    "/lovable-uploads/7b1dc96e-d083-46e9-be18-1d7a21122d40.png", // sad person
+  const negativeAttributes = [
+    "حزين", 
+    "سلبي", 
+    "ضعيف"
   ];
 
   const categories = getTrialCategories(trial);
@@ -98,19 +98,19 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
               {categories.left}
             </div>
           )}
-          {categories.showLeftImages && (
+          {categories.showLeftAttributes && (
             <div className="grid grid-cols-2 gap-2 mb-3 w-full">
-              {categories.leftImageType === "positive" && 
-                positiveImages.map((src, index) => (
+              {categories.leftAttributeType === "positive" && 
+                positiveAttributes.map((text, index) => (
                   <div key={`left-pos-${index}`} className="bg-white p-2 rounded-md shadow-sm">
-                    <img src={src} alt="إيجابي" className="w-12 h-12 object-contain mx-auto" />
+                    <span className="text-sm font-medium">{text}</span>
                   </div>
                 ))
               }
-              {categories.leftImageType === "negative" && 
-                negativeImages.map((src, index) => (
+              {categories.leftAttributeType === "negative" && 
+                negativeAttributes.map((text, index) => (
                   <div key={`left-neg-${index}`} className="bg-white p-2 rounded-md shadow-sm">
-                    <img src={src} alt="سلبي" className="w-12 h-12 object-contain mx-auto" />
+                    <span className="text-sm font-medium">{text}</span>
                   </div>
                 ))
               }
@@ -126,19 +126,19 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
               {categories.right}
             </div>
           )}
-          {categories.showRightImages && (
+          {categories.showRightAttributes && (
             <div className="grid grid-cols-2 gap-2 mb-3 w-full">
-              {categories.rightImageType === "positive" && 
-                positiveImages.map((src, index) => (
+              {categories.rightAttributeType === "positive" && 
+                positiveAttributes.map((text, index) => (
                   <div key={`right-pos-${index}`} className="bg-white p-2 rounded-md shadow-sm">
-                    <img src={src} alt="إيجابي" className="w-12 h-12 object-contain mx-auto" />
+                    <span className="text-sm font-medium">{text}</span>
                   </div>
                 ))
               }
-              {categories.rightImageType === "negative" && 
-                negativeImages.map((src, index) => (
+              {categories.rightAttributeType === "negative" && 
+                negativeAttributes.map((text, index) => (
                   <div key={`right-neg-${index}`} className="bg-white p-2 rounded-md shadow-sm">
-                    <img src={src} alt="سلبي" className="w-12 h-12 object-contain mx-auto" />
+                    <span className="text-sm font-medium">{text}</span>
                   </div>
                 ))
               }
@@ -149,13 +149,8 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
       </div>
 
       <div className="text-center space-y-4 md:space-y-8 p-6 bg-gray-50 rounded-lg shadow-sm">
-        {trial.isImage ? (
-          <div className="flex justify-center">
-            <img src={trial.stimulus} alt="Attribute" className="h-24 w-24 md:h-32 md:w-32 p-2 bg-white rounded-lg shadow-sm" />
-          </div>
-        ) : (
-          <div className="text-2xl md:text-4xl font-bold p-4 bg-white rounded-lg shadow-sm">{trial.stimulus}</div>
-        )}
+        {/* استبدلنا الصورة بعرض نصي للمحفز */}
+        <div className="text-2xl md:text-4xl font-bold p-4 bg-white rounded-lg shadow-sm">{trial.stimulus}</div>
         {showFeedback && !isCorrect && (
           <div className="text-red-500 text-4xl md:text-6xl font-bold">X</div>
         )}
