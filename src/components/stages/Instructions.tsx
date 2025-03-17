@@ -18,6 +18,10 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
     "/lovable-uploads/b6c9ca5e-a51f-4bd7-98e4-689a021c4de1.png", // Friends group
     "/lovable-uploads/013b45f6-a99e-48fe-98fc-74537c635a43.png", // Trophy winner
     "/lovable-uploads/4e511310-63b0-4dc6-97c6-08f559b7f288.png", // Superhero
+    "/lovable-uploads/17922e80-7727-4e77-ba76-efcb82e55f31.png", // Weight lifter
+    "/lovable-uploads/1777ddc4-3ab8-4cee-b00d-a535001407fb.png", // Business person
+    "/lovable-uploads/8b94a936-48f9-47fb-ab67-f328191b15be.png", // Graduate
+    "/lovable-uploads/d0f34a2b-987a-44aa-b114-924258deff18.png"  // A+ student
   ];
 
   // Images for negative attributes
@@ -26,6 +30,12 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
     "/lovable-uploads/a3279a90-96f3-4e35-aff6-00a3f84b6355.png", // thumbs down
     "/lovable-uploads/7b1dc96e-d083-46e9-be18-1d7a21122d40.png", // sad person
     "/lovable-uploads/7f658006-b81a-4da1-ba18-fd5c3d2e88dd.png", // pointing boss
+    "/lovable-uploads/b786a712-7b99-484d-8a15-f2f80241dd1c.png", // depressed walk
+    "/lovable-uploads/21cd29b5-16be-4f4a-aacd-227f025d8bc5.png", // laughing at someone 
+    "/lovable-uploads/1bb6964d-14fe-44eb-9523-14f5fc1b849d.png", // standing sad
+    "/lovable-uploads/6e039dce-2910-41e0-855d-344386d44f90.png", // sad businessman
+    "/lovable-uploads/7c56a99d-9adc-4e25-914f-d94fcfa7e36e.png", // self hugging
+    "/lovable-uploads/d116176d-050d-4bd5-9e87-0a9ae257c677.png"  // person with bad grades
   ];
 
   return (
@@ -46,26 +56,24 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
         
         <div className="bg-gray-50 p-4 rounded-lg">
           <h3 className="font-bold mb-3">إيجابي</h3>
-          <div className="flex justify-center items-center gap-2 mb-3">
+          <div className="flex flex-wrap justify-center items-center gap-2 mb-3">
             {positiveImages.map((src, index) => (
               <div key={`pos-${index}`} className="flex flex-col items-center">
-                <img src={src} alt="إيجابي" className="w-12 h-12 object-contain" />
+                <img src={src} alt="إيجابي" className="w-10 h-10 object-contain" />
               </div>
             ))}
           </div>
-          <p className="text-sm">المشاعر والصور الإيجابية، نجاح، سعادة، تفوق، إنجاز، صداقة</p>
         </div>
         
         <div className="bg-gray-50 p-4 rounded-lg">
           <h3 className="font-bold mb-3">سلبي</h3>
-          <div className="flex justify-center items-center gap-2 mb-3">
+          <div className="flex flex-wrap justify-center items-center gap-2 mb-3">
             {negativeImages.map((src, index) => (
               <div key={`neg-${index}`} className="flex flex-col items-center">
-                <img src={src} alt="سلبي" className="w-12 h-12 object-contain" />
+                <img src={src} alt="سلبي" className="w-10 h-10 object-contain" />
               </div>
             ))}
           </div>
-          <p className="text-sm">المشاعر والصور السلبية، حزن، إحباط، فشل، تعب، توتر</p>
         </div>
       </div>
       <div className="text-right text-sm bg-blue-50 p-4 rounded-lg">
@@ -83,4 +91,3 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
     </Card>
   );
 };
-
