@@ -127,14 +127,12 @@ export const ResultDetails = ({ results, degreeMapping }: ResultDetailsProps) =>
                         {getBiasDescription(result.d_score)}
                       </p>
                     </div>
-                    {result.survey_score !== undefined && (
-                      <div className="md:text-left mt-2 md:mt-0">
-                        <p className="font-medium">نتيجة الاستبيان: {result.survey_score.toFixed(2)}</p>
-                        <p className="text-sm text-gray-600">
-                          التفسير: {getSurveyInterpretation(result.survey_score)}
-                        </p>
-                      </div>
-                    )}
+                    <div className="md:text-left mt-2 md:mt-0">
+                      <p className="font-medium">نتيجة الاستبيان: {result.survey_score !== undefined ? result.survey_score.toFixed(2) : 'غير متوفر'}</p>
+                      <p className="text-sm text-gray-600">
+                        التفسير: {getSurveyInterpretation(result.survey_score)}
+                      </p>
+                    </div>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
