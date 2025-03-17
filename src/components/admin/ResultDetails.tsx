@@ -50,27 +50,27 @@ export const ResultDetails: React.FC<ResultDetailsProps> = ({ results }) => {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-md border overflow-hidden">
+      <div className="rounded-md border overflow-x-auto">
         <Table className="min-w-full">
-          <TableHeader>
+          <TableHeader className="bg-muted/50">
             <TableRow>
-              <TableHead className="w-[80px]">ID</TableHead>
-              <TableHead>D-Score</TableHead>
-              <TableHead>الفئة العمرية</TableHead>
-              <TableHead>سنوات الخبرة</TableHead>
-              <TableHead>المؤهل التعليمي</TableHead>
-              <TableHead>الجنس</TableHead>
-              <TableHead>نموذج الاختبار</TableHead>
-              <TableHead>التاريخ</TableHead>
+              <TableHead className="w-[80px] whitespace-nowrap">ID</TableHead>
+              <TableHead className="whitespace-nowrap">D-Score</TableHead>
+              <TableHead className="whitespace-nowrap">الفئة العمرية</TableHead>
+              <TableHead className="whitespace-nowrap">سنوات الخبرة</TableHead>
+              <TableHead className="whitespace-nowrap">المؤهل التعليمي</TableHead>
+              <TableHead className="whitespace-nowrap">الجنس</TableHead>
+              <TableHead className="whitespace-nowrap">نموذج الاختبار</TableHead>
+              <TableHead className="whitespace-nowrap">التاريخ</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {paginatedResults.map((result) => (
               <TableRow key={result.id}>
-                <TableCell className="font-mono text-xs">
+                <TableCell className="font-mono text-xs whitespace-nowrap">
                   {result.id.substring(0, 8)}...
                 </TableCell>
-                <TableCell>
+                <TableCell className="whitespace-nowrap">
                   <span 
                     className={`px-2 py-1 rounded text-xs font-medium ${
                       result.d_score > 0.65 ? "bg-red-100 text-red-800" :
@@ -83,20 +83,20 @@ export const ResultDetails: React.FC<ResultDetailsProps> = ({ results }) => {
                     {result.d_score.toFixed(3)} ({getBiasCategory(result.d_score)})
                   </span>
                 </TableCell>
-                <TableCell>{getAgeRange(result.age)}</TableCell>
-                <TableCell>{getExperienceRange(result.years_experience)}</TableCell>
-                <TableCell>
+                <TableCell className="whitespace-nowrap">{getAgeRange(result.age)}</TableCell>
+                <TableCell className="whitespace-nowrap">{getExperienceRange(result.years_experience)}</TableCell>
+                <TableCell className="whitespace-nowrap">
                   {degreeMapping[result.degree] || result.degree}
                 </TableCell>
-                <TableCell>
+                <TableCell className="whitespace-nowrap">
                   {result.gender === 1 ? "ذكر" : 
                    result.gender === 2 ? "أنثى" : 
                    "غير محدد"}
                 </TableCell>
-                <TableCell>
+                <TableCell className="whitespace-nowrap">
                   {result.test_model || "غير محدد"}
                 </TableCell>
-                <TableCell className="text-gray-500">
+                <TableCell className="text-gray-500 whitespace-nowrap">
                   {format(new Date(result.created_at), "yyyy-MM-dd")}
                 </TableCell>
               </TableRow>
@@ -106,7 +106,7 @@ export const ResultDetails: React.FC<ResultDetailsProps> = ({ results }) => {
       </div>
 
       {totalPages > 1 && (
-        <div className="flex justify-center gap-2">
+        <div className="flex flex-wrap justify-center gap-2 mt-4">
           <Button
             variant="outline"
             size="sm"
