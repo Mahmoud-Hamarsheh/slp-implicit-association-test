@@ -44,8 +44,6 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
   };
 
   const categories = getTrialCategories();
-  const isBlock2 = trial.block === 2;
-  const isBlock5 = trial.block === 5;
 
   return (
     <div className="max-w-3xl mx-auto p-4 md:p-8 bg-white shadow-md">
@@ -58,10 +56,6 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
           <div className="text-green-600 text-xl font-medium mb-4 whitespace-pre-line">
             {categories.left}
           </div>
-          
-          <div className="text-blue-600 bg-blue-50 py-1 px-3 rounded-full font-medium mt-auto inline-block">
-            اضغط "K"
-          </div>
         </div>
         
         {/* Right Category */}
@@ -72,14 +66,10 @@ export const IATTrial: React.FC<IATTrialProps> = ({ trial, showFeedback, isCorre
           <div className="text-green-600 text-xl font-medium mb-4 whitespace-pre-line">
             {categories.right}
           </div>
-          
-          <div className="text-blue-600 bg-blue-50 py-1 px-3 rounded-full font-medium mt-auto inline-block">
-            اضغط "D"
-          </div>
         </div>
       </div>
 
-      {/* Stimulus Area - Show image instead of text */}
+      {/* Stimulus Area - Only show the image */}
       <div className="text-center p-6 bg-gray-50 rounded-lg shadow-sm">
         {trial.isImage ? (
           <div className="p-4 bg-white rounded-lg shadow-sm flex justify-center">
