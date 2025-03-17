@@ -14,6 +14,7 @@ export interface SurveyData {
   yearsExperience: number;
   degree: string;
   gender: "male" | "female" | number;  // Updated to allow number values
+  testModel?: "A" | "B";  // Added testModel property
 }
 
 export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
