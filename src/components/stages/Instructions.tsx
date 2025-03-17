@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 
 interface InstructionsProps {
   onContinue: () => void;
+  testModel?: "A" | "B";
 }
 
-export const Instructions: React.FC<InstructionsProps> = ({ onContinue }) => {
+export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testModel = "A" }) => {
   return (
     <Card className="p-8 text-center space-y-6 animate-slideIn">
       <h2 className="text-2xl font-bold">تعليمات الاختبار</h2>
@@ -31,6 +32,12 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue }) => {
           <h3 className="font-bold mb-2">سلبي</h3>
           <p>المشاعر والصور السلبية، حزن، إحباط، فشل، تعب، توتر</p>
         </div>
+      </div>
+      <div className="text-right text-sm bg-blue-50 p-4 rounded-lg">
+        <p className="font-semibold">ملاحظة مهمة: </p>
+        <p>خلال الاختبار، سيتم تبديل تصنيف المجموعات بين المفاتيح D و K.</p>
+        <p>في المرحلة الأولى، سيتم استخدام D لـ "اضطراب تواصل" و K لـ "تواصل طبيعي".</p>
+        <p>في مراحل لاحقة، قد يتغير التصنيف وتظهر لك تعليمات جديدة.</p>
       </div>
       <Button onClick={onContinue}>متابعة</Button>
     </Card>

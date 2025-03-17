@@ -10,7 +10,7 @@ export interface IATProps {
     gender: "male" | "female" | number;
     biasAwarenessResponses: SurveyResponses;
     hasTakenIATBefore?: boolean;
-    testModel?: "A" | "B"; // Add new field for test model
+    testModel?: "A" | "B";
   };
 }
 
@@ -20,7 +20,8 @@ export interface Trial {
   correctKey: "d" | "k";
   responseTime?: number;
   correct?: boolean;
-  block: number;
+  block: number; // The original block number
+  effectiveBlock?: number; // The effective block based on test model
   isImage?: boolean;
 }
 
@@ -55,57 +56,33 @@ export const BLOCKS = {
   ]
 };
 
-// Add a helper to determine the correct key based on test model and block
+// Determine the correct key based on test model and block
 export const getCorrectKeyForBlock = (block: number, category: string, testModel: "A" | "B" = "A"): "d" | "k" => {
-  // For Model B, we swap blocks 2,3,4 with 5,6,7
-  let adjustedBlock = block;
+  // NOTE: block here should be the effective block, NOT the original block number
   
-  if (testModel === "B") {
-    if (block >= 2 && block <= 4) {
-      adjustedBlock = block + 3; // 2->5, 3->6, 4->7
-    } else if (block >= 5 && block <= 7) {
-      adjustedBlock = block - 3; // 5->2, 6->3, 7->4
-    }
-  }
-  
-  switch (adjustedBlock) {
+  switch (block) {
     case 1:
       // Block 1: K = normal, D = disorder
-      if (category === "communication_disorder") {
-        return "d";
-      } else {
-        return "k";
-      }
+      return category === "communication_disorder" ? "d" : "k";
+      
     case 2:
       // Block 2: K = positive, D = negative
-      if (category === "negative") {
-        return "d";
-      } else {
-        return "k";
-      }
+      return category === "negative" ? "d" : "k";
+      
     case 3:
     case 4:
       // Blocks 3, 4: K = normal/positive, D = disorder/negative
-      if (category === "communication_disorder" || category === "negative") {
-        return "d";
-      } else {
-        return "k";
-      }
+      return (category === "communication_disorder" || category === "negative") ? "d" : "k";
+      
     case 5:
-      // Block 5: K = negative, D = positive
-      if (category === "positive") {
-        return "d";
-      } else {
-        return "k";
-      }
+      // Block 5: K = negative, D = positive (reversed)
+      return category === "positive" ? "d" : "k";
+      
     case 6:
     case 7:
-      // Blocks 6, 7: K = normal/negative, D = disorder/positive
-      if (category === "communication_disorder" || category === "positive") {
-        return "d";
-      } else {
-        return "k";
-      }
+      // Blocks 6, 7: K = normal/negative, D = disorder/positive (also reversed)
+      return (category === "communication_disorder" || category === "positive") ? "d" : "k";
+      
     default:
       return "k";
   }
