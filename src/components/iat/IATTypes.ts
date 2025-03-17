@@ -35,24 +35,26 @@ export const BLOCKS = {
   COMMUNICATION_DISORDER: ["أفيزيا", "أبراكسيا", "ديسارثريا (عسر النطق)", "تأخر لغوي", "اضطراب صوت", "تأتأة"],
   NORMAL_COMMUNICATION: ["وضوح الكلام", "انسيابية الكلام", "طلاقة التعبير", "تواصل فعال", "مُعبّر", "كلام مترابط", "الاستماع الفعال"],
   POSITIVE_ATTRIBUTES: [
-    "/lovable-uploads/9b147b57-aafb-4241-94ff-3a9c352503b0.png", // A+ student
-    "/lovable-uploads/1fae69a3-a257-4e39-9d7e-92e71d89316b.png", // Graduate
-    "/lovable-uploads/f12e4381-84c6-45f6-8cde-62d1721d3509.png", // Business person
-    "/lovable-uploads/c0bdba02-284f-47d1-a891-9edbf0a2af61.png", // Friends group
-    "/lovable-uploads/dfc82370-e222-4fd8-9fd4-702c4d7ec161.png", // Weight lifter
-    "/lovable-uploads/ac17eeed-e0ea-41bf-ad17-438e10326d15.png", // Superhero
-    "/lovable-uploads/55a0f431-595a-4b86-9aea-bd6807cdb268.png", // Thumbs up
-    "/lovable-uploads/e012de25-8c46-4112-86d7-da7f81976105.png"  // Trophy winner
+    "/lovable-uploads/4ee1dd40-8b8f-434f-8e90-709c1f2a4812.png", // Thumbs up
+    "/lovable-uploads/b6c9ca5e-a51f-4bd7-98e4-689a021c4de1.png", // Friends group
+    "/lovable-uploads/013b45f6-a99e-48fe-98fc-74537c635a43.png", // Trophy winner
+    "/lovable-uploads/4e511310-63b0-4dc6-97c6-08f559b7f288.png", // Superhero
+    "/lovable-uploads/17922e80-7727-4e77-ba76-efcb82e55f31.png", // Weight lifter
+    "/lovable-uploads/1777ddc4-3ab8-4cee-b00d-a535001407fb.png", // Business person
+    "/lovable-uploads/8b94a936-48f9-47fb-ab67-f328191b15be.png", // Graduate
+    "/lovable-uploads/d0f34a2b-987a-44aa-b114-924258deff18.png"  // A+ student
   ],
   NEGATIVE_ATTRIBUTES: [
-    "/lovable-uploads/30bf4690-6613-4357-8236-b485afbf6cf9.png",
-    "/lovable-uploads/3d4fef15-cf7d-40d1-8a29-7d4cfbde6b31.png",
-    "/lovable-uploads/ebd1f283-efcd-4a89-8d86-c7c08dbb8edc.png",
-    "/lovable-uploads/9ff773ad-fd12-4ff4-acd5-6817aeb3a60d.png",
-    "/lovable-uploads/93575d6b-370c-40dc-aae0-0709a7f52560.png",
-    "/lovable-uploads/a0fcd957-3f2e-4e39-877d-4b966025da02.png", 
-    "/lovable-uploads/2dcdf403-f786-42e2-a082-d5fec49e0c3b.png",
-    "/lovable-uploads/2d46afb5-2cde-4105-bf61-cd9fa437456c.png"
+    "/lovable-uploads/4d29ef76-64fb-4508-8d76-2b27461fd844.png", // crying person
+    "/lovable-uploads/a3279a90-96f3-4e35-aff6-00a3f84b6355.png", // thumbs down
+    "/lovable-uploads/7b1dc96e-d083-46e9-be18-1d7a21122d40.png", // sad person
+    "/lovable-uploads/7f658006-b81a-4da1-ba18-fd5c3d2e88dd.png", // pointing boss
+    "/lovable-uploads/b786a712-7b99-484d-8a15-f2f80241dd1c.png", // depressed walk
+    "/lovable-uploads/21cd29b5-16be-4f4a-aacd-227f025d8bc5.png", // laughing at someone 
+    "/lovable-uploads/1bb6964d-14fe-44eb-9523-14f5fc1b849d.png", // standing sad
+    "/lovable-uploads/6e039dce-2910-41e0-855d-344386d44f90.png", // sad businessman
+    "/lovable-uploads/7c56a99d-9adc-4e25-914f-d94fcfa7e36e.png", // self hugging
+    "/lovable-uploads/d116176d-050d-4bd5-9e87-0a9ae257c677.png"  // person with bad grades
   ]
 };
 

@@ -1,124 +1,161 @@
 
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { CategoryCard } from "./CategoryCard";
+import { Button } from "../ui/button";
+
+interface BlockInstructions {
+  title: string;
+  description: string | string[];
+  leftKey: string;
+  rightKey: string;
+  reminder?: string[];
+}
 
 interface IATInstructionsProps {
   block: number;
   onStart: () => void;
-  testModel: "A" | "B";
+  testModel?: "A" | "B";
 }
 
-export const IATInstructions: React.FC<IATInstructionsProps> = ({ block, onStart, testModel }) => {
-  const getInstructionText = () => {
-    // Map block number to effective block based on test model
-    const effectiveBlock = testModel === "A" ? block : getEffectiveBlockForModelB(block);
-    
-    switch (effectiveBlock) {
-      case 1:
-        return "في هذه المرحلة، ستقوم بتصنيف الكلمات المعروضة إلى فئتين: تواصل طبيعي أو اضطراب تواصل. اضغط على مفتاح (D) للكلمات المتعلقة باضطراب التواصل، واضغط على مفتاح (K) للكلمات المتعلقة بالتواصل الطبيعي.";
-      case 2:
-        return "في هذه المرحلة، ستقوم بتصنيف الصور المعروضة إلى فئتين: إيجابي أو سلبي. اضغط على مفتاح (D) للصور السلبية، واضغط على مفتاح (K) للصور الإيجابية.";
-      case 3:
-      case 4:
-        return "في هذه المرحلة، ستقوم بتصنيف الكلمات والصور. اضغط على مفتاح (D) للكلمات المتعلقة باضطراب التواصل أو الصور السلبية، واضغط على مفتاح (K) للكلمات المتعلقة بالتواصل الطبيعي أو الصور الإيجابية.";
-      case 5:
-        return "انتبه! تم عكس المفاتيح للصور. في هذه المرحلة، اضغط على مفتاح (D) للصور الإيجابية، واضغط على مفتاح (K) للصور السلبية.";
-      case 6:
-      case 7:
-        return "انتبه! في هذه المرحلة، اضغط على مفتاح (D) للكلمات المتعلقة باضطراب التواصل أو الصور الإيجابية، واضغط على مفتاح (K) للكلمات المتعلقة بالتواصل الطبيعي أو الصور السلبية.";
-      default:
-        return "اضغط ابدأ للمتابعة.";
-    }
-  };
+export const IATInstructions: React.FC<IATInstructionsProps> = ({ 
+  block, 
+  onStart,
+  testModel = "A"
+}) => {
+  // Get the effective block number based on test model (for content display)
+  const effectiveBlock = testModel === "B" && block >= 2 && block <= 7 
+    ? block <= 4 ? block + 3 : block - 3 
+    : block;
+  
+  // For display purposes, we always show the sequential block number (1-7)
+  // regardless of the test model or effective block
+  const displayBlockNumber = block;
+  
+  console.log(`Block ${block}, effective block ${effectiveBlock} for model ${testModel}, displaying as block ${displayBlockNumber}`);
 
-  // Maps original block to effective block for test model B
-  const getEffectiveBlockForModelB = (originalBlock: number): number => {
-    switch (originalBlock) {
-      case 1: return 1;
-      case 2: return 2;
-      case 3: return 6;
-      case 4: return 7;
-      case 5: return 5;
-      case 6: return 3;
-      case 7: return 4;
-      default: return originalBlock;
-    }
-  };
+  const getInstructionsForBlock = (blockNum: number): BlockInstructions => {
+    const reminders = [
+      "✔ حاول الإجابة بسرعة ودون تردد.",
+      "✔ إذا أخطأت سيظهر رمز X أحمر. ويجب تصحيح الإجابة للمتابعة.",
+      "✔ ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة."
+    ];
 
-  const getInstructionCategories = () => {
-    // Map block number to effective block based on test model
-    const effectiveBlock = testModel === "A" ? block : getEffectiveBlockForModelB(block);
-    
-    switch (effectiveBlock) {
+    // We'll get the content based on the effective block
+    // but the title will be modified later to show the sequential number
+    switch (blockNum) {
       case 1:
         return {
-          left: { label: "تواصل طبيعي", showPositive: false, showNegative: false },
-          right: { label: "اضطراب تواصل", showPositive: false, showNegative: false },
+          title: `١ من اصل ٧`,
+          description: "ستظهر لك على الشاشة مجموعة من الكلمات، ومهمتك هي تصنيفها إلى تواصل طبيعي أو اضطراب تواصل بأسرع ما يمكن.",
+          leftKey: "تواصل طبيعي",
+          rightKey: "اضطراب تواصل",
+          reminder: reminders
         };
       case 2:
         return {
-          left: { label: "إيجابي", showPositive: true, showNegative: false },
-          right: { label: "سلبي", showPositive: false, showNegative: true },
+          title: `٢ من اصل ٧`,
+          description: "ستظهر لك على الشاشة مجموعة من الصور، ومهمتك هي تصنيفها بأسرع ما يمكن.",
+          leftKey: "إيجابي",
+          rightKey: "سلبي",
+          reminder: reminders
         };
       case 3:
+        return {
+          title: `٣ من اصل ٧`,
+          description: "ستظهر لك على الشاشة مجموعة من الكلمات والصور، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
+          leftKey: "تواصل طبيعي أو إيجابي",
+          rightKey: "اضطراب تواصل أو سلبي",
+          reminder: reminders
+        };
       case 4:
         return {
-          left: { label: "تواصل طبيعي\nأو\nإيجابي", showPositive: true, showNegative: false },
-          right: { label: "اضطراب تواصل\nأو\nسلبي", showPositive: false, showNegative: true },
+          title: `٤ من اصل ٧`,
+          description: "هذا مماثل للجزء السابق\nستظهر لك على الشاشة مجموعة من الكلمات والصور، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
+          leftKey: "تواصل طبيعي أو إيجابي",
+          rightKey: "اضطراب تواصل أو سلبي",
+          reminder: reminders
         };
       case 5:
         return {
-          left: { label: "سلبي", showPositive: false, showNegative: true },
-          right: { label: "إيجابي", showPositive: true, showNegative: false },
+          title: `٥ من اصل ٧`,
+          description: "انتبه، لقد تغيرت أماكن التسميات!",
+          leftKey: "سلبي",
+          rightKey: "إيجابي",
+          reminder: reminders
         };
       case 6:
+        return {
+          title: `٦ من اصل ٧`,
+          description: "ستظهر لك على الشاشة مجموعة من الكلمات والصور، ومهمتك هي تصنيفها وفقًا للفئات التالية بأسرع ما يمكن.",
+          leftKey: "تواصل طبيعي أو سلبي",
+          rightKey: "اضطراب تواصل أو إيجابي",
+          reminder: reminders
+        };
       case 7:
         return {
-          left: { label: "تواصل طبيعي\nأو\nسلبي", showPositive: false, showNegative: true },
-          right: { label: "اضطراب تواصل\nأو\nإيجابي", showPositive: true, showNegative: false },
+          title: `٧ من اصل ٧`,
+          description: "هذا مماثل للجزء السابق",
+          leftKey: "تواصل طبيعي أو سلبي",
+          rightKey: "اضطراب تواصل أو إيجابي",
+          reminder: reminders
         };
       default:
         return {
-          left: { label: "", showPositive: false, showNegative: false },
-          right: { label: "", showPositive: false, showNegative: false },
+          title: "",
+          description: "",
+          leftKey: "",
+          rightKey: ""
         };
     }
   };
 
-  const categories = getInstructionCategories();
+  // Get instructions based on the effective block (which content to show)
+  const instructions = getInstructionsForBlock(effectiveBlock);
+  
+  // Create Arabic numerals for the block number (1-7)
+  const arabicNumerals = ["١", "٢", "٣", "٤", "٥", "٦", "٧"];
+  
+  // Replace the number in the title with the sequential block number (display block)
+  // This ensures we always show 1-7 in order regardless of the test model
+  const displayTitle = `${arabicNumerals[displayBlockNumber-1]} من اصل ٧`;
 
   return (
-    <div className="max-w-3xl mx-auto border-2 border-blue-200 rounded-lg p-4 md:p-8 bg-white">
-      <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">تعليمات المرحلة {block}</h2>
+    <div className="p-4 md:p-6 text-center space-y-4 max-w-3xl mx-auto animate-slideUpFade">
+      <h2 className="text-xl md:text-2xl font-bold">{displayTitle}</h2>
       
-      <p className="text-lg md:text-xl mb-8 text-center">{getInstructionText()}</p>
+      {instructions.description && (
+        <div className="bg-amber-50 border border-amber-200 p-3 md:p-4 rounded-lg">
+          <p className="text-amber-800 whitespace-pre-line">{instructions.description}</p>
+        </div>
+      )}
       
-      <div className="grid grid-cols-2 gap-4 md:gap-8 mb-8 md:mb-12">
-        <CategoryCard 
-          keyLetter="K" 
-          categoryLabel={categories.left.label} 
-          keyLabel="اضغط K" 
-          showPositiveImages={categories.left.showPositive}
-          showNegativeImages={categories.left.showNegative}
-        />
-        <CategoryCard 
-          keyLetter="D" 
-          categoryLabel={categories.right.label} 
-          keyLabel="اضغط D" 
-          showPositiveImages={categories.right.showPositive}
-          showNegativeImages={categories.right.showNegative}
-        />
+      <div className="bg-gray-50 p-4 md:p-6 rounded-lg mb-4 md:mb-6">
+        <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4">التصنيفات:</h3>
+        <div className="grid grid-cols-2 gap-4 md:gap-6">
+          <div className="text-center">
+            <div className="text-xl md:text-2xl font-bold mb-2">K</div>
+            <div className="text-green-600 whitespace-pre-line">{instructions.leftKey}</div>
+            <p className="mt-2">اضغط "K"</p>
+          </div>
+          <div className="text-center">
+            <div className="text-xl md:text-2xl font-bold mb-2">D</div>
+            <div className="text-green-600 whitespace-pre-line">{instructions.rightKey}</div>
+            <p className="mt-2">اضغط "D"</p>
+          </div>
+        </div>
       </div>
-      
-      <div className="text-center">
-        <Button 
-          className="px-8 py-2 text-lg bg-green-600 hover:bg-green-700 text-white rounded-lg" 
-          onClick={onStart}
-        >
-          ابدأ
-        </Button>
-      </div>
+
+      {instructions.reminder && (
+        <div className="bg-blue-50 p-3 md:p-4 rounded-lg border border-blue-200">
+          <h3 className="font-bold mb-2">تذكر:</h3>
+          <div className="text-right space-y-1 md:space-y-2">
+            {instructions.reminder.map((item, index) => (
+              <p key={index} className="text-blue-700">{item}</p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <Button onClick={onStart} size="lg">بدء المرحلة</Button>
     </div>
   );
 };
