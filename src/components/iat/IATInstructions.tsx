@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "../ui/button";
 
@@ -21,10 +20,14 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
   onStart,
   testModel = "A"
 }) => {
-  // Get the effective block number based on test model
+  // Get the effective block number based on test model (for content display)
   const effectiveBlock = testModel === "B" && block >= 2 && block <= 7 
     ? block <= 4 ? block + 3 : block - 3 
     : block;
+  
+  // For display purposes, we want to show the original block number
+  // But for Model B, we need to keep the actual sequential numbering from 1 to 7
+  const displayBlockNumber = block;
   
   console.log(`Block ${block}, effective block ${effectiveBlock} for model ${testModel}`);
 
@@ -102,12 +105,15 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
     }
   };
 
-  // Use effective block number to get instructions
+  // Use effective block number to get instructions but display block number for the title
   const instructions = getInstructionsForBlock(effectiveBlock);
+  
+  // Modify the title to show the sequential block number (1-7) regardless of test model
+  const displayTitle = instructions.title.replace(/\d+/, displayBlockNumber.toString());
 
   return (
     <div className="p-4 md:p-6 text-center space-y-4 max-w-3xl mx-auto animate-slideUpFade">
-      <h2 className="text-xl md:text-2xl font-bold">{instructions.title}</h2>
+      <h2 className="text-xl md:text-2xl font-bold">{displayTitle}</h2>
       
       {instructions.description && (
         <div className="bg-amber-50 border border-amber-200 p-3 md:p-4 rounded-lg">
