@@ -50,27 +50,27 @@ export const ResultDetails: React.FC<ResultDetailsProps> = ({ results }) => {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-md border overflow-x-auto">
-        <Table className="min-w-full">
-          <TableHeader className="bg-muted/50">
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableHead className="w-[80px] whitespace-nowrap">ID</TableHead>
-              <TableHead className="whitespace-nowrap">D-Score</TableHead>
-              <TableHead className="whitespace-nowrap">الفئة العمرية</TableHead>
-              <TableHead className="whitespace-nowrap">سنوات الخبرة</TableHead>
-              <TableHead className="whitespace-nowrap">المؤهل التعليمي</TableHead>
-              <TableHead className="whitespace-nowrap">الجنس</TableHead>
-              <TableHead className="whitespace-nowrap">نموذج الاختبار</TableHead>
-              <TableHead className="whitespace-nowrap">التاريخ</TableHead>
+              <TableHead className="text-right">ID</TableHead>
+              <TableHead className="text-right">D-Score</TableHead>
+              <TableHead className="text-right">الفئة العمرية</TableHead>
+              <TableHead className="text-right">سنوات الخبرة</TableHead>
+              <TableHead className="text-right">المؤهل التعليمي</TableHead>
+              <TableHead className="text-right">الجنس</TableHead>
+              <TableHead className="text-right">نموذج الاختبار</TableHead>
+              <TableHead className="text-right">التاريخ</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {paginatedResults.map((result) => (
               <TableRow key={result.id}>
-                <TableCell className="font-mono text-xs whitespace-nowrap">
+                <TableCell className="font-mono text-xs text-right">
                   {result.id.substring(0, 8)}...
                 </TableCell>
-                <TableCell className="whitespace-nowrap">
+                <TableCell className="text-right">
                   <span 
                     className={`px-2 py-1 rounded text-xs font-medium ${
                       result.d_score > 0.65 ? "bg-red-100 text-red-800" :
@@ -83,20 +83,20 @@ export const ResultDetails: React.FC<ResultDetailsProps> = ({ results }) => {
                     {result.d_score.toFixed(3)} ({getBiasCategory(result.d_score)})
                   </span>
                 </TableCell>
-                <TableCell className="whitespace-nowrap">{getAgeRange(result.age)}</TableCell>
-                <TableCell className="whitespace-nowrap">{getExperienceRange(result.years_experience)}</TableCell>
-                <TableCell className="whitespace-nowrap">
+                <TableCell className="text-right">{getAgeRange(result.age)}</TableCell>
+                <TableCell className="text-right">{getExperienceRange(result.years_experience)}</TableCell>
+                <TableCell className="text-right">
                   {degreeMapping[result.degree] || result.degree}
                 </TableCell>
-                <TableCell className="whitespace-nowrap">
+                <TableCell className="text-right">
                   {result.gender === 1 ? "ذكر" : 
                    result.gender === 2 ? "أنثى" : 
                    "غير محدد"}
                 </TableCell>
-                <TableCell className="whitespace-nowrap">
+                <TableCell className="text-right">
                   {result.test_model || "غير محدد"}
                 </TableCell>
-                <TableCell className="text-gray-500 whitespace-nowrap">
+                <TableCell className="text-right text-gray-500">
                   {format(new Date(result.created_at), "yyyy-MM-dd")}
                 </TableCell>
               </TableRow>
@@ -106,7 +106,7 @@ export const ResultDetails: React.FC<ResultDetailsProps> = ({ results }) => {
       </div>
 
       {totalPages > 1 && (
-        <div className="flex flex-wrap justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-2 mt-4">
           <Button
             variant="outline"
             size="sm"
