@@ -26,10 +26,29 @@ export const AgeDistributionChart: React.FC<AgeDistributionProps> = ({ data }) =
     return acc;
   }, {} as Record<string, { color: string; label: string }>);
 
+  // Create a legend component
+  const renderLegend = () => {
+    return (
+      <div className="flex flex-wrap justify-center mt-4 gap-3">
+        {data.map((entry, index) => (
+          <div key={`legend-${index}`} className="flex items-center">
+            <div 
+              style={{ backgroundColor: entry.color }} 
+              className="w-3 h-3 rounded-full mr-1"
+            />
+            <span className="text-xs">
+              {entry.name}: {((entry.value / total) * 100).toFixed(1)}%
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <Card className="h-72 p-4">
       <h3 className="text-md font-semibold mb-2">توزيع الفئات العمرية</h3>
-      <ChartContainer className="h-56 w-full" config={config}>
+      <ChartContainer className="h-44 w-full" config={config}>
         <PieChart margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
           <Pie
             data={data}
@@ -40,10 +59,7 @@ export const AgeDistributionChart: React.FC<AgeDistributionProps> = ({ data }) =
             fill="#8884d8"
             dataKey="value"
             nameKey="name"
-            label={({ name, percent }) => {
-              const value = `${(percent * 100).toFixed(0)}%`;
-              return `${name}: ${value}`;
-            }}
+            label={false}
           >
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
@@ -58,6 +74,7 @@ export const AgeDistributionChart: React.FC<AgeDistributionProps> = ({ data }) =
           />
         </PieChart>
       </ChartContainer>
+      {renderLegend()}
     </Card>
   );
 };
