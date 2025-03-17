@@ -12,6 +12,22 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
   // Determine if this is model A or B
   console.log(`Showing instructions for test model: ${testModel}`);
 
+  // Images for positive attributes
+  const positiveImages = [
+    "/lovable-uploads/4ee1dd40-8b8f-434f-8e90-709c1f2a4812.png", // Thumbs up
+    "/lovable-uploads/b6c9ca5e-a51f-4bd7-98e4-689a021c4de1.png", // Friends group
+    "/lovable-uploads/013b45f6-a99e-48fe-98fc-74537c635a43.png", // Trophy winner
+    "/lovable-uploads/4e511310-63b0-4dc6-97c6-08f559b7f288.png", // Superhero
+  ];
+
+  // Images for negative attributes
+  const negativeImages = [
+    "/lovable-uploads/4d29ef76-64fb-4508-8d76-2b27461fd844.png", // crying person
+    "/lovable-uploads/a3279a90-96f3-4e35-aff6-00a3f84b6355.png", // thumbs down
+    "/lovable-uploads/7b1dc96e-d083-46e9-be18-1d7a21122d40.png", // sad person
+    "/lovable-uploads/7f658006-b81a-4da1-ba18-fd5c3d2e88dd.png", // pointing boss
+  ];
+
   return (
     <Card className="p-8 text-center space-y-6 animate-slideIn">
       <h2 className="text-2xl font-bold">تعليمات الاختبار</h2>
@@ -27,13 +43,29 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
           <h3 className="font-bold mb-2">اضطراب تواصل</h3>
           <p>أفيزيا، أبراكسيا، ديسارثريا (عسر النطق)، تأخر لغوي، اضطراب صوت، تأتأة</p>
         </div>
+        
         <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-bold mb-2">إيجابي</h3>
-          <p>المشاعر والصور الإيجابية، نجاح، سعادة، تفوق، إنجاز، صداقة</p>
+          <h3 className="font-bold mb-3">إيجابي</h3>
+          <div className="flex justify-center items-center gap-2 mb-3">
+            {positiveImages.map((src, index) => (
+              <div key={`pos-${index}`} className="flex flex-col items-center">
+                <img src={src} alt="إيجابي" className="w-12 h-12 object-contain" />
+              </div>
+            ))}
+          </div>
+          <p className="text-sm">المشاعر والصور الإيجابية، نجاح، سعادة، تفوق، إنجاز، صداقة</p>
         </div>
+        
         <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-bold mb-2">سلبي</h3>
-          <p>المشاعر والصور السلبية، حزن، إحباط، فشل، تعب، توتر</p>
+          <h3 className="font-bold mb-3">سلبي</h3>
+          <div className="flex justify-center items-center gap-2 mb-3">
+            {negativeImages.map((src, index) => (
+              <div key={`neg-${index}`} className="flex flex-col items-center">
+                <img src={src} alt="سلبي" className="w-12 h-12 object-contain" />
+              </div>
+            ))}
+          </div>
+          <p className="text-sm">المشاعر والصور السلبية، حزن، إحباط، فشل، تعب، توتر</p>
         </div>
       </div>
       <div className="text-right text-sm bg-blue-50 p-4 rounded-lg">
@@ -51,3 +83,4 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
     </Card>
   );
 };
+
