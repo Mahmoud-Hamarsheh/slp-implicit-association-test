@@ -1,3 +1,4 @@
+
 import { SurveyResponses } from "../BiasAwarenessSurvey";
 
 export interface IATProps {
@@ -34,24 +35,24 @@ export const BLOCKS = {
   COMMUNICATION_DISORDER: ["أفيزيا", "أبراكسيا", "ديسارثريا (عسر النطق)", "تأخر لغوي", "اضطراب صوت", "تأتأة"],
   NORMAL_COMMUNICATION: ["وضوح الكلام", "انسيابية الكلام", "طلاقة التعبير", "تواصل فعال", "مُعبّر", "كلام مترابط", "الاستماع الفعال"],
   POSITIVE_ATTRIBUTES: [
-    "/lovable-uploads/945065f2-66e4-47c9-83cf-d30d843f2880.png", // Trophy winner
-    "/lovable-uploads/832847ee-de90-45c6-9cf1-e6d83d774cff.png", // Superhero
-    "/lovable-uploads/d44a6ddc-8a05-44d0-97ac-2d59134c11b3.png", // Weight lifter
-    "/lovable-uploads/b5753873-d6c1-4491-8965-4f8a34bce71c.png", // Business person at podium
-    "/lovable-uploads/19ccbedc-8914-489f-8189-677f2f3d5287.png", // Graduate
-    "/lovable-uploads/58c8ba40-c526-4de9-915a-234eca14af40.png", // A+ student
-    "/lovable-uploads/4b8acb79-67cc-45a6-91ec-1c64c0df9646.png", // Thumbs up
-    "/lovable-uploads/2f6d9505-8ede-45ec-8b81-a31baef68a7c.png", // Friends group
+    "/lovable-uploads/93db19c2-e0dd-4eec-9507-f221369b92fd.png", // أصدقاء
+    "/lovable-uploads/7a2f734e-6115-40d0-8760-146aed3c8705.png", // فائز
+    "/lovable-uploads/4e6f71c4-8642-4827-b966-276882db5ca7.png", // بطل خارق
+    "/lovable-uploads/6577b267-eeb2-42c1-807c-37c297534211.png", // رافع أثقال
+    "/lovable-uploads/128c5b59-d835-4d35-8db4-91c49e5691a3.png", // خطيب
+    "/lovable-uploads/aad98393-d035-4993-9df4-70d20ca8d869.png", // خريج
+    "/lovable-uploads/5642c084-8273-4481-99c0-4b8061323a7d.png", // طالب ممتاز
+    "/lovable-uploads/dfb07bb4-398a-4ad2-806b-2eb95159e5a0.png", // إعجاب
   ],
   NEGATIVE_ATTRIBUTES: [
-    "/lovable-uploads/51401776-854b-4100-9139-2aa61e28e3de.png", // Sad person
-    "/lovable-uploads/beb504c8-8742-46aa-93d0-d0a04e515ee2.png", // Crying person
-    "/lovable-uploads/e7aa332a-efe4-47ad-b3fa-203e82a1dd89.png", // Thumbs down
-    "/lovable-uploads/13d3a1dc-cb31-4b1a-b77c-d7f18f424645.png", // Person with boss pointing
-    "/lovable-uploads/fba03378-ed42-41b7-a427-0018e2317e3e.png", // People laughing at someone
-    "/lovable-uploads/9ab2f5fc-7ac7-43fc-ad04-f6d53c1f97bb.png", // Depressed person
-    "/lovable-uploads/2d0c9586-a654-465a-99c7-04a321842952.png", // Sad businessman
-    "/lovable-uploads/59ee5ed7-42af-4a95-8e04-28f248deafa3.png", // Self hugging person
+    "/lovable-uploads/e7596747-4942-41b8-86df-ded740cb89ee.png", // توبيخ
+    "/lovable-uploads/950c3cfe-d7a2-4f4e-8575-ab8c2640814e.png", // سخرية
+    "/lovable-uploads/8a23e268-03e8-446d-abd7-0a1035a44a01.png", // عدم إعجاب
+    "/lovable-uploads/2786740d-6a92-4082-bb07-40b2b80e8dc1.png", // حزين
+    "/lovable-uploads/d6ffd2ec-e26c-47f6-90b1-65d7b42ea6e3.png", // حزن
+    "/lovable-uploads/9997e9f9-63be-46d4-867a-6ad6d32ca19f.png", // عزلة
+    "/lovable-uploads/e286e917-cb3a-4273-a2fc-8cee3bccd009.png", // يبكي 
+    "/lovable-uploads/1e9f90e6-74bc-4791-a954-4ce9b884a26f.png", // إحباط
   ]
 };
 
