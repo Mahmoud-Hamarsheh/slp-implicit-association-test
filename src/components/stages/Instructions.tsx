@@ -54,23 +54,23 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
           <p>أفيزيا، أبراكسيا، ديسارثريا (عسر النطق)، تأخر لغوي، اضطراب صوت، تأتأة</p>
         </div>
         
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-bold mb-3">إيجابي</h3>
-          <div className="flex flex-wrap justify-center items-center gap-2 mb-3">
+        <div className="bg-gray-50 p-5 rounded-lg shadow-sm">
+          <h3 className="font-bold mb-4 text-lg">إيجابي</h3>
+          <div className="grid grid-cols-4 gap-3">
             {positiveImages.map((src, index) => (
-              <div key={`pos-${index}`} className="flex flex-col items-center">
-                <img src={src} alt="إيجابي" className="w-10 h-10 object-contain" />
+              <div key={`pos-${index}`} className="flex flex-col items-center justify-center p-1 bg-white rounded-md shadow-sm hover:shadow-md transition-shadow">
+                <img src={src} alt="إيجابي" className="w-14 h-14 object-contain" />
               </div>
             ))}
           </div>
         </div>
         
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="font-bold mb-3">سلبي</h3>
-          <div className="flex flex-wrap justify-center items-center gap-2 mb-3">
+        <div className="bg-gray-50 p-5 rounded-lg shadow-sm">
+          <h3 className="font-bold mb-4 text-lg">سلبي</h3>
+          <div className="grid grid-cols-4 gap-3">
             {negativeImages.map((src, index) => (
-              <div key={`neg-${index}`} className="flex flex-col items-center">
-                <img src={src} alt="سلبي" className="w-10 h-10 object-contain" />
+              <div key={`neg-${index}`} className="flex flex-col items-center justify-center p-1 bg-white rounded-md shadow-sm hover:shadow-md transition-shadow">
+                <img src={src} alt="سلبي" className="w-14 h-14 object-contain" />
               </div>
             ))}
           </div>

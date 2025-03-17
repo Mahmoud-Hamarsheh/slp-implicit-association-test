@@ -39,12 +39,14 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
     "/lovable-uploads/4ee1dd40-8b8f-434f-8e90-709c1f2a4812.png", // Thumbs up
     "/lovable-uploads/013b45f6-a99e-48fe-98fc-74537c635a43.png", // Trophy winner
     "/lovable-uploads/4e511310-63b0-4dc6-97c6-08f559b7f288.png", // Superhero
+    "/lovable-uploads/17922e80-7727-4e77-ba76-efcb82e55f31.png", // Weight lifter
   ];
 
   const negativeImages = [
     "/lovable-uploads/4d29ef76-64fb-4508-8d76-2b27461fd844.png", // crying person
     "/lovable-uploads/a3279a90-96f3-4e35-aff6-00a3f84b6355.png", // thumbs down
     "/lovable-uploads/7b1dc96e-d083-46e9-be18-1d7a21122d40.png", // sad person
+    "/lovable-uploads/b786a712-7b99-484d-8a15-f2f80241dd1c.png", // depressed walk
   ];
 
   const getInstructionsForBlock = (blockNum: number): BlockInstructions => {
@@ -155,54 +157,63 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
         </div>
       )}
       
-      <div className="bg-gray-50 p-4 md:p-6 rounded-lg mb-4 md:mb-6">
-        <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4">التصنيفات:</h3>
-        <div className="grid grid-cols-2 gap-4 md:gap-6">
-          <div className="text-center">
-            <div className="text-xl md:text-2xl font-bold mb-2">K</div>
-            <div className="text-green-600 whitespace-pre-line">{instructions.leftKey}</div>
+      <div className="bg-gray-50 p-4 md:p-6 rounded-lg mb-4 md:mb-6 shadow-sm">
+        <h3 className="text-lg md:text-xl font-bold mb-4">التصنيفات:</h3>
+        <div className="grid grid-cols-2 gap-6">
+          <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+            <div className="text-xl md:text-2xl font-bold mb-3 bg-green-50 p-2 rounded-md">K</div>
+            <div className="text-green-600 whitespace-pre-line font-medium mb-3">{instructions.leftKey}</div>
             
             {/* Show positive/negative images based on the block */}
             {instructions.showPositiveImages && instructions.leftKey.includes("إيجابي") && (
-              <div className="flex justify-center mt-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 mb-3">
                 {positiveImages.map((src, index) => (
-                  <img key={`left-pos-${index}`} src={src} alt="إيجابي" className="w-8 h-8 object-contain" />
+                  <div key={`left-pos-${index}`} className="bg-gray-50 p-2 rounded-md">
+                    <img src={src} alt="إيجابي" className="w-12 h-12 object-contain mx-auto" />
+                  </div>
                 ))}
               </div>
             )}
             
             {instructions.showNegativeImages && instructions.leftKey.includes("سلبي") && (
-              <div className="flex justify-center mt-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 mb-3">
                 {negativeImages.map((src, index) => (
-                  <img key={`left-neg-${index}`} src={src} alt="سلبي" className="w-8 h-8 object-contain" />
+                  <div key={`left-neg-${index}`} className="bg-gray-50 p-2 rounded-md">
+                    <img src={src} alt="سلبي" className="w-12 h-12 object-contain mx-auto" />
+                  </div>
                 ))}
               </div>
             )}
             
-            <p className="mt-2">اضغط "K"</p>
+            <p className="mt-2 bg-blue-50 py-1 px-2 rounded-full text-blue-600 font-medium inline-block">اضغط "K"</p>
           </div>
-          <div className="text-center">
-            <div className="text-xl md:text-2xl font-bold mb-2">D</div>
-            <div className="text-green-600 whitespace-pre-line">{instructions.rightKey}</div>
+          
+          <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+            <div className="text-xl md:text-2xl font-bold mb-3 bg-green-50 p-2 rounded-md">D</div>
+            <div className="text-green-600 whitespace-pre-line font-medium mb-3">{instructions.rightKey}</div>
             
             {/* Show positive/negative images based on the block */}
             {instructions.showPositiveImages && instructions.rightKey.includes("إيجابي") && (
-              <div className="flex justify-center mt-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 mb-3">
                 {positiveImages.map((src, index) => (
-                  <img key={`right-pos-${index}`} src={src} alt="إيجابي" className="w-8 h-8 object-contain" />
+                  <div key={`right-pos-${index}`} className="bg-gray-50 p-2 rounded-md">
+                    <img src={src} alt="إيجابي" className="w-12 h-12 object-contain mx-auto" />
+                  </div>
                 ))}
               </div>
             )}
             
             {instructions.showNegativeImages && instructions.rightKey.includes("سلبي") && (
-              <div className="flex justify-center mt-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 mb-3">
                 {negativeImages.map((src, index) => (
-                  <img key={`right-neg-${index}`} src={src} alt="سلبي" className="w-8 h-8 object-contain" />
+                  <div key={`right-neg-${index}`} className="bg-gray-50 p-2 rounded-md">
+                    <img src={src} alt="سلبي" className="w-12 h-12 object-contain mx-auto" />
+                  </div>
                 ))}
               </div>
             )}
             
-            <p className="mt-2">اضغط "D"</p>
+            <p className="mt-2 bg-blue-50 py-1 px-2 rounded-full text-blue-600 font-medium inline-block">اضغط "D"</p>
           </div>
         </div>
       </div>
@@ -222,4 +233,3 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
     </div>
   );
 };
-
