@@ -5,12 +5,16 @@ interface CategoryCardProps {
   keyLabel: string;
   categoryLabel: string;
   keyLetter: "K" | "D";
+  showPositiveImages?: boolean;
+  showNegativeImages?: boolean;
 }
 
 export const CategoryCard: React.FC<CategoryCardProps> = ({
   keyLabel,
   categoryLabel,
   keyLetter,
+  showPositiveImages,
+  showNegativeImages,
 }) => {
   return (
     <div className="text-center p-4 bg-white rounded-lg shadow-sm">
