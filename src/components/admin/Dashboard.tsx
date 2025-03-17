@@ -142,6 +142,7 @@ const Dashboard = () => {
             surveyData={surveyData}
             ageData={ageData}
             experienceData={experienceData}
+            testModelData={testModelData}
           />
         </>
       )}
