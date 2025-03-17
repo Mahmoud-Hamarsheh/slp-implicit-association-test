@@ -46,16 +46,16 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
             keyLetter="K"
             categoryLabel={instructions.leftKey}
             keyLabel="K"
-            showPositiveImages={instructions.showPositiveImages}
-            showNegativeImages={instructions.showNegativeImages}
+            showPositiveImages={instructions.showPositiveAttributes}
+            showNegativeImages={instructions.showNegativeAttributes}
           />
           
           <CategoryCard 
             keyLetter="D"
             categoryLabel={instructions.rightKey}
             keyLabel="D"
-            showPositiveImages={instructions.showPositiveImages}
-            showNegativeImages={instructions.showNegativeImages}
+            showPositiveImages={instructions.showPositiveAttributes}
+            showNegativeImages={instructions.showNegativeAttributes}
           />
         </div>
       </div>
