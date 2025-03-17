@@ -1,44 +1,31 @@
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { TabNavigation } from "./TabNavigation";
 import { DashboardStats } from "./DashboardStats";
 import { DashboardCharts } from "./DashboardCharts";
 import { ResultDetails } from "./ResultDetails";
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/lib/supabase";
 import { 
-  degreeMapping, 
   prepareStats, 
   prepareDegreeData, 
   prepareBiasData, 
-  prepareDScoreData,
+  prepareDScoreData, 
   prepareGenderData,
   prepareSurveyData,
   prepareAgeData,
   prepareExperienceData,
-  prepareTestModelData,
-  exportToCsv
+  exportToCsv,
+  prepareTestModelData
 } from "./dashboardUtils";
-import { RefreshCw, Download } from "lucide-react";
+import { Button } from "../ui/button";
+import { Download } from "lucide-react";
 
-interface IATResult {
-  id: string;
-  created_at: string;
-  d_score: number;
-  age: number;
-  years_experience: number;
-  degree: string;
-  gender?: number | null;
-  survey_responses: any;
-  survey_score?: number;
-  test_model?: "A" | "B";
-}
-
-export const Dashboard = () => {
-  const [results, setResults] = useState<IATResult[]>([]);
-  const [loading, setLoading] = useState(true);
+const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [results, setResults] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -54,55 +41,50 @@ export const Dashboard = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      
-      // Parse the JSON survey_responses field
-      const parsedData = data?.map(item => ({
-        ...item,
-        survey_responses: typeof item.survey_responses === 'string' 
-          ? JSON.parse(item.survey_responses)
-          : item.survey_responses
-      })) as IATResult[];
-      
-      setResults(parsedData || []);
-    } catch (error: any) {
+
+      // Sort results by creation date (newest first)
+      const sortedResults = data || [];
+      sortedResults.sort((a, b) => {
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      });
+
+      setResults(sortedResults);
+    } catch (error) {
+      console.error('Error fetching results:', error);
       toast({
-        title: "خطأ في جلب النتائج",
-        description: error.message,
-        variant: "destructive",
+        title: "خطأ في جلب البيانات",
+        description: "حدث خطأ أثناء محاولة جلب النتائج من قاعدة البيانات.",
+        variant: "destructive"
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRefresh = () => {
-    fetchResults();
-    toast({
-      title: "تم تحديث البيانات",
-      description: "تم تحديث البيانات بنجاح",
-    });
-  };
-
-  const handleExportData = () => {
+  const handleExport = () => {
+    setExporting(true);
     exportToCsv(
       results,
       () => {
         toast({
-          title: "تم تصدير البيانات",
-          description: "تم تصدير البيانات بنجاح",
+          title: "تم التصدير بنجاح",
+          description: "تم تصدير بيانات النتائج بنجاح إلى ملف CSV.",
         });
+        setExporting(false);
       },
       (error) => {
+        console.error("Error exporting data:", error);
         toast({
-          title: "خطأ في تصدير البيانات",
-          description: "حدث خطأ أثناء تصدير البيانات",
-          variant: "destructive",
+          title: "خطأ في التصدير",
+          description: "حدث خطأ أثناء محاولة تصدير البيانات.",
+          variant: "destructive"
         });
+        setExporting(false);
       }
     );
   };
 
-  // Prepare data for dashboard
+  // Prepare data for visualization
   const stats = prepareStats(results);
   const degreeData = prepareDegreeData(results);
   const biasData = prepareBiasData(results);
@@ -112,11 +94,6 @@ export const Dashboard = () => {
   const ageData = prepareAgeData(results);
   const experienceData = prepareExperienceData(results);
   const testModelData = prepareTestModelData(results);
-
-  const tabs = [
-    { id: "dashboard", label: "لوحة التحكم" },
-    { id: "details", label: "النتائج التفصيلية" }
-  ];
 
   if (loading) {
     return (
@@ -128,36 +105,36 @@ export const Dashboard = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center mb-6">
-        <TabNavigation 
-          tabs={tabs} 
-          activeTab={activeTab} 
-          onTabChange={setActiveTab} 
-        />
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            onClick={handleExportData}
-            className="flex items-center gap-2"
-          >
-            <Download size={16} />
-            تصدير البيانات
-          </Button>
-          <Button 
-            variant="outline" 
-            onClick={handleRefresh}
-            className="flex items-center gap-2"
-          >
-            <RefreshCw size={16} />
-            تحديث
-          </Button>
-        </div>
+      <div className="flex justify-end">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleExport}
+          disabled={exporting || results.length === 0}
+          className="flex items-center gap-2"
+        >
+          <Download size={16} />
+          تصدير البيانات (CSV)
+        </Button>
       </div>
 
-      {activeTab === "dashboard" ? (
+      <TabNavigation
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        totalResults={results.length}
+      />
+
+      {activeTab === "dashboard" && (
         <>
-          <DashboardStats {...stats} testModelData={testModelData} />
-          <DashboardCharts 
+          <DashboardStats
+            totalParticipants={stats.totalParticipants}
+            avgDScore={stats.avgDScore}
+            maxDScore={stats.maxDScore}
+            minDScore={stats.minDScore}
+            testModelData={testModelData}
+          />
+          
+          <DashboardCharts
             degreeData={degreeData}
             biasData={biasData}
             dScoreData={dScoreData}
@@ -165,15 +142,15 @@ export const Dashboard = () => {
             surveyData={surveyData}
             ageData={ageData}
             experienceData={experienceData}
-            testModelData={testModelData}
           />
         </>
-      ) : (
-        <ResultDetails 
-          results={results}
-          degreeMapping={degreeMapping}
-        />
+      )}
+
+      {activeTab === "results" && (
+        <ResultDetails results={results} />
       )}
     </div>
   );
 };
+
+export { Dashboard };

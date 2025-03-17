@@ -3,7 +3,7 @@ import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Card } from "@/components/ui/card";
 
-interface SurveyDistributionProps {
+interface TestModelChartProps {
   data: {
     name: string;
     value: number;
@@ -11,7 +11,7 @@ interface SurveyDistributionProps {
   }[];
 }
 
-export const SurveyDistributionChart: React.FC<SurveyDistributionProps> = ({ data }) => {
+export const TestModelChart: React.FC<TestModelChartProps> = ({ data }) => {
   if (!data || data.length === 0) {
     return <div>لا توجد بيانات كافية</div>;
   }
@@ -31,7 +31,7 @@ export const SurveyDistributionChart: React.FC<SurveyDistributionProps> = ({ dat
 
   return (
     <Card className="h-72 p-4">
-      <h3 className="text-md font-semibold mb-2">توزيع نتائج الاستبيان</h3>
+      <h3 className="text-md font-semibold mb-2">توزيع نماذج الاختبار</h3>
       <ResponsiveContainer width="100%" height="90%">
         <PieChart>
           <Pie

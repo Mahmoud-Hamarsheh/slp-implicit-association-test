@@ -1,63 +1,56 @@
 
-import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import React from "react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { Card } from "@/components/ui/card";
 
-interface AgeChartProps {
-  data: Array<{
+interface AgeDistributionProps {
+  data: {
     name: string;
     value: number;
     color: string;
-  }>;
+  }[];
 }
 
-export const AgeDistributionChart = ({ data }: AgeChartProps) => {
-  const total = data.reduce((sum, entry) => sum + entry.value, 0);
+export const AgeDistributionChart: React.FC<AgeDistributionProps> = ({ data }) => {
+  if (!data || data.length === 0) {
+    return <div>لا توجد بيانات كافية</div>;
+  }
+
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-2 border rounded-md shadow">
+          <p className="font-bold">{`${payload[0].name}`}</p>
+          <p>{`العدد: ${payload[0].value}`}</p>
+          <p>{`النسبة: ${((payload[0].value / data.reduce((sum, entry) => sum + entry.value, 0)) * 100).toFixed(1)}%`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
-    <ChartContainer config={{}} className="aspect-square md:aspect-[4/3] w-full h-72">
-      <ResponsiveContainer width="100%" height="100%">
+    <Card className="h-72 p-4">
+      <h3 className="text-md font-semibold mb-2">توزيع الفئات العمرية</h3>
+      <ResponsiveContainer width="100%" height="90%">
         <PieChart>
           <Pie
             data={data}
             cx="50%"
             cy="50%"
+            labelLine={false}
             outerRadius={80}
+            fill="#8884d8"
             dataKey="value"
-            nameKey="name"
+            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
           >
             {data.map((entry, index) => (
-              <Cell 
-                key={`cell-${index}`} 
-                fill={entry.color}
-              />
+              <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip 
-            content={(props) => (
-              <ChartTooltipContent 
-                formatter={(value: number, name: string) => [
-                  `${value} (${((value / total) * 100).toFixed(1)}%)`,
-                  name
-                ]}
-                {...props}
-              />
-            )}
-          />
+          <Tooltip content={<CustomTooltip />} />
         </PieChart>
       </ResponsiveContainer>
-      <div className="mt-3">
-        <ul className="flex flex-wrap justify-center gap-4">
-          {data.map((entry, index) => (
-            <li key={index} className="flex items-center">
-              <span 
-                className="w-3 h-3 inline-block mr-1 rounded-sm" 
-                style={{ backgroundColor: entry.color }}
-              ></span>
-              <span>{entry.name} ({entry.value})</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </ChartContainer>
+    </Card>
   );
 };

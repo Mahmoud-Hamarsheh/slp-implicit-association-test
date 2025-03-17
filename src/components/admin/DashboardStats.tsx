@@ -1,59 +1,58 @@
 
+import React from "react";
 import { StatCard } from "./StatCard";
+import { TestModelChart } from "./TestModelChart";
 
 interface DashboardStatsProps {
   totalParticipants: number;
   avgDScore: number;
   maxDScore: number;
   minDScore: number;
+  testModelData: {
+    name: string;
+    value: number;
+    color: string;
+  }[];
 }
 
-// Helper function to get bias level description based on d-score
-const getBiasDescription = (dScore: number): string => {
-  if (dScore > 0.65) return "تحيز قوي (اضطرابات التواصل مع السمات السلبية)";
-  if (dScore > 0.35) return "تحيز متوسط (اضطرابات التواصل مع السمات السلبية)";
-  if (dScore > 0.15) return "تحيز خفيف (اضطرابات التواصل مع السمات السلبية)";
-  if (dScore < -0.15) return "محايد";
-  return "محايد";
-};
-
-export const DashboardStats = ({ 
-  totalParticipants, 
-  avgDScore, 
-  maxDScore, 
-  minDScore 
-}: DashboardStatsProps) => {
+export const DashboardStats: React.FC<DashboardStatsProps> = ({
+  totalParticipants,
+  avgDScore,
+  maxDScore,
+  minDScore,
+  testModelData
+}) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <StatCard 
-        title="إجمالي المشاركين" 
-        value={totalParticipants.toString()} 
-        valueColor="text-primary"
-        iconColor="bg-primary/10"
-        icon="👥"
-      />
-      <StatCard 
-        title="متوسط نتيجة D-Score" 
-        value={avgDScore.toFixed(2)} 
-        valueColor={avgDScore > 0.35 ? "text-red-500" : "text-gray-600"}
-        subtext={getBiasDescription(avgDScore)}
-        iconColor="bg-blue-100"
-        icon="📊"
-      />
-      <StatCard 
-        title="أعلى نتيجة" 
-        value={maxDScore.toFixed(2)} 
-        valueColor="text-green-600"
-        iconColor="bg-green-100"
-        icon="⬆️"
-      />
-      <StatCard 
-        title="أقل نتيجة" 
-        value={minDScore.toFixed(2)} 
-        valueColor="text-red-600"
-        iconColor="bg-red-100"
-        icon="⬇️"
-      />
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <StatCard
+          title="عدد المشاركين"
+          value={totalParticipants.toString()}
+          description="إجمالي المشاركين في الدراسة"
+          className="bg-gradient-to-br from-blue-50 to-blue-100"
+        />
+        <StatCard
+          title="متوسط D-Score"
+          value={avgDScore.toFixed(3)}
+          description="متوسط مقياس التحيز الضمني"
+          className="bg-gradient-to-br from-amber-50 to-amber-100"
+        />
+        <StatCard
+          title="أعلى D-Score"
+          value={maxDScore.toFixed(3)}
+          description="أعلى قيمة تحيز ضمني مسجلة"
+          className="bg-gradient-to-br from-green-50 to-green-100"
+        />
+        <StatCard
+          title="أدنى D-Score"
+          value={minDScore.toFixed(3)}
+          description="أدنى قيمة تحيز ضمني مسجلة"
+          className="bg-gradient-to-br from-purple-50 to-purple-100"
+        />
+      </div>
+      <div className="lg:col-span-1">
+        <TestModelChart data={testModelData} />
+      </div>
     </div>
   );
 };

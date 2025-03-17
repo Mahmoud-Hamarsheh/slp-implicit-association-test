@@ -1,199 +1,133 @@
 
-import { Card, CardContent } from "@/components/ui/card";
-import { format } from "date-fns";
+import React, { useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-
-interface IATResult {
-  id: string;
-  created_at: string;
-  d_score: number;
-  age: number;
-  years_experience: number;
-  degree: string;
-  gender?: number | null;
-  survey_responses: any;
-  survey_score?: number;
-}
+import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+import { degreeMapping } from "./dashboardUtils";
 
 interface ResultDetailsProps {
-  results: IATResult[];
-  degreeMapping: { [key: string]: string };
+  results: any[];
 }
 
-// Helper function to get bias description based on d-score
-const getBiasDescription = (dScore: number): string => {
-  if (dScore > 0.65) return "تحيز قوي (اضطرابات التواصل مع السمات السلبية)";
-  if (dScore > 0.35) return "تحيز متوسط (اضطرابات التواصل مع السمات السلبية)";
-  if (dScore > 0.15) return "تحيز خفيف (اضطرابات التواصل مع السمات السلبية)";
-  if (dScore < -0.15) return "لا يوجد تحيز أو تحيز محايد";
-  return "محايد";
-};
+export const ResultDetails: React.FC<ResultDetailsProps> = ({ results }) => {
+  const [page, setPage] = useState(1);
+  const resultsPerPage = 10;
+  const totalPages = Math.ceil(results.length / resultsPerPage);
 
-// Helper function to get survey interpretation based on survey score
-const getSurveyInterpretation = (score?: number): string => {
-  if (!score) return "غير متوفر";
-  if (score <= 2.5) return "منخفض";
-  if (score <= 3.5) return "متوسط";
-  return "مرتفع";
-};
+  const paginatedResults = results.slice(
+    (page - 1) * resultsPerPage,
+    page * resultsPerPage
+  );
 
-// Helper function to get gender description
-const getGenderDescription = (gender?: number | null): string => {
-  if (gender === 1) return "ذكر";
-  if (gender === 2) return "أنثى";
-  return "غير محدد";
-};
+  const getAgeRange = (ageValue: number): string => {
+    switch (ageValue) {
+      case 1: return "20-30";
+      case 2: return "31-40";
+      case 3: return "41-50";
+      case 4: return "51+";
+      default: return "غير محدد";
+    }
+  };
 
-// Helper function to convert age number to age range text
-const getAgeRange = (age: number): string => {
-  switch(age) {
-    case 1: return "20-30";
-    case 2: return "31-40";
-    case 3: return "41-50";
-    case 4: return "51+";
-    default: return "غير محدد";
-  }
-};
+  const getExperienceRange = (expValue: number): string => {
+    switch (expValue) {
+      case 0: return "لا يوجد خبرة";
+      case 1: return "1-2 سنوات";
+      case 2: return "2-4 سنوات";
+      case 3: return "5-10 سنوات";
+      case 4: return "10+ سنوات";
+      default: return "غير محدد";
+    }
+  };
 
-// Helper function to convert years experience number to range text
-const getExperienceRange = (years: number): string => {
-  switch(years) {
-    case 0: return "لا يوجد خبرة";
-    case 1: return "1-2";
-    case 2: return "2-4";
-    case 3: return "5-10";
-    case 4: return "10+";
-    default: return "غير محدد";
-  }
-};
+  const getBiasCategory = (dScore: number): string => {
+    if (dScore > 0.65) return "تحيز قوي (سلبي)";
+    if (dScore > 0.35) return "تحيز متوسط (سلبي)";
+    if (dScore > 0.15) return "تحيز خفيف (سلبي)";
+    if (dScore > -0.15) return "محايد";
+    return "تحيز خفيف (إيجابي)";
+  };
 
-export const ResultDetails = ({ results, degreeMapping }: ResultDetailsProps) => {
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardContent className="p-6">
-          <h2 className="text-xl font-bold mb-4">النتائج التفصيلية</h2>
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="text-right font-bold">ID</TableHead>
-                  <TableHead className="text-right font-bold">الجنس</TableHead>
-                  <TableHead className="text-right font-bold">العمر</TableHead>
-                  <TableHead className="text-right font-bold">سنوات الخبرة</TableHead>
-                  <TableHead className="text-right font-bold">الدرجة العلمية</TableHead>
-                  <TableHead className="text-right font-bold">D-Score</TableHead>
-                  <TableHead className="text-right font-bold">تفسير IAT</TableHead>
-                  <TableHead className="text-right font-bold">نتيجة الاستبيان</TableHead>
-                  <TableHead className="text-right font-bold">تفسير الاستبيان</TableHead>
-                  <TableHead className="text-right font-bold">تاريخ الاختبار</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {results.map((result) => (
-                  <TableRow key={result.id}>
-                    <TableCell className="whitespace-nowrap">{result.id.substring(0, 8)}</TableCell>
-                    <TableCell>{getGenderDescription(result.gender)}</TableCell>
-                    <TableCell>{getAgeRange(result.age)}</TableCell>
-                    <TableCell>{getExperienceRange(result.years_experience)}</TableCell>
-                    <TableCell>{degreeMapping[result.degree] || result.degree}</TableCell>
-                    <TableCell className={`
-                      ${result.d_score > 0.65 ? 'text-red-500' : 
-                        result.d_score > 0.35 ? 'text-orange-500' :
-                        result.d_score > 0.15 ? 'text-yellow-600' :
-                        'text-blue-500'
-                      }
-                    `}>{result.d_score.toFixed(2)}</TableCell>
-                    <TableCell>{getBiasDescription(result.d_score)}</TableCell>
-                    <TableCell>{result.survey_score !== undefined ? result.survey_score.toFixed(2) : 'غير متوفر'}</TableCell>
-                    <TableCell>{getSurveyInterpretation(result.survey_score)}</TableCell>
-                    <TableCell dir="ltr">{format(new Date(result.created_at), "yyyy/MM/dd")}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <h3 className="text-lg font-bold mt-8 mb-4">البطاقات التفصيلية</h3>
-      <div className="grid gap-6">
-        {results.map((result) => (
-          <Card key={result.id} className="animate-fadeIn overflow-hidden">
-            <CardContent className="p-0">
-              <div className="flex flex-col md:flex-row">
-                {/* Left side - colored status bar */}
-                <div 
-                  className={`w-full md:w-1 h-2 md:h-auto ${
-                    result.d_score > 0.65 ? 'bg-red-500' : 
-                    result.d_score > 0.35 ? 'bg-orange-400' :
-                    result.d_score > 0.15 ? 'bg-yellow-400' :
-                    'bg-blue-500'
-                  }`}
-                />
-                
-                <div className="p-6 flex-1">
-                  <div className="flex flex-col md:flex-row justify-between mb-4">
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold flex items-center">
-                        <span className={`
-                          ${result.d_score > 0.65 ? 'text-red-500' : 
-                            result.d_score > 0.35 ? 'text-orange-500' :
-                            result.d_score > 0.15 ? 'text-yellow-600' :
-                            'text-blue-500'
-                          }
-                        `}>
-                          نتيجة IAT: {result.d_score.toFixed(2)}
-                        </span>
-                      </h3>
-                      <p className="text-gray-600 mt-1">
-                        {getBiasDescription(result.d_score)}
-                      </p>
-                    </div>
-                    <div className="md:text-left mt-2 md:mt-0">
-                      <p className="font-medium">نتيجة الاستبيان: {result.survey_score !== undefined ? result.survey_score.toFixed(2) : 'غير متوفر'}</p>
-                      <p className="text-sm text-gray-600">
-                        التفسير: {getSurveyInterpretation(result.survey_score)}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-                    <div className="space-y-2">
-                      <p className="flex justify-between">
-                        <strong>ID:</strong> 
-                        <span>{result.id.substring(0, 8)}</span>
-                      </p>
-                      <p className="flex justify-between">
-                        <strong>الجنس:</strong> 
-                        <span>{getGenderDescription(result.gender)}</span>
-                      </p>
-                      <p className="flex justify-between">
-                        <strong>العمر:</strong> 
-                        <span>{getAgeRange(result.age)}</span>
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="flex justify-between">
-                        <strong>سنوات الخبرة:</strong> 
-                        <span>{getExperienceRange(result.years_experience)}</span>
-                      </p>
-                      <p className="flex justify-between">
-                        <strong>الدرجة العلمية:</strong> 
-                        <span>{degreeMapping[result.degree] || result.degree}</span>
-                      </p>
-                      <p className="flex justify-between">
-                        <strong>تاريخ الاختبار:</strong> 
-                        <span dir="ltr">{format(new Date(result.created_at), "yyyy/MM/dd")}</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+    <div className="space-y-4">
+      <div className="rounded-md border overflow-hidden">
+        <Table className="min-w-full">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[80px]">ID</TableHead>
+              <TableHead>D-Score</TableHead>
+              <TableHead>الفئة العمرية</TableHead>
+              <TableHead>سنوات الخبرة</TableHead>
+              <TableHead>المؤهل التعليمي</TableHead>
+              <TableHead>الجنس</TableHead>
+              <TableHead>نموذج الاختبار</TableHead>
+              <TableHead>التاريخ</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {paginatedResults.map((result) => (
+              <TableRow key={result.id}>
+                <TableCell className="font-mono text-xs">
+                  {result.id.substring(0, 8)}...
+                </TableCell>
+                <TableCell>
+                  <span 
+                    className={`px-2 py-1 rounded text-xs font-medium ${
+                      result.d_score > 0.65 ? "bg-red-100 text-red-800" :
+                      result.d_score > 0.35 ? "bg-orange-100 text-orange-800" :
+                      result.d_score > 0.15 ? "bg-yellow-100 text-yellow-800" :
+                      result.d_score > -0.15 ? "bg-green-100 text-green-800" :
+                      "bg-blue-100 text-blue-800"
+                    }`}
+                  >
+                    {result.d_score.toFixed(3)} ({getBiasCategory(result.d_score)})
+                  </span>
+                </TableCell>
+                <TableCell>{getAgeRange(result.age)}</TableCell>
+                <TableCell>{getExperienceRange(result.years_experience)}</TableCell>
+                <TableCell>
+                  {degreeMapping[result.degree] || result.degree}
+                </TableCell>
+                <TableCell>
+                  {result.gender === 1 ? "ذكر" : 
+                   result.gender === 2 ? "أنثى" : 
+                   "غير محدد"}
+                </TableCell>
+                <TableCell>
+                  {result.test_model || "غير محدد"}
+                </TableCell>
+                <TableCell className="text-gray-500">
+                  {format(new Date(result.created_at), "yyyy-MM-dd")}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setPage(page - 1)}
+            disabled={page === 1}
+          >
+            السابق
+          </Button>
+          <div className="flex items-center px-2">
+            صفحة {page} من {totalPages}
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setPage(page + 1)}
+            disabled={page === totalPages}
+          >
+            التالي
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

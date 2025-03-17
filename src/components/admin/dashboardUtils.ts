@@ -1,3 +1,4 @@
+
 import { format } from "date-fns";
 
 interface IATResult {
@@ -10,6 +11,7 @@ interface IATResult {
   gender?: number | null;
   survey_responses: any;
   survey_score?: number;
+  test_model?: string;
 }
 
 export const degreeMapping: { [key: string]: string } = {
@@ -249,7 +251,7 @@ export const prepareExperienceData = (results: IATResult[]) => {
     }));
 };
 
-export const prepareTestModelData = (results: any[]) => {
+export const prepareTestModelData = (results: IATResult[]) => {
   const models = {
     A: 0,
     B: 0,
@@ -270,21 +272,24 @@ export const prepareTestModelData = (results: any[]) => {
     { name: 'نموذج A', value: models.A, color: '#4CAF50' },
     { name: 'نموذج B', value: models.B, color: '#2196F3' },
     { name: 'غير معروف', value: models.Unknown, color: '#9E9E9E' }
-  ];
+  ].filter(item => item.value > 0);
 };
 
 export const exportToCsv = (results: IATResult[], onSuccess: () => void, onError: (error: any) => void) => {
   try {
-    const headers = ["ID", "D-Score", "Age", "Experience Years", "Degree", "Created At"];
+    const headers = ["ID", "D-Score", "Age", "Experience Years", "Degree", "Gender", "Test Model", "Created At"];
     const csvRows = [headers.join(",")];
     
     results.forEach(result => {
+      const gender = result.gender === 1 ? "ذكر" : result.gender === 2 ? "أنثى" : "غير محدد";
       const row = [
         result.id,
         result.d_score.toString(),
         result.age.toString(),
         result.years_experience.toString(),
         degreeMapping[result.degree] || result.degree,
+        gender,
+        result.test_model || "غير محدد",
         format(new Date(result.created_at), "yyyy-MM-dd")
       ];
       csvRows.push(row.join(","));

@@ -18,13 +18,17 @@ export const TestStage: React.FC<TestStageProps> = ({
   biasAwarenessData
 }) => {
   console.log("Bias awareness data in TestStage:", biasAwarenessData);
-  console.log("Test model in TestStage:", surveyData.testModel || "Not assigned");
+  
+  // Randomly assign test model A or B if not already assigned
+  const testModel: "A" | "B" = surveyData.testModel || (Math.random() < 0.5 ? "A" : "B");
+  console.log("Test model in TestStage:", testModel);
   
   // Ensure surveyData is properly formatted for IAT component
   const formattedSurveyData = {
     ...surveyData,
     hasTakenIATBefore,
-    biasAwarenessResponses: biasAwarenessData || {}
+    biasAwarenessResponses: biasAwarenessData || {},
+    testModel
   };
 
   const handleIATComplete = (result: number, responses: any[]) => {

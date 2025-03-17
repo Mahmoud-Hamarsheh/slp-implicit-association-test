@@ -71,6 +71,24 @@ export const calculateDScore = (responses: Response[]) => {
   return dScore;
 };
 
+export const getIATResultInterpretation = (dScore: number): string => {
+  if (dScore > 0.65) {
+    return "تحيز قوي سلبي ضد اضطرابات التواصل";
+  } else if (dScore > 0.35) {
+    return "تحيز متوسط سلبي ضد اضطرابات التواصل";
+  } else if (dScore > 0.15) {
+    return "تحيز خفيف سلبي ضد اضطرابات التواصل";
+  } else if (dScore > -0.15) {
+    return "لا يوجد تحيز ضمني واضح";
+  } else if (dScore > -0.35) {
+    return "تحيز خفيف إيجابي نحو اضطرابات التواصل";
+  } else if (dScore > -0.65) {
+    return "تحيز متوسط إيجابي نحو اضطرابات التواصل";
+  } else {
+    return "تحيز قوي إيجابي نحو اضطرابات التواصل";
+  }
+};
+
 const calculateMean = (responses: Response[]): number => {
   if (responses.length === 0) return 0;
   const sum = responses.reduce((acc, r) => {
