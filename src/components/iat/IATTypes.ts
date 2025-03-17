@@ -45,14 +45,14 @@ export const BLOCKS = {
     "/lovable-uploads/e012de25-8c46-4112-86d7-da7f81976105.png"  // Trophy winner
   ],
   NEGATIVE_ATTRIBUTES: [
-    "/lovable-uploads/931bb6fb-2e2b-4cc4-8622-e80094779e3e.png", // crying person
-    "/lovable-uploads/190a76e6-dad4-419f-bfe5-fdd5925357bb.png", // thumbs down
-    "/lovable-uploads/8a0d916a-d56a-4e4b-89f7-3a4b8c0fa621.png", // sad person
-    "/lovable-uploads/b815d003-a055-4edc-bdff-40800398d084.png", // pointing boss
-    "/lovable-uploads/5966da6d-271f-43ad-84b2-372d03f07ef3.png", // depressed walk
-    "/lovable-uploads/15c076e1-f2cc-4715-934f-b581cc1b6def.png", // laughing at someone 
-    "/lovable-uploads/1175a5e8-2fcb-48f9-be8b-477557983011.png", // standing sad
-    "/lovable-uploads/7cc1f6d0-c8da-48dc-a191-2a0760f0f6f8.png", // sad businessman
+    "/lovable-uploads/4d29ef76-64fb-4508-8d76-2b27461fd844.png", // crying person
+    "/lovable-uploads/a3279a90-96f3-4e35-aff6-00a3f84b6355.png", // thumbs down
+    "/lovable-uploads/7b1dc96e-d083-46e9-be18-1d7a21122d40.png", // sad person
+    "/lovable-uploads/7f658006-b81a-4da1-ba18-fd5c3d2e88dd.png", // pointing boss
+    "/lovable-uploads/b786a712-7b99-484d-8a15-f2f80241dd1c.png", // depressed walk
+    "/lovable-uploads/21cd29b5-16be-4f4a-aacd-227f025d8bc5.png", // laughing at someone 
+    "/lovable-uploads/1bb6964d-14fe-44eb-9523-14f5fc1b849d.png", // standing sad
+    "/lovable-uploads/6e039dce-2910-41e0-855d-344386d44f90.png", // sad businessman
     "/lovable-uploads/7c56a99d-9adc-4e25-914f-d94fcfa7e36e.png", // self hugging
     "/lovable-uploads/d116176d-050d-4bd5-9e87-0a9ae257c677.png"  // person with bad grades
   ]
