@@ -1,5 +1,8 @@
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import React from "react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { Card } from "@/components/ui/card";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 interface BiasCategory {
   name: string;
@@ -13,63 +16,53 @@ interface BiasDistributionChartProps {
 }
 
 export const BiasDistributionChart = ({ data }: BiasDistributionChartProps) => {
-  // Calculate percentages for each category
-  const total = data.reduce((sum, entry) => sum + entry.value, 0);
-  const dataWithPercent = data.map(item => ({
-    ...item,
-    percent: total > 0 ? Math.round((item.value / total) * 100) : 0
-  }));
+  if (!data || data.length === 0) {
+    return <div>لا توجد بيانات كافية</div>;
+  }
 
-  // Custom legend that only shows name and percentage
-  const CustomLegend = ({ payload }: any) => {
-    if (!payload) return null;
-    
-    return (
-      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4 text-xs">
-        {payload.map((entry: any, index: number) => (
-          <div key={`legend-${index}`} className="flex items-center">
-            <div 
-              className="w-3 h-3 mr-1" 
-              style={{ backgroundColor: entry.color }}
-            />
-            <span>
-              {entry.value} ({dataWithPercent[index].percent}%)
-            </span>
-          </div>
-        ))}
-      </div>
-    );
-  };
+  // Calculate total for percentages
+  const total = data.reduce((sum, entry) => sum + entry.value, 0);
+
+  // Prepare data for chart configuration
+  const config = data.reduce((acc, item) => {
+    acc[item.name] = { color: item.color, label: item.name };
+    return acc;
+  }, {} as Record<string, { color: string; label: string }>);
 
   return (
-    <div className="h-[300px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
+    <Card className="h-80 p-4">
+      <h3 className="text-md font-semibold mb-2">توزيع نتائج التحيز</h3>
+      <ChartContainer className="h-64 w-full" config={config}>
+        <PieChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
           <Pie
-            data={dataWithPercent}
+            data={data}
             cx="50%"
-            cy="45%"
+            cy="50%"
             labelLine={false}
-            outerRadius={80}
+            outerRadius={70}
             fill="#8884d8"
             dataKey="value"
             nameKey="name"
             startAngle={90}
             endAngle={-270}
+            label={({ name, percent }) => {
+              const value = `${(percent * 100).toFixed(0)}%`;
+              return `${name}: ${value}`;
+            }}
           >
-            {dataWithPercent.map((entry, index) => (
+            {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip 
-            formatter={(value: number) => [
-              `${Math.round((value / total) * 100)}%`, 
-              'النسبة'
-            ]} 
+          <ChartTooltip 
+            content={
+              <ChartTooltipContent 
+                formatter={(value) => [`${value} (${((value as number / total) * 100).toFixed(1)}%)`, 'العدد']}
+              />
+            }
           />
-          <Legend content={<CustomLegend />} />
         </PieChart>
-      </ResponsiveContainer>
-    </div>
+      </ChartContainer>
+    </Card>
   );
 };

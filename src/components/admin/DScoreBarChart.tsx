@@ -1,4 +1,5 @@
 
+import React from "react";
 import {
   BarChart,
   Bar,
@@ -11,6 +12,8 @@ import {
   ReferenceLine,
   Legend
 } from "recharts";
+import { Card } from "@/components/ui/card";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 interface DScoreDataPoint {
   id: string;
@@ -23,15 +26,26 @@ interface DScoreBarChartProps {
 }
 
 export const DScoreBarChart = ({ data }: DScoreBarChartProps) => {
+  if (!data || data.length === 0) {
+    return <div>لا توجد بيانات كافية</div>;
+  }
+
+  // Prepare data for chart configuration
+  const config = data.reduce((acc, item) => {
+    acc[item.id] = { color: item.color };
+    return acc;
+  }, {} as Record<string, { color: string }>);
+
   return (
-    <div className="h-[350px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
+    <Card className="h-[350px] p-4">
+      <h3 className="text-md font-semibold mb-2">توزيع D-Score</h3>
+      <ChartContainer className="h-[300px] w-full" config={config}>
         <BarChart
           data={data}
           margin={{
             top: 20,
-            right: 30,
-            left: 40,
+            right: 10,
+            left: 10,
             bottom: 60,
           }}
         >
@@ -55,9 +69,13 @@ export const DScoreBarChart = ({ data }: DScoreBarChartProps) => {
               style: { textAnchor: 'middle', fontSize: 12 }
             }}
           />
-          <Tooltip 
-            formatter={(value: number) => [value.toFixed(2), "D-Score"]}
-            labelFormatter={(id) => `ID: ${id}`}
+          <ChartTooltip 
+            content={
+              <ChartTooltipContent 
+                formatter={(value) => [(value as number).toFixed(2), "D-Score"]}
+                labelFormatter={(id) => `ID: ${id}`}
+              />
+            }
           />
           <ReferenceLine y={0} stroke="#000" strokeDasharray="3 3" />
           <Bar dataKey="value" name="D-Score" fill="#8884d8" radius={[2, 2, 0, 0]}>
@@ -67,7 +85,7 @@ export const DScoreBarChart = ({ data }: DScoreBarChartProps) => {
           </Bar>
           <Legend />
         </BarChart>
-      </ResponsiveContainer>
-    </div>
+      </ChartContainer>
+    </Card>
   );
 };

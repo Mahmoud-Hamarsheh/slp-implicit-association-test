@@ -2,6 +2,7 @@
 import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Card } from "@/components/ui/card";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 interface SurveyDistributionProps {
   data: {
@@ -16,41 +17,47 @@ export const SurveyDistributionChart: React.FC<SurveyDistributionProps> = ({ dat
     return <div>لا توجد بيانات كافية</div>;
   }
 
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-2 border rounded-md shadow">
-          <p className="font-bold">{`${payload[0].name}`}</p>
-          <p>{`العدد: ${payload[0].value}`}</p>
-          <p>{`النسبة: ${((payload[0].value / data.reduce((sum, entry) => sum + entry.value, 0)) * 100).toFixed(1)}%`}</p>
-        </div>
-      );
-    }
-    return null;
-  };
+  // Calculate total for percentages
+  const total = data.reduce((sum, entry) => sum + entry.value, 0);
+
+  // Prepare data for chart configuration
+  const config = data.reduce((acc, item) => {
+    acc[item.name] = { color: item.color, label: item.name };
+    return acc;
+  }, {} as Record<string, { color: string; label: string }>);
 
   return (
     <Card className="h-72 p-4">
       <h3 className="text-md font-semibold mb-2">توزيع نتائج الاستبيان</h3>
-      <ResponsiveContainer width="100%" height="90%">
-        <PieChart>
+      <ChartContainer className="h-56 w-full" config={config}>
+        <PieChart margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
           <Pie
             data={data}
             cx="50%"
             cy="50%"
             labelLine={false}
-            outerRadius={80}
+            outerRadius={70}
             fill="#8884d8"
             dataKey="value"
-            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            nameKey="name"
+            label={({ name, percent }) => {
+              const value = `${(percent * 100).toFixed(0)}%`;
+              return `${name}: ${value}`;
+            }}
           >
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip content={<CustomTooltip />} />
+          <ChartTooltip 
+            content={
+              <ChartTooltipContent 
+                formatter={(value) => [`${value} (${((value as number / total) * 100).toFixed(1)}%)`, 'العدد']}
+              />
+            }
+          />
         </PieChart>
-      </ResponsiveContainer>
+      </ChartContainer>
     </Card>
   );
 };

@@ -7,6 +7,7 @@ import { GenderDistributionChart } from "./GenderDistributionChart";
 import { SurveyDistributionChart } from "./SurveyDistributionChart";
 import { AgeDistributionChart } from "./AgeDistributionChart";
 import { ExperienceDistributionChart } from "./ExperienceDistributionChart";
+import { TestModelChart } from "./TestModelChart";
 
 interface DashboardChartsProps {
   degreeData: {
@@ -44,6 +45,11 @@ interface DashboardChartsProps {
     value: number;
     color: string;
   }[];
+  testModelData: {
+    name: string;
+    value: number;
+    color: string;
+  }[];
 }
 
 export const DashboardCharts: React.FC<DashboardChartsProps> = ({
@@ -53,23 +59,28 @@ export const DashboardCharts: React.FC<DashboardChartsProps> = ({
   genderData,
   surveyData,
   ageData,
-  experienceData
+  experienceData,
+  testModelData
 }) => {
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <DegreeDistributionChart data={degreeData} />
         <BiasDistributionChart data={biasData} />
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         <GenderDistributionChart data={genderData} />
-        <SurveyDistributionChart data={surveyData} />
-        <AgeDistributionChart data={ageData} />
+        <TestModelChart data={testModelData} />
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <AgeDistributionChart data={ageData} />
+        <SurveyDistributionChart data={surveyData} />
         <ExperienceDistributionChart data={experienceData} />
+      </div>
+      
+      <div className="w-full">
         <DScoreBarChart data={dScoreData} />
       </div>
     </div>
