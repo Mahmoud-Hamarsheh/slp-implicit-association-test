@@ -44,6 +44,29 @@ const getGenderDescription = (gender?: number | null): string => {
   return "غير محدد";
 };
 
+// Helper function to convert age number to age range text
+const getAgeRange = (age: number): string => {
+  switch(age) {
+    case 1: return "20-30";
+    case 2: return "31-40";
+    case 3: return "41-50";
+    case 4: return "51+";
+    default: return "غير محدد";
+  }
+};
+
+// Helper function to convert years experience number to range text
+const getExperienceRange = (years: number): string => {
+  switch(years) {
+    case 0: return "لا يوجد خبرة";
+    case 1: return "1-2";
+    case 2: return "2-4";
+    case 3: return "5-10";
+    case 4: return "10+";
+    default: return "غير محدد";
+  }
+};
+
 export const ResultDetails = ({ results, degreeMapping }: ResultDetailsProps) => {
   return (
     <div className="space-y-6">
@@ -71,8 +94,8 @@ export const ResultDetails = ({ results, degreeMapping }: ResultDetailsProps) =>
                   <TableRow key={result.id}>
                     <TableCell className="whitespace-nowrap">{result.id.substring(0, 8)}</TableCell>
                     <TableCell>{getGenderDescription(result.gender)}</TableCell>
-                    <TableCell>{result.age}</TableCell>
-                    <TableCell>{result.years_experience}</TableCell>
+                    <TableCell>{getAgeRange(result.age)}</TableCell>
+                    <TableCell>{getExperienceRange(result.years_experience)}</TableCell>
                     <TableCell>{degreeMapping[result.degree] || result.degree}</TableCell>
                     <TableCell className={`
                       ${result.d_score > 0.65 ? 'text-red-500' : 
@@ -147,13 +170,13 @@ export const ResultDetails = ({ results, degreeMapping }: ResultDetailsProps) =>
                       </p>
                       <p className="flex justify-between">
                         <strong>العمر:</strong> 
-                        <span>{result.age}</span>
+                        <span>{getAgeRange(result.age)}</span>
                       </p>
                     </div>
                     <div className="space-y-2">
                       <p className="flex justify-between">
                         <strong>سنوات الخبرة:</strong> 
-                        <span>{result.years_experience}</span>
+                        <span>{getExperienceRange(result.years_experience)}</span>
                       </p>
                       <p className="flex justify-between">
                         <strong>الدرجة العلمية:</strong> 
