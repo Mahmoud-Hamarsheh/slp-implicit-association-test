@@ -13,6 +13,10 @@ import {
   prepareDegreeData, 
   prepareBiasData, 
   prepareDScoreData,
+  prepareGenderData,
+  prepareSurveyData,
+  prepareAgeData,
+  prepareExperienceData,
   exportToCsv
 } from "./dashboardUtils";
 import { RefreshCw, Download } from "lucide-react";
@@ -24,6 +28,7 @@ interface IATResult {
   age: number;
   years_experience: number;
   degree: string;
+  gender?: number | null;
   survey_responses: any;
   survey_score?: number;
 }
@@ -100,6 +105,10 @@ export const Dashboard = () => {
   const degreeData = prepareDegreeData(results);
   const biasData = prepareBiasData(results);
   const dScoreData = prepareDScoreData(results);
+  const genderData = prepareGenderData(results);
+  const surveyData = prepareSurveyData(results);
+  const ageData = prepareAgeData(results);
+  const experienceData = prepareExperienceData(results);
 
   const tabs = [
     { id: "dashboard", label: "لوحة التحكم" },
@@ -149,6 +158,10 @@ export const Dashboard = () => {
             degreeData={degreeData}
             biasData={biasData}
             dScoreData={dScoreData}
+            genderData={genderData}
+            surveyData={surveyData}
+            ageData={ageData}
+            experienceData={experienceData}
           />
         </>
       ) : (
