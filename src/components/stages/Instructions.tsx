@@ -29,11 +29,11 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
           <h3 className="font-bold mb-2">إيجابي</h3>
-          <p>المشاعر والصور الإيجابية، نجاح، سعادة، تفوق، إنجاز، صداقة</p>
+          <p>النجاح، التفوق، الإنجازات، التخرج، القوة، الأبطال الخارقين، الرضا، الصداقة</p>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg">
           <h3 className="font-bold mb-2">سلبي</h3>
-          <p>المشاعر والصور السلبية، حزن، إحباط، فشل، تعب، توتر</p>
+          <p>الحزن، البكاء، الفشل، الإحباط، السخرية، الاكتئاب، الإهانة، العزلة</p>
         </div>
       </div>
       <div className="text-right text-sm bg-blue-50 p-4 rounded-lg">
