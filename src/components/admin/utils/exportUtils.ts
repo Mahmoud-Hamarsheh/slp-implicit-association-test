@@ -1,5 +1,4 @@
 
-import { format } from "date-fns";
 import { IATResult, degreeMapping } from "../types/iatResults";
 import { getAgeRange, getExperienceRange, getIATInterpretation, getSurveyInterpretation } from "./helpers";
 
@@ -58,15 +57,15 @@ export const exportToCsv = (results: IATResult[], onSuccess: () => void, onError
       
       // Base row data
       const baseRow = [
-        result.id,
-        ageRange,
-        gender,
-        degreeMapping[result.degree] || result.degree,
-        experienceRange,
-        result.d_score.toFixed(2),
-        interpretationText,
-        result.survey_score?.toFixed(1) || "",
-        surveyInterpretation
+        `"${result.id}"`,
+        `"${ageRange}"`,
+        `"${gender}"`,
+        `"${degreeMapping[result.degree] || result.degree}"`,
+        `"${experienceRange}"`,
+        `"${result.d_score.toFixed(2)}"`,
+        `"${interpretationText}"`,
+        `"${result.survey_score?.toFixed(1) || ''}"`,
+        `"${surveyInterpretation}"`
       ];
       
       // Parse and add survey question responses
@@ -84,15 +83,17 @@ export const exportToCsv = (results: IATResult[], onSuccess: () => void, onError
       // Add survey responses to the row
       const questionResponses = sortedQuestions.map(question => {
         const qKey = question.toLowerCase();
-        return surveyResponses[qKey] || "";
+        return `"${surveyResponses[qKey] || ''}"`;
       });
       
       // Add Test Model
-      const row = [...baseRow, ...questionResponses, result.test_model || "غير محدد"];
+      const row = [...baseRow, ...questionResponses, `"${result.test_model || 'غير محدد'}"`];
       csvRows.push(row.join(","));
     });
     
-    const csvString = csvRows.join("\n");
+    // Create Blob with BOM (Byte Order Mark) for proper UTF-8 encoding
+    const BOM = '\uFEFF'; // UTF-8 BOM character
+    const csvString = BOM + csvRows.join("\n");
     const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     
