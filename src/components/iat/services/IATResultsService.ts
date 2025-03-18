@@ -1,4 +1,3 @@
-
 import { supabase } from "@/lib/supabase";
 import { Response } from "../IATTypes";
 import { IATProps } from "../IATTypes";
