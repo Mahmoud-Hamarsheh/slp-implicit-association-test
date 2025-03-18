@@ -2,7 +2,8 @@
 // This file re-exports everything from the individual utility files
 // for backward compatibility
 
-export { IATResult, degreeMapping } from './types/iatResults';
+export type { IATResult } from './types/iatResults';
+export { degreeMapping } from './types/iatResults';
 
 export { 
   getAgeRange, 
