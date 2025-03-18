@@ -110,7 +110,16 @@ export class TrialGenerator {
     }
     
     // Randomize the order of trials
-    return newTrials.sort(() => Math.random() - 0.5);
+    const randomizedTrials = newTrials.sort(() => Math.random() - 0.5);
+    
+    // Limit the number of trials based on the block
+    let numberOfTrials = 20; // Default for most blocks
+    
+    if (block === 4 || block === 7) {
+      numberOfTrials = 40; // Blocks 4 and 7 have 40 trials
+    }
+    
+    return randomizedTrials.slice(0, numberOfTrials);
   }
 
   // Helper method to map the actual block to an effective block based on test model

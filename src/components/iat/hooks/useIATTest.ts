@@ -16,7 +16,9 @@ export const useIATTest = (onComplete: (result: number, allResponses: Response[]
   // Generate trials for the current block
   useEffect(() => {
     const generatedTrials = TrialGenerator.generateTrialsForBlock(currentBlock, testModel);
-    console.log(`Generated ${generatedTrials.length} trials for block ${currentBlock} (Model ${testModel})`);
+    const expectedTrials = currentBlock === 4 || currentBlock === 7 ? 40 : 20;
+    console.log(`Generated ${generatedTrials.length}/${expectedTrials} trials for block ${currentBlock} (Model ${testModel})`);
+    
     setTrials(generatedTrials);
     setCurrentTrial(0);
     setShowInstructions(true);
@@ -34,7 +36,7 @@ export const useIATTest = (onComplete: (result: number, allResponses: Response[]
     // Add response to the list
     const updatedResponses = [...responses, response];
     setResponses(updatedResponses);
-    console.log(`Completed trial in block ${response.block}, correct: ${response.correct}, time: ${response.responseTime.toFixed(3)}s`);
+    console.log(`Completed trial ${currentTrial + 1}/${trials.length} in block ${response.block}, correct: ${response.correct}, time: ${response.responseTime.toFixed(3)}s`);
 
     // Move to next trial or block regardless of correctness
     if (currentTrial + 1 >= trials.length) {
