@@ -2,6 +2,15 @@
 import { IATResult, degreeMapping } from "../types/iatResults";
 import { getAgeRange, getExperienceRange, getIATInterpretation, getSurveyInterpretation } from "./helpers";
 
+// Map Arabic responses to numerical values
+const responseValueMap = {
+  'أوافق بشدة': 5,
+  'أوافق': 4,
+  'محايد': 3,
+  'لا أوافق': 2,
+  'لا أوافق بشدة': 1
+};
+
 export const exportToCsv = (results: IATResult[], onSuccess: () => void, onError: (error: any) => void) => {
   try {
     // Base headers for demographic and IAT data
@@ -80,10 +89,13 @@ export const exportToCsv = (results: IATResult[], onSuccess: () => void, onError
         }
       }
       
-      // Add survey responses to the row
+      // Add survey responses to the row - convert text values to numerical weights
       const questionResponses = sortedQuestions.map(question => {
         const qKey = question.toLowerCase();
-        return `"${surveyResponses[qKey] || ''}"`;
+        const responseText = surveyResponses[qKey] || '';
+        // Convert the Arabic text response to its numerical weight (1-5)
+        const responseValue = responseValueMap[responseText] || '';
+        return `"${responseValue}"`;
       });
       
       // Add Test Model
