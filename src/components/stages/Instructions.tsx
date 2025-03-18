@@ -34,7 +34,7 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
                 <span className="text-xl text-[#205677] font-bold">تواصل طبيعي</span>
               </TableCell>
               <TableCell className="text-right border align-middle py-4">
-                وضوح الكلام، تواصل فعال، طلاقة التعبير، انسيابية الكلام، كلام مترابط، استماع فعال، مُعبّر
+                <span className="text-lg">وضوح الكلام، تواصل فعال، طلاقة التعبير، انسيابية الكلام، كلام مترابط، استماع فعال، مُعبّر</span>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -42,7 +42,7 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
                 <span className="text-xl text-[#205677] font-bold">اضطراب تواصل</span>
               </TableCell>
               <TableCell className="text-right border align-middle py-4">
-                أفيزيا، أبراكسيا، ديسارثريا، تأخر لغوي، اضطراب صوت، تأتأة
+                <span className="text-lg">أفيزيا، أبراكسيا، ديسارثريا، تأخر لغوي، اضطراب صوت، تأتأة</span>
               </TableCell>
             </TableRow>
             <TableRow>
