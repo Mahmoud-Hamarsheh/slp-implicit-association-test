@@ -1,16 +1,15 @@
-
 import { Trial, BLOCKS, getCorrectKeyForBlock } from "./IATTypes";
 
 export class TrialGenerator {
-  static generateTrialsForBlock(block: number, testModel: "A" | "B" = "A"): Trial[] {
-    let newTrials: Trial[] = [];
+  static generateTrialsForBlock(block: number, testModel: "A" | "B" = "A", expectedTrialCount: number = 20): Trial[] {
+    let allPossibleTrials: Trial[] = [];
     
     // Determine if we're using the original block or swapped block based on test model
     const effectiveBlock = this.getEffectiveBlock(block, testModel);
     
     switch (effectiveBlock) {
       case 1:
-        newTrials = [
+        allPossibleTrials = [
           ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
             stimulus: item,
             category: "communication_disorder",
@@ -29,7 +28,7 @@ export class TrialGenerator {
         break;
       case 2:
         // Attribute block (positive vs negative)
-        newTrials = [
+        allPossibleTrials = [
           ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "negative",
@@ -50,7 +49,7 @@ export class TrialGenerator {
         break;
       case 5:
         // The switched attribute block (negative vs positive with flipped keys)
-        newTrials = [
+        allPossibleTrials = [
           ...BLOCKS.NEGATIVE_ATTRIBUTES.map((item): Trial => ({
             stimulus: item,
             category: "negative",
@@ -74,7 +73,7 @@ export class TrialGenerator {
       case 6:
       case 7:
         // Combined blocks
-        newTrials = [
+        allPossibleTrials = [
           ...BLOCKS.COMMUNICATION_DISORDER.map((item): Trial => ({
             stimulus: item,
             category: "communication_disorder",
@@ -109,17 +108,16 @@ export class TrialGenerator {
         break;
     }
     
-    // Randomize the order of trials
-    const randomizedTrials = newTrials.sort(() => Math.random() - 0.5);
-    
-    // Limit the number of trials based on the block
-    let numberOfTrials = 20; // Default for most blocks
-    
-    if (block === 4 || block === 7) {
-      numberOfTrials = 40; // Blocks 4 and 7 have 40 trials
+    // Ensure we have enough trials by duplicating if necessary
+    while (allPossibleTrials.length < expectedTrialCount) {
+      allPossibleTrials = [...allPossibleTrials, ...allPossibleTrials];
     }
     
-    return randomizedTrials.slice(0, numberOfTrials);
+    // Randomize the order of trials
+    const randomizedTrials = allPossibleTrials.sort(() => Math.random() - 0.5);
+    
+    // Return exactly the expected number of trials
+    return randomizedTrials.slice(0, expectedTrialCount);
   }
 
   // Helper method to map the actual block to an effective block based on test model

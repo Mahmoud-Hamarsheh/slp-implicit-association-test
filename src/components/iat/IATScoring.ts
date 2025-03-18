@@ -18,7 +18,7 @@ export const calculateDScore = (responses: Response[]) => {
     // We'll continue with calculation but mark this in the result
   }
 
-  // Get responses for blocks 4 and 7 only (as per updated requirements)
+  // Get responses for blocks 4 and 7 only 
   const block4Responses = validResponses.filter(r => r.block === 4);
   const block7Responses = validResponses.filter(r => r.block === 7);
 

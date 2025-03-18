@@ -15,8 +15,8 @@ export const useIATTest = (onComplete: (result: number, allResponses: Response[]
 
   // Generate trials for the current block
   useEffect(() => {
-    const generatedTrials = TrialGenerator.generateTrialsForBlock(currentBlock, testModel);
     const expectedTrials = currentBlock === 4 || currentBlock === 7 ? 40 : 20;
+    const generatedTrials = TrialGenerator.generateTrialsForBlock(currentBlock, testModel, expectedTrials);
     console.log(`Generated ${generatedTrials.length}/${expectedTrials} trials for block ${currentBlock} (Model ${testModel})`);
     
     setTrials(generatedTrials);
