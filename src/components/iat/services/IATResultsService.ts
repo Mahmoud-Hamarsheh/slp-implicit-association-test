@@ -1,3 +1,4 @@
+
 import { supabase } from "@/lib/supabase";
 import { Response } from "../IATTypes";
 import { IATProps } from "../IATTypes";
@@ -82,7 +83,9 @@ export const saveIATResults = async (
         'لا أوافق بشدة': 1,
       };
       
+      // Items that need reverse scoring (q5 and q8)
       const reverseItems = ['q5', 'q8'];
+      
       let totalScore = 0;
       let answeredQuestions = 0;
       
@@ -94,8 +97,9 @@ export const saveIATResults = async (
           answeredQuestions++;
           let score = responseValues[response] || 0;
           
+          // Apply reverse scoring for negative items
           if (reverseItems.includes(questionId)) {
-            score = 6 - score;
+            score = 6 - score; // Reverse the score: 6 - original score
           }
           
           totalScore += score;
@@ -106,7 +110,7 @@ export const saveIATResults = async (
       if (answeredQuestions > 0) {
         biasScore = Number((totalScore / answeredQuestions).toFixed(2));
       } else {
-        biasScore = 3.0; // Default fallback if no questions answered
+        biasScore = 0; // Default fallback if no questions answered
       }
       
       console.log("Calculated bias score:", biasScore);

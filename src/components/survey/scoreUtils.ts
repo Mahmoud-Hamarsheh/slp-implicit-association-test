@@ -39,7 +39,7 @@ export const calculateBiasScore = (responses: SurveyResponses): { biasScore: num
   // Calculate average score if at least one question was answered
   const averageScore = answeredQuestions > 0 ? totalScore / answeredQuestions : 0;
   
-  // Determine bias level based on average score
+  // Determine bias level based on average score according to the new thresholds
   let biasLevel = '';
   if (averageScore <= 2.5) {
     biasLevel = 'منخفض';
