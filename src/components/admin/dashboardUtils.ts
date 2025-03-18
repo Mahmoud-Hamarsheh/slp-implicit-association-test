@@ -277,21 +277,90 @@ export const prepareTestModelData = (results: IATResult[]) => {
 
 export const exportToCsv = (results: IATResult[], onSuccess: () => void, onError: (error: any) => void) => {
   try {
-    const headers = ["ID", "D-Score", "Age", "Experience Years", "Degree", "Gender", "Test Model", "Created At"];
+    // Base headers for demographic and IAT data
+    const baseHeaders = [
+      "ID", 
+      "Age", 
+      "Gender", 
+      "Degree", 
+      "Experience", 
+      "IAT score", 
+      "IAT Score interpretation", 
+      "Survey score", 
+      "Survey interpretation"
+    ];
+    
+    // Get the maximum number of survey questions present in any result
+    let surveyQuestions: Set<string> = new Set();
+    results.forEach(result => {
+      if (result.survey_responses) {
+        try {
+          const responses = typeof result.survey_responses === 'string' 
+            ? JSON.parse(result.survey_responses) 
+            : result.survey_responses;
+            
+          Object.keys(responses).forEach(key => {
+            if (key.startsWith('q') && !isNaN(parseInt(key.substring(1)))) {
+              surveyQuestions.add(key.toUpperCase());
+            }
+          });
+        } catch (e) {
+          console.error("Error parsing survey responses:", e);
+        }
+      }
+    });
+    
+    // Sort the survey question keys numerically (Q1, Q2, Q3, etc.)
+    const sortedQuestions = Array.from(surveyQuestions).sort((a, b) => {
+      const numA = parseInt(a.substring(1));
+      const numB = parseInt(b.substring(1));
+      return numA - numB;
+    });
+    
+    // Add Test Model to headers
+    const headers = [...baseHeaders, ...sortedQuestions, "Test Model"];
     const csvRows = [headers.join(",")];
     
     results.forEach(result => {
       const gender = result.gender === 1 ? "ذكر" : result.gender === 2 ? "أنثى" : "غير محدد";
-      const row = [
+      const ageRange = getAgeRange(result.age);
+      const experienceRange = getExperienceRange(result.years_experience);
+      const interpretationText = getIATInterpretation(result.d_score);
+      const surveyInterpretation = getSurveyInterpretation(result.survey_score);
+      
+      // Base row data
+      const baseRow = [
         result.id,
-        result.d_score.toString(),
-        result.age.toString(),
-        result.years_experience.toString(),
-        degreeMapping[result.degree] || result.degree,
+        ageRange,
         gender,
-        result.test_model || "غير محدد",
-        format(new Date(result.created_at), "yyyy-MM-dd")
+        degreeMapping[result.degree] || result.degree,
+        experienceRange,
+        result.d_score.toFixed(2),
+        interpretationText,
+        result.survey_score?.toFixed(1) || "",
+        surveyInterpretation
       ];
+      
+      // Parse and add survey question responses
+      let surveyResponses: any = {};
+      if (result.survey_responses) {
+        try {
+          surveyResponses = typeof result.survey_responses === 'string' 
+            ? JSON.parse(result.survey_responses) 
+            : result.survey_responses;
+        } catch (e) {
+          console.error("Error parsing survey responses for result:", result.id);
+        }
+      }
+      
+      // Add survey responses to the row
+      const questionResponses = sortedQuestions.map(question => {
+        const qKey = question.toLowerCase();
+        return surveyResponses[qKey] || "";
+      });
+      
+      // Add Test Model
+      const row = [...baseRow, ...questionResponses, result.test_model || "غير محدد"];
       csvRows.push(row.join(","));
     });
     
@@ -312,4 +381,43 @@ export const exportToCsv = (results: IATResult[], onSuccess: () => void, onError
     console.error("Error exporting data:", error);
     onError(error);
   }
+};
+
+// Helper functions for the export
+const getAgeRange = (ageValue: number): string => {
+  switch (ageValue) {
+    case 1: return "20-30";
+    case 2: return "31-40";
+    case 3: return "41-50";
+    case 4: return "51+";
+    default: return "غير محدد";
+  }
+};
+
+const getExperienceRange = (expValue: number): string => {
+  switch (expValue) {
+    case 0: return "لا يوجد خبرة";
+    case 1: return "1-2 سنوات";
+    case 2: return "2-4 سنوات";
+    case 3: return "5-10 سنوات";
+    case 4: return "10+ سنوات";
+    default: return "غير محدد";
+  }
+};
+
+const getIATInterpretation = (dScore: number): string => {
+  if (dScore > 0.65) return "تحيز قوي (سلبي)";
+  if (dScore > 0.35) return "تحيز متوسط (سلبي)";
+  if (dScore > 0.15) return "تحيز خفيف (سلبي)";
+  if (dScore > -0.15) return "محايد";
+  if (dScore > -0.35) return "تحيز خفيف (إيجابي)";
+  if (dScore > -0.65) return "تحيز متوسط (إيجابي)";
+  return "تحيز قوي (إيجابي)";
+};
+
+const getSurveyInterpretation = (score?: number): string => {
+  if (!score) return "غير متوفر";
+  if (score > 3.5) return "مرتفع";
+  if (score > 2.5) return "متوسط";
+  return "منخفض";
 };
