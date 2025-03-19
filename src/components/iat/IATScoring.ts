@@ -19,6 +19,7 @@ export const calculateDScore = (responses: Response[]) => {
   }
 
   // Get responses for blocks 4 and 7 only 
+  // Block 4 = compatible block, Block 7 = incompatible block
   const block4Responses = validResponses.filter(r => r.block === 4);
   const block7Responses = validResponses.filter(r => r.block === 7);
 
@@ -34,18 +35,18 @@ export const calculateDScore = (responses: Response[]) => {
   const sd = calculatePooledSD([...block4Responses, ...block7Responses]);
 
   // Step 4: Compute mean latency for blocks 4 and 7
-  const mean4 = calculateMean(block4Responses);
-  const mean7 = calculateMean(block7Responses);
+  const mean4 = calculateMean(block4Responses); // Mean of compatible block
+  const mean7 = calculateMean(block7Responses); // Mean of incompatible block
 
   console.log(`Means: B4=${mean4.toFixed(3)}, B7=${mean7.toFixed(3)}`);
   console.log(`SD: ${sd.toFixed(3)}`);
 
-  // Step 5: Compute the mean difference (block7 - block4)
-  // Block 7 is typically the incompatible block and Block 4 is the compatible block
-  const diff = mean7 - mean4;
+  // Step 5: Compute the mean difference (Incompatible - Compatible)
+  // D = Mean Difference (Incompatible - Compatible) / Pooled Standard Deviation
+  const meanDifference = mean7 - mean4;
 
   // Step 6: Divide the difference score by the pooled standard deviation
-  const dScore = diff / sd;
+  const dScore = meanDifference / sd;
   console.log(`Final D-Score: ${dScore.toFixed(3)}`);
   
   // Handle NaN cases
