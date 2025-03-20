@@ -8,44 +8,56 @@ export const calculateDScore = (responses: Response[]) => {
   const validResponses = responses.filter(r => r.responseTime <= 10);
   console.log(`Filtered ${responses.length - validResponses.length} responses > 10 seconds`);
 
-  // Step 2: Check if more than 10% of trials are < 300ms
+  // Step 2: Remove trials with reaction time < 300ms (outliers)
+  const filteredResponses = validResponses.filter(r => r.responseTime >= 0.3);
+  console.log(`Removed ${validResponses.length - filteredResponses.length} responses < 300ms as outliers`);
+  
+  // Check if more than 10% of trials were < 300ms (warning flag)
   const fastTrials = validResponses.filter(r => r.responseTime < 0.3);
   const tooManyFastResponses = fastTrials.length / validResponses.length > 0.1;
-  console.log(`Found ${fastTrials.length} fast trials (< 300ms) out of ${validResponses.length} valid trials`);
   
   if (tooManyFastResponses) {
     console.log("Warning: More than 10% of trials are < 300ms, subject should be deleted");
     // We'll continue with calculation but mark this in the result
   }
 
-  // Get responses for blocks 4 and 7 only 
-  // Block 4 = compatible block, Block 7 = incompatible block
-  const block4Responses = validResponses.filter(r => r.block === 4);
-  const block7Responses = validResponses.filter(r => r.block === 7);
+  // Get responses for blocks 3, 4, 6, and 7
+  // Blocks 3 & 4 = compatible blocks, Blocks 6 & 7 = incompatible blocks
+  const block3Responses = filteredResponses.filter(r => r.block === 3); // Practice compatible
+  const block4Responses = filteredResponses.filter(r => r.block === 4); // Test compatible
+  const block6Responses = filteredResponses.filter(r => r.block === 6); // Practice incompatible
+  const block7Responses = filteredResponses.filter(r => r.block === 7); // Test incompatible
 
-  console.log(`Block counts for D-score calculation: B4=${block4Responses.length}, B7=${block7Responses.length}`);
+  console.log(`Block counts for D-score calculation: 
+    Compatible: B3=${block3Responses.length}, B4=${block4Responses.length}
+    Incompatible: B6=${block6Responses.length}, B7=${block7Responses.length}`);
 
   // If we're missing responses from critical blocks, return 0
-  if (!block4Responses.length || !block7Responses.length) {
-    console.log("Missing responses for one or more critical blocks (4 or 7), returning 0");
+  if (!block3Responses.length || !block4Responses.length || 
+      !block6Responses.length || !block7Responses.length) {
+    console.log("Missing responses for one or more critical blocks (3, 4, 6, or 7), returning 0");
     return 0;
   }
 
-  // Step 3: Compute the standard deviation for blocks 4 & 7 combined
-  const sd = calculatePooledSD([...block4Responses, ...block7Responses]);
+  // Combine compatible and incompatible blocks
+  const compatibleResponses = [...block3Responses, ...block4Responses];
+  const incompatibleResponses = [...block6Responses, ...block7Responses];
 
-  // Step 4: Compute mean latency for blocks 4 and 7
-  const mean4 = calculateMean(block4Responses); // Mean of compatible block
-  const mean7 = calculateMean(block7Responses); // Mean of incompatible block
+  // Calculate means for compatible and incompatible blocks
+  const meanCompatible = calculateMean(compatibleResponses); // Mean of compatible blocks (3 & 4)
+  const meanIncompatible = calculateMean(incompatibleResponses); // Mean of incompatible blocks (6 & 7)
 
-  console.log(`Means: B4=${mean4.toFixed(3)}, B7=${mean7.toFixed(3)}`);
-  console.log(`SD: ${sd.toFixed(3)}`);
+  // Calculate the pooled standard deviation across all critical blocks
+  const sd = calculatePooledSD([...compatibleResponses, ...incompatibleResponses]);
 
-  // Step 5: Compute the mean difference (Incompatible - Compatible)
+  console.log(`Means: Compatible=${meanCompatible.toFixed(3)}, Incompatible=${meanIncompatible.toFixed(3)}`);
+  console.log(`Pooled SD: ${sd.toFixed(3)}`);
+
+  // Compute the mean difference (Incompatible - Compatible)
   // D = Mean Difference (Incompatible - Compatible) / Pooled Standard Deviation
-  const meanDifference = mean7 - mean4;
+  const meanDifference = meanIncompatible - meanCompatible;
 
-  // Step 6: Divide the difference score by the pooled standard deviation
+  // Divide the difference score by the pooled standard deviation
   const dScore = meanDifference / sd;
   console.log(`Final D-Score: ${dScore.toFixed(3)}`);
   
