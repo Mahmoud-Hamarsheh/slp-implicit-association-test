@@ -40,22 +40,40 @@ export const calculateDScore = (responses: Response[]) => {
     return 0;
   }
 
-  // Combine compatible and incompatible blocks
-  const compatibleResponses = [...block3Responses, ...block4Responses];
-  const incompatibleResponses = [...block6Responses, ...block7Responses];
+  // Calculate means for each block (correct responses only)
+  const mean3 = calculateBlockMean(block3Responses, true);
+  const mean4 = calculateBlockMean(block4Responses, true);
+  const mean6 = calculateBlockMean(block6Responses, true);
+  const mean7 = calculateBlockMean(block7Responses, true);
+
+  console.log(`Block means (correct responses only):
+    Block 3: ${mean3.toFixed(3)}s
+    Block 4: ${mean4.toFixed(3)}s
+    Block 6: ${mean6.toFixed(3)}s 
+    Block 7: ${mean7.toFixed(3)}s`);
+
+  // Now handle the incorrect responses with block mean + 600ms penalty
+  // Create new arrays with corrected response times
+  const correctedBlock3 = correctResponseTimes(block3Responses, mean3);
+  const correctedBlock4 = correctResponseTimes(block4Responses, mean4);
+  const correctedBlock6 = correctResponseTimes(block6Responses, mean6);
+  const correctedBlock7 = correctResponseTimes(block7Responses, mean7);
+
+  // Combine compatible and incompatible blocks with corrections applied
+  const compatibleResponses = [...correctedBlock3, ...correctedBlock4];
+  const incompatibleResponses = [...correctedBlock6, ...correctedBlock7];
 
   // Calculate means for compatible and incompatible blocks
-  const meanCompatible = calculateMean(compatibleResponses); // Mean of compatible blocks (3 & 4)
-  const meanIncompatible = calculateMean(incompatibleResponses); // Mean of incompatible blocks (6 & 7)
+  const meanCompatible = calculateMean(compatibleResponses);
+  const meanIncompatible = calculateMean(incompatibleResponses);
 
   // Calculate the pooled standard deviation across all critical blocks
   const sd = calculatePooledSD([...compatibleResponses, ...incompatibleResponses]);
 
-  console.log(`Means: Compatible=${meanCompatible.toFixed(3)}, Incompatible=${meanIncompatible.toFixed(3)}`);
+  console.log(`Final means: Compatible=${meanCompatible.toFixed(3)}, Incompatible=${meanIncompatible.toFixed(3)}`);
   console.log(`Pooled SD: ${sd.toFixed(3)}`);
 
   // Compute the mean difference (Incompatible - Compatible)
-  // D = Mean Difference (Incompatible - Compatible) / Pooled Standard Deviation
   const meanDifference = meanIncompatible - meanCompatible;
 
   // Divide the difference score by the pooled standard deviation
@@ -69,6 +87,49 @@ export const calculateDScore = (responses: Response[]) => {
   }
   
   return dScore;
+};
+
+// Calculate mean for correct responses only in a block
+const calculateBlockMean = (responses: Response[], correctOnly: boolean): number => {
+  if (responses.length === 0) return 0;
+  
+  const filteredResponses = correctOnly ? responses.filter(r => r.correct) : responses;
+  if (filteredResponses.length === 0) return 0;
+  
+  const sum = filteredResponses.reduce((acc, r) => acc + r.responseTime, 0);
+  return sum / filteredResponses.length;
+};
+
+// Apply corrections to response times (replace incorrect with mean + 600ms)
+const correctResponseTimes = (responses: Response[], blockMean: number): Response[] => {
+  return responses.map(response => {
+    if (!response.correct) {
+      // For incorrect responses, use block mean + 600ms penalty
+      return {
+        ...response,
+        responseTime: blockMean + 0.6 // 600ms penalty
+      };
+    }
+    return response;
+  });
+};
+
+// Calculate mean across all responses (after corrections)
+const calculateMean = (responses: Response[]): number => {
+  if (responses.length === 0) return 0;
+  const sum = responses.reduce((acc, r) => acc + r.responseTime, 0);
+  return sum / responses.length;
+};
+
+const calculatePooledSD = (responses: Response[]): number => {
+  if (responses.length <= 1) return 1; // Return 1 to avoid division by zero
+  
+  const mean = calculateMean(responses);
+  const sumSquares = responses.reduce((acc, r) => {
+    return acc + Math.pow(r.responseTime - mean, 2);
+  }, 0);
+  
+  return Math.sqrt(sumSquares / (responses.length - 1));
 };
 
 export const getIATResultInterpretation = (dScore: number): string => {
@@ -87,26 +148,4 @@ export const getIATResultInterpretation = (dScore: number): string => {
   } else {
     return "تحيز قوي إيجابي نحو اضطرابات التواصل";
   }
-};
-
-const calculateMean = (responses: Response[]): number => {
-  if (responses.length === 0) return 0;
-  const sum = responses.reduce((acc, r) => {
-    // Add 600ms penalty for incorrect responses
-    const time = r.correct ? r.responseTime : r.responseTime + 0.6;
-    return acc + time;
-  }, 0);
-  return sum / responses.length;
-};
-
-const calculatePooledSD = (responses: Response[]): number => {
-  if (responses.length <= 1) return 1; // Return 1 to avoid division by zero
-  
-  const mean = calculateMean(responses);
-  const sumSquares = responses.reduce((acc, r) => {
-    const time = r.correct ? r.responseTime : r.responseTime + 0.6;
-    return acc + Math.pow(time - mean, 2);
-  }, 0);
-  
-  return Math.sqrt(sumSquares / (responses.length - 1));
 };
