@@ -26,9 +26,9 @@ export const getIATInterpretation = (dScore: number): string => {
   if (dScore > 0.65) return "تحيز قوي (سلبي)";
   if (dScore > 0.35) return "تحيز متوسط (سلبي)";
   if (dScore > 0.15) return "تحيز خفيف (سلبي)";
-  if (dScore > -0.15) return "محايد";
-  if (dScore > -0.35) return "تحيز خفيف (إيجابي)";
-  if (dScore > -0.65) return "تحيز متوسط (إيجابي)";
+  if (dScore >= -0.15) return "محايد";
+  if (dScore >= -0.35) return "تحيز خفيف (إيجابي)";
+  if (dScore >= -0.65) return "تحيز متوسط (إيجابي)";
   return "تحيز قوي (إيجابي)";
 };
 

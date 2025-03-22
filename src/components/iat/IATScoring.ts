@@ -139,11 +139,11 @@ export const getIATResultInterpretation = (dScore: number): string => {
     return "تحيز متوسط سلبي ضد اضطرابات التواصل";
   } else if (dScore > 0.15) {
     return "تحيز خفيف سلبي ضد اضطرابات التواصل";
-  } else if (dScore > -0.15) {
+  } else if (dScore >= -0.15) {
     return "لا يوجد تحيز ضمني واضح";
-  } else if (dScore > -0.35) {
+  } else if (dScore >= -0.35) {
     return "تحيز خفيف إيجابي نحو اضطرابات التواصل";
-  } else if (dScore > -0.65) {
+  } else if (dScore >= -0.65) {
     return "تحيز متوسط إيجابي نحو اضطرابات التواصل";
   } else {
     return "تحيز قوي إيجابي نحو اضطرابات التواصل";
