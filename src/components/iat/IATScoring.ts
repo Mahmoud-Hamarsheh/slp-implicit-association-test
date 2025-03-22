@@ -1,12 +1,28 @@
 
 import type { Response } from "./IATTypes";
 
-export const calculateDScore = (responses: Response[]) => {
-  console.log("Calculating D-Score with responses:", responses);
+export const calculateDScore = (responses: Response[], testModel: "A" | "B" = "A") => {
+  console.log(`Calculating D-Score with responses for test model ${testModel}:`, responses);
+  
+  // If we're using test model B, we need to correct the block numbers before calculation
+  // In model B, blocks are reversed: blocks 2-4 in UI are actually blocks 5-7, and vice versa
+  const normalizedResponses = testModel === "B" 
+    ? responses.map(response => {
+        let effectiveBlock = response.block;
+        if (response.block >= 2 && response.block <= 4) {
+          // Convert UI blocks 2,3,4 to effective blocks 5,6,7 for calculation
+          effectiveBlock = response.block + 3;
+        } else if (response.block >= 5 && response.block <= 7) {
+          // Convert UI blocks 5,6,7 to effective blocks 2,3,4 for calculation
+          effectiveBlock = response.block - 3;
+        }
+        return { ...response, block: effectiveBlock };
+      })
+    : responses;
   
   // Step 1: Delete trials > 10,000ms (10 seconds)
-  const validResponses = responses.filter(r => r.responseTime <= 10);
-  console.log(`Filtered ${responses.length - validResponses.length} responses > 10 seconds`);
+  const validResponses = normalizedResponses.filter(r => r.responseTime <= 10);
+  console.log(`Filtered ${normalizedResponses.length - validResponses.length} responses > 10 seconds`);
 
   // Step 2: Remove trials with reaction time < 300ms (outliers)
   const filteredResponses = validResponses.filter(r => r.responseTime >= 0.3);

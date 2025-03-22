@@ -46,8 +46,8 @@ export const useIATTest = (onComplete: (result: number, allResponses: Response[]
       } else {
         console.log("All blocks completed, calculating D-score");
         // Always get a valid D-score (never null)
-        const dScore = calculateDScore(updatedResponses) || 0;
-        console.log(`Final D-score: ${dScore.toFixed(3)}`);
+        const dScore = calculateDScore(updatedResponses, testModel) || 0;
+        console.log(`Final D-score: ${dScore.toFixed(3)} (Model ${testModel})`);
         
         // Send the score, all responses, and test model to the parent component
         onComplete(dScore, updatedResponses, testModel);
