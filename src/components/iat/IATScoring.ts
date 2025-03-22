@@ -18,7 +18,8 @@ export const calculateDScore = (responses: Response[]) => {
   
   if (tooManyFastResponses) {
     console.log("Warning: More than 10% of trials are < 300ms, subject should be deleted");
-    // We'll continue with calculation but mark this in the result
+    // We should discard this participant's data
+    return 0;
   }
 
   // Get responses for blocks 3, 4, 6, and 7
