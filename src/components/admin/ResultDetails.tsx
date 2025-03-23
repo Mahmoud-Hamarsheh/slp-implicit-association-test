@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { degreeMapping } from "./dashboardUtils";
+import { getAgeRange, getExperienceRange, getIATInterpretation } from "./utils/helpers";
 
 interface ResultDetailsProps {
   results: any[];
@@ -18,35 +19,6 @@ export const ResultDetails: React.FC<ResultDetailsProps> = ({ results }) => {
     (page - 1) * resultsPerPage,
     page * resultsPerPage
   );
-
-  const getAgeRange = (ageValue: number): string => {
-    switch (ageValue) {
-      case 1: return "20-30";
-      case 2: return "31-40";
-      case 3: return "41-50";
-      case 4: return "51+";
-      default: return "غير محدد";
-    }
-  };
-
-  const getExperienceRange = (expValue: number): string => {
-    switch (expValue) {
-      case 0: return "لا يوجد خبرة";
-      case 1: return "1-2 سنوات";
-      case 2: return "2-4 سنوات";
-      case 3: return "5-10 سنوات";
-      case 4: return "10+ سنوات";
-      default: return "غير محدد";
-    }
-  };
-
-  const getBiasCategory = (dScore: number): string => {
-    if (dScore > 0.65) return "تحيز قوي (سلبي)";
-    if (dScore > 0.35) return "تحيز متوسط (سلبي)";
-    if (dScore > 0.15) return "تحيز خفيف (سلبي)";
-    if (dScore > -0.15) return "محايد";
-    return "تحيز خفيف (إيجابي)";
-  };
 
   return (
     <div className="space-y-4">
@@ -76,11 +48,13 @@ export const ResultDetails: React.FC<ResultDetailsProps> = ({ results }) => {
                       result.d_score > 0.65 ? "bg-red-100 text-red-800" :
                       result.d_score > 0.35 ? "bg-orange-100 text-orange-800" :
                       result.d_score > 0.15 ? "bg-yellow-100 text-yellow-800" :
-                      result.d_score > -0.15 ? "bg-green-100 text-green-800" :
-                      "bg-blue-100 text-blue-800"
+                      result.d_score >= -0.15 ? "bg-green-100 text-green-800" :
+                      result.d_score >= -0.35 ? "bg-blue-100 text-blue-800" :
+                      result.d_score >= -0.65 ? "bg-indigo-100 text-indigo-800" :
+                      "bg-purple-100 text-purple-800"
                     }`}
                   >
-                    {result.d_score.toFixed(3)} ({getBiasCategory(result.d_score)})
+                    {result.d_score.toFixed(3)} ({getIATInterpretation(result.d_score)})
                   </span>
                 </TableCell>
                 <TableCell className="text-right">{getAgeRange(result.age)}</TableCell>
