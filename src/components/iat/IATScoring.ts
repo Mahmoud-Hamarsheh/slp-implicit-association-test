@@ -24,20 +24,31 @@ export const calculateDScore = (responses: Response[], testModel: "A" | "B" = "A
   const validResponses = normalizedResponses.filter(r => r.responseTime <= 10);
   console.log(`Filtered ${normalizedResponses.length - validResponses.length} responses > 10 seconds`);
 
-  // Step 2: Remove trials with reaction time < 300ms (outliers)
-  const filteredResponses = validResponses.filter(r => r.responseTime >= 0.3);
-  console.log(`Removed ${validResponses.length - filteredResponses.length} responses < 300ms as outliers`);
-  
-  // Check if more than 10% of trials were < 300ms (warning flag)
+  // Step 2: Check for exclusion criteria
+  // Count trials with reaction time < 300ms (outliers)
   const fastTrials = validResponses.filter(r => r.responseTime < 0.3);
   const tooManyFastResponses = fastTrials.length / validResponses.length > 0.1;
   
-  if (tooManyFastResponses) {
-    console.log("Warning: More than 10% of trials are < 300ms, subject should be deleted");
-    // We should discard this participant's data
+  // Count incorrect responses
+  const incorrectResponses = validResponses.filter(r => !r.correct);
+  const tooManyIncorrectResponses = incorrectResponses.length / validResponses.length > 0.3;
+  
+  // Exclude participant data if they meet either exclusion criterion
+  if (tooManyFastResponses || tooManyIncorrectResponses) {
+    if (tooManyFastResponses) {
+      console.log("Exclusion: More than 10% of trials are < 300ms");
+    }
+    if (tooManyIncorrectResponses) {
+      console.log("Exclusion: More than 30% incorrect responses");
+    }
+    // Discard this participant's data
     return 0;
   }
 
+  // Remove trials with reaction time < 300ms (outliers)
+  const filteredResponses = validResponses.filter(r => r.responseTime >= 0.3);
+  console.log(`Removed ${validResponses.length - filteredResponses.length} responses < 300ms as outliers`);
+  
   // Get responses for blocks 3, 4, 6, and 7
   // Blocks 3 & 4 = compatible blocks, Blocks 6 & 7 = incompatible blocks
   const block3Responses = filteredResponses.filter(r => r.block === 3); // Practice compatible
