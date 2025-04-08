@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,15 +9,23 @@ import { Label } from "@/components/ui/label";
 interface InfoPopupProps {
   onContinue: () => void;
   initialStep?: "specialist" | "info";
+  onSpecialistSelect?: (type: string) => void;
 }
 
-export const InfoPopup: React.FC<InfoPopupProps> = ({ onContinue, initialStep = "specialist" }) => {
+export const InfoPopup: React.FC<InfoPopupProps> = ({ 
+  onContinue, 
+  initialStep = "specialist", 
+  onSpecialistSelect 
+}) => {
   const [selection, setSelection] = useState<string | null>(null);
   const [showInfo, setShowInfo] = useState(initialStep === "info");
   const [currentStep, setCurrentStep] = useState<"specialist" | "info">(initialStep);
 
   const handleSelection = (value: string) => {
     setSelection(value);
+    if (onSpecialistSelect) {
+      onSpecialistSelect(value);
+    }
   };
 
   const handleProceed = () => {
