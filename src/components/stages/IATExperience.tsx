@@ -38,7 +38,7 @@ export const IATExperience: React.FC<IATExperienceProps> = ({ onSelectYes, onSel
           <h2 className="text-2xl font-bold">هل سبق لك أن خضعت لاختبار الترابط الضمني (IAT) من قبل؟</h2>
           <div className="flex justify-center gap-4">
             <Button variant="outline" onClick={handleYesClick}>نعم</Button>
-            <Button onClick={handleNoClick}>لا</Button>
+            <Button variant="outline" onClick={handleNoClick}>لا</Button>
           </div>
         </Card>
       ) : (

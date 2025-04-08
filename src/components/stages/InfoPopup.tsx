@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -56,24 +55,16 @@ export const InfoPopup: React.FC<InfoPopupProps> = ({
             <h2 className="text-2xl font-bold">هل أنت أخصائي، مُعالج، أو طالب نطق ولغة؟</h2>
           </div>
           
-          <RadioGroup className="flex flex-col space-y-4 px-8" value={selection || ""} onValueChange={handleSelection}>
-            <div className="flex items-center space-x-2 space-x-reverse justify-end">
-              <Label htmlFor="specialist" className="font-medium cursor-pointer">أخصائي نطق ولغة</Label>
-              <RadioGroupItem value="specialist" id="specialist" />
-            </div>
-            <div className="flex items-center space-x-2 space-x-reverse justify-end">
-              <Label htmlFor="therapist" className="font-medium cursor-pointer">معالج نطق ولغة</Label>
-              <RadioGroupItem value="therapist" id="therapist" />
-            </div>
-            <div className="flex items-center space-x-2 space-x-reverse justify-end">
-              <Label htmlFor="student" className="font-medium cursor-pointer">طالب نطق ولغة</Label>
-              <RadioGroupItem value="student" id="student" />
-            </div>
-            <div className="flex items-center space-x-2 space-x-reverse justify-end">
-              <Label htmlFor="other" className="font-medium cursor-pointer">غير ذلك</Label>
-              <RadioGroupItem value="other" id="other" />
-            </div>
-          </RadioGroup>
+          <div className="flex justify-center gap-4 mt-6">
+            <Button variant="outline" onClick={() => handleSelection("yes")} 
+              className={selection === "yes" ? "ring-2 ring-primary" : ""}>
+              نعم
+            </Button>
+            <Button variant="outline" onClick={() => handleSelection("no")}
+              className={selection === "no" ? "ring-2 ring-primary" : ""}>
+              لا
+            </Button>
+          </div>
           
           <Button 
             onClick={handleProceed} 
