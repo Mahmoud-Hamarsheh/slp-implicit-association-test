@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,11 +7,13 @@ import { Label } from "@/components/ui/label";
 
 interface InfoPopupProps {
   onContinue: () => void;
+  initialStep?: "specialist" | "info";
 }
 
-export const InfoPopup: React.FC<InfoPopupProps> = ({ onContinue }) => {
+export const InfoPopup: React.FC<InfoPopupProps> = ({ onContinue, initialStep = "specialist" }) => {
   const [selection, setSelection] = useState<string | null>(null);
-  const [showInfo, setShowInfo] = useState(false);
+  const [showInfo, setShowInfo] = useState(initialStep === "info");
+  const [currentStep, setCurrentStep] = useState<"specialist" | "info">(initialStep);
 
   const handleSelection = (value: string) => {
     setSelection(value);
@@ -22,7 +23,15 @@ export const InfoPopup: React.FC<InfoPopupProps> = ({ onContinue }) => {
     if (!selection) {
       return; // Don't proceed without selection
     }
-    setShowInfo(true);
+    
+    if (initialStep === "specialist") {
+      // If we started with the specialist question, we can just continue
+      onContinue();
+    } else {
+      // Otherwise show the info step
+      setShowInfo(true);
+      setCurrentStep("info");
+    }
   };
 
   const handleContinue = () => {
@@ -31,7 +40,7 @@ export const InfoPopup: React.FC<InfoPopupProps> = ({ onContinue }) => {
 
   return (
     <Card className="p-8 text-center space-y-6 fixed inset-0 flex flex-col items-center justify-center max-w-xl mx-auto my-auto bg-white/90 backdrop-blur-sm shadow-lg z-50 animate-fadeIn">
-      {!showInfo ? (
+      {currentStep === "specialist" && !showInfo ? (
         <>
           <div className="flex items-center justify-center gap-2 text-primary">
             <GraduationCap className="w-8 h-8" />
