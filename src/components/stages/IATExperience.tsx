@@ -10,7 +10,7 @@ interface IATExperienceProps {
 }
 
 export const IATExperience: React.FC<IATExperienceProps> = ({ onSelectYes, onSelectNo }) => {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(true);
   const [selectedYes, setSelectedYes] = useState(false);
 
   const handleYesClick = () => {
@@ -33,15 +33,17 @@ export const IATExperience: React.FC<IATExperienceProps> = ({ onSelectYes, onSel
 
   return (
     <>
-      <Card className="p-8 text-center space-y-6 animate-slideIn">
-        <h2 className="text-2xl font-bold">هل سبق لك أن خضعت لاختبار الترابط الضمني (IAT) من قبل؟</h2>
-        <div className="flex justify-center gap-4">
-          <Button variant="outline" onClick={handleYesClick}>نعم</Button>
-          <Button onClick={handleNoClick}>لا</Button>
-        </div>
-      </Card>
-
-      {showPopup && <InfoPopup onContinue={handlePopupContinue} />}
+      {!showPopup ? (
+        <Card className="p-8 text-center space-y-6 animate-slideIn">
+          <h2 className="text-2xl font-bold">هل سبق لك أن خضعت لاختبار الترابط الضمني (IAT) من قبل؟</h2>
+          <div className="flex justify-center gap-4">
+            <Button variant="outline" onClick={handleYesClick}>نعم</Button>
+            <Button onClick={handleNoClick}>لا</Button>
+          </div>
+        </Card>
+      ) : (
+        <InfoPopup onContinue={handlePopupContinue} />
+      )}
     </>
   );
 };
