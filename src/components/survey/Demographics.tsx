@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 export const Demographics: React.FC<DemographicsProps> = ({ onComplete }) => {
   const [age, setAge] = useState('');
   const [yearsExperience, setYearsExperience] = useState('لا يوجد خبرة/طالب');
-  const [degree, setDegree] = useState('طالب');
+  const [degree, setDegree] = useState('طالب بكالوريوس سمع ونطق');
   const [gender, setGender] = useState<'male' | 'female'>('male');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -92,7 +92,7 @@ export const Demographics: React.FC<DemographicsProps> = ({ onComplete }) => {
                   <SelectValue placeholder="اختر الدرجة العلمية" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border shadow-md">
-                  <SelectItem value="طالب">طالب</SelectItem>
+                  <SelectItem value="طالب بكالوريوس سمع ونطق">طالب بكالوريوس سمع ونطق</SelectItem>
                   <SelectItem value="بكالوريوس">بكالوريوس</SelectItem>
                   <SelectItem value="ماجستير">ماجستير</SelectItem>
                   <SelectItem value="دكتوراه">دكتوراه</SelectItem>

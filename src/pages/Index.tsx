@@ -12,18 +12,23 @@ import { IATWelcome } from "@/components/stages/IATWelcome";
 import { Instructions } from "@/components/stages/Instructions";
 import { TestStage } from "@/components/stages/TestStage";
 import { Complete } from "@/components/stages/Complete";
+import { SpecialistQuestion } from "@/components/stages/SpecialistQuestion";
+import { DeviceWarning } from "@/components/stages/DeviceWarning";
 import { saveIATResults } from "@/components/iat/services/IATResultsService";
 
 type Stage = 
   | "welcome" 
   | "consent" 
+  | "specialist-question"
+  | "device-warning"
   | "iat-experience" 
   | "survey" 
   | "iat-welcome" 
   | "instructions" 
   | "test" 
   | "bias-awareness" 
-  | "complete";
+  | "complete"
+  | "not-eligible";
 
 const Index = () => {
   const [stage, setStage] = useState<Stage>("welcome");
@@ -33,6 +38,7 @@ const Index = () => {
   const [testResponses, setTestResponses] = useState<any[]>([]);
   const [hasTakenIATBefore, setHasTakenIATBefore] = useState(false);
   const [testModel, setTestModel] = useState<"A" | "B">(Math.random() < 0.5 ? "A" : "B");
+  const [isSpecialist, setIsSpecialist] = useState(false);
   const { toast } = useToast();
 
   // Assign test model on component mount
@@ -47,7 +53,8 @@ const Index = () => {
     // Add the test model to survey data
     const enrichedData = {
       ...data,
-      testModel
+      testModel,
+      isSpecialist
     };
     setSurveyData(enrichedData);
     setStage("iat-welcome");
@@ -65,13 +72,15 @@ const Index = () => {
     setBiasAwarenessData(data);
     
     // Save all data to the database at the end of the flow
-    if (surveyData && testResult !== null) {
+    // Only save data if the user is a specialist
+    if (surveyData && testResult !== null && isSpecialist) {
       // Combine all data together
       const completeData = {
         ...surveyData,
         biasAwarenessResponses: data,
         hasTakenIATBefore,
-        testModel  // Include the test model in the saved data
+        testModel,
+        isSpecialist
       };
       
       // Extract response times from responses for the database
@@ -88,12 +97,28 @@ const Index = () => {
           });
         });
     } else {
-      // In case there's missing data, still move to complete stage
+      // In case there's missing data or user is not a specialist,
+      // still move to complete stage but don't save to database
       setStage("complete");
       toast({
         title: "تم الانتهاء من الاستبيان",
         description: "شكراً لإكمال جميع مراحل الدراسة"
       });
+    }
+  };
+
+  const handleSpecialistQuestion = (isSpecialist: boolean) => {
+    setIsSpecialist(isSpecialist);
+    if (isSpecialist) {
+      setStage("device-warning");
+    } else {
+      // If not a specialist, show a message and don't record data
+      setStage("not-eligible");
+      setTimeout(() => {
+        // After showing the message for 3 seconds, redirect to survey anyway
+        // but mark as non-specialist so no data is saved
+        setStage("device-warning");
+      }, 3000);
     }
   };
 
@@ -105,7 +130,28 @@ const Index = () => {
         )}
 
         {stage === "consent" && (
-          <Consent onAgree={() => setStage("iat-experience")} />
+          <Consent onAgree={() => setStage("specialist-question")} />
+        )}
+
+        {stage === "specialist-question" && (
+          <SpecialistQuestion 
+            onSelectYes={() => handleSpecialistQuestion(true)}
+            onSelectNo={() => handleSpecialistQuestion(false)}
+          />
+        )}
+
+        {stage === "not-eligible" && (
+          <Card className="p-8 text-center space-y-6 animate-slideIn">
+            <h2 className="text-2xl font-bold">شكراً لاهتمامك</h2>
+            <p className="text-lg">
+              هذه الدراسة مخصصة لأخصائيي ومعالجي وطلاب النطق واللغة.
+            </p>
+            <p>جاري التوجيه...</p>
+          </Card>
+        )}
+
+        {stage === "device-warning" && (
+          <DeviceWarning onContinue={() => setStage("iat-experience")} />
         )}
 
         {stage === "iat-experience" && (

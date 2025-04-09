@@ -21,6 +21,12 @@ export const saveIATResults = async (
     console.log("Responses:", responses);
     console.log("Survey data:", JSON.stringify(surveyData, null, 2));
     
+    // Check if user is specialist - only save data if they are
+    if (!surveyData.isSpecialist) {
+      console.log("User is not a specialist, skipping database save");
+      return dScore;
+    }
+    
     // Ensure valid D-score (never null)
     const finalDScore = dScore || 0;
     
@@ -35,7 +41,7 @@ export const saveIATResults = async (
     // Convert degree to numeric value if it's not already
     let degreeValue = surveyData.degree;
     if (!degreeValue.match(/^[0-9]+$/)) {
-      if (degreeValue === "طالب") degreeValue = "1";
+      if (degreeValue === "طالب بكالوريوس سمع ونطق") degreeValue = "1";
       else if (degreeValue === "بكالوريوس") degreeValue = "2";
       else if (degreeValue === "ماجستير") degreeValue = "3";
       else if (degreeValue === "دكتوراه") degreeValue = "4";
