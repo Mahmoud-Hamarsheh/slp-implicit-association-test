@@ -13,12 +13,10 @@ import { Instructions } from "@/components/stages/Instructions";
 import { TestStage } from "@/components/stages/TestStage";
 import { Complete } from "@/components/stages/Complete";
 import { saveIATResults } from "@/components/iat/services/IATResultsService";
-import { InfoPopup } from "@/components/stages/InfoPopup";
 
 type Stage = 
   | "welcome" 
   | "consent" 
-  | "specialist-question"
   | "iat-experience" 
   | "survey" 
   | "iat-welcome" 
@@ -35,7 +33,6 @@ const Index = () => {
   const [testResponses, setTestResponses] = useState<any[]>([]);
   const [hasTakenIATBefore, setHasTakenIATBefore] = useState(false);
   const [testModel, setTestModel] = useState<"A" | "B">(Math.random() < 0.5 ? "A" : "B");
-  const [specialistType, setSpecialistType] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Assign test model on component mount
@@ -46,16 +43,11 @@ const Index = () => {
     console.log(`Assigned test model: ${model}`);
   }, []);
 
-  const handleSpecialistContinue = () => {
-    setStage("iat-experience");
-  };
-
   const handleSurveyComplete = (data: SurveyData) => {
     // Add the test model to survey data
     const enrichedData = {
       ...data,
-      testModel,
-      specialistType
+      testModel
     };
     setSurveyData(enrichedData);
     setStage("iat-welcome");
@@ -113,15 +105,7 @@ const Index = () => {
         )}
 
         {stage === "consent" && (
-          <Consent onAgree={() => setStage("specialist-question")} />
-        )}
-        
-        {stage === "specialist-question" && (
-          <InfoPopup 
-            onContinue={handleSpecialistContinue} 
-            initialStep="specialist" 
-            onSpecialistSelect={(type) => setSpecialistType(type)}
-          />
+          <Consent onAgree={() => setStage("iat-experience")} />
         )}
 
         {stage === "iat-experience" && (
