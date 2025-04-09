@@ -9,8 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 
 export const Demographics: React.FC<DemographicsProps> = ({ onComplete }) => {
   const [age, setAge] = useState('');
-  const [yearsExperience, setYearsExperience] = useState('لا يوجد خبرة/طالب');
-  const [degree, setDegree] = useState('طالب بكالوريوس سمع ونطق');
+  const [yearsExperience, setYearsExperience] = useState('');
+  const [degree, setDegree] = useState('');
   const [gender, setGender] = useState<'male' | 'female'>('male');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -19,6 +19,18 @@ export const Demographics: React.FC<DemographicsProps> = ({ onComplete }) => {
     // Make sure age is not empty before submitting
     if (!age) {
       alert('الرجاء اختيار الفئة العمرية');
+      return;
+    }
+
+    // Make sure yearsExperience is not empty
+    if (!yearsExperience) {
+      alert('الرجاء اختيار سنوات الخبرة');
+      return;
+    }
+
+    // Make sure degree is not empty
+    if (!degree) {
+      alert('الرجاء اختيار الدرجة العلمية');
       return;
     }
     
@@ -92,7 +104,7 @@ export const Demographics: React.FC<DemographicsProps> = ({ onComplete }) => {
                   <SelectValue placeholder="اختر الدرجة العلمية" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border shadow-md">
-                  <SelectItem value="طالب بكالوريوس سمع ونطق">طالب بكالوريوس سمع ونطق</SelectItem>
+                  <SelectItem value="طالب سمع ونطق">طالب سمع ونطق</SelectItem>
                   <SelectItem value="بكالوريوس">بكالوريوس</SelectItem>
                   <SelectItem value="ماجستير">ماجستير</SelectItem>
                   <SelectItem value="دكتوراه">دكتوراه</SelectItem>

@@ -45,7 +45,7 @@ export const Survey: React.FC<SurveyProps> = ({ onComplete }) => {
   const formatDegree = (degree: string): string => {
     // Convert degree to numerical values for database
     switch (degree) {
-      case "طالب بكالوريوس سمع ونطق": return "1";
+      case "طالب سمع ونطق": return "1";
       case "بكالوريوس": return "2";
       case "ماجستير": return "3";
       case "دكتوراه": return "4";
