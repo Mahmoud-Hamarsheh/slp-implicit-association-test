@@ -11,6 +11,7 @@ export interface IATProps {
     biasAwarenessResponses: SurveyResponses;
     hasTakenIATBefore?: boolean;
     testModel?: "A" | "B";
+    isSpecialist?: boolean; // Added this property
   };
 }
 

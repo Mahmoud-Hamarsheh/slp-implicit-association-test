@@ -28,7 +28,8 @@ export const TestStage: React.FC<TestStageProps> = ({
     ...surveyData,
     hasTakenIATBefore,
     biasAwarenessResponses: biasAwarenessData || {},
-    testModel
+    testModel,
+    isSpecialist: surveyData.isSpecialist // Ensure isSpecialist is passed to IAT component
   };
 
   const handleIATComplete = (result: number, responses: any[]) => {

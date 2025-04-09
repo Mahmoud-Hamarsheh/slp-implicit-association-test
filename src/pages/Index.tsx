@@ -1,8 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { Survey, SurveyData } from "@/components/Survey";
 import BiasAwarenessSurvey, { SurveyResponses } from "@/components/BiasAwarenessSurvey";
 import { useToast } from "@/hooks/use-toast";
+import { Card } from "@/components/ui/card";
 
 // Import refactored stage components
 import { Welcome } from "@/components/stages/Welcome";
