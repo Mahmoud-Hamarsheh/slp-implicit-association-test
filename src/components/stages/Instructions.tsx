@@ -3,6 +3,7 @@ import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useIsMobile, useIsTouchDevice } from "@/hooks/use-mobile";
 
 interface InstructionsProps {
   onContinue: () => void;
@@ -12,12 +13,19 @@ interface InstructionsProps {
 export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testModel = "A" }) => {
   // Determine if this is model A or B
   console.log(`Showing instructions for test model: ${testModel}`);
+  const isMobile = useIsMobile();
+  const isTouch = useIsTouchDevice();
+  const isTouchDevice = isMobile || isTouch;
 
   return (
     <Card className="p-8 text-center space-y-6 animate-slideIn">
       <h2 className="text-2xl font-bold">تعليمات الاختبار</h2>
       <div className="text-right space-y-4">
-        <p>ستستخدم مفاتيح الكمبيوتر "D" و"K" لتصنيف العناصر في مجموعات بأسرع ما يمكن. فيما يلي المجموعات الأربع والعناصر التي تنتمي إلى كل منها:</p>
+        {isTouchDevice ? (
+          <p>ستستخدم اللمس لتصنيف العناصر في مجموعات بأسرع ما يمكن. انقر على المربع الأخضر على اليمين أو اليسار لتصنيف العناصر. فيما يلي المجموعات الأربع والعناصر التي تنتمي إلى كل منها:</p>
+        ) : (
+          <p>ستستخدم مفاتيح الكمبيوتر "D" و"K" لتصنيف العناصر في مجموعات بأسرع ما يمكن. فيما يلي المجموعات الأربع والعناصر التي تنتمي إلى كل منها:</p>
+        )}
       </div>
       
       <div className="overflow-x-auto">
@@ -85,8 +93,17 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
 
       <div className="text-right text-sm bg-blue-50 p-4 rounded-lg">
         <p className="font-semibold">ملاحظة مهمة: </p>
-        <p>خلال الاختبار، سيتم تبديل تصنيف المجموعات بين المفاتيح D و K.</p>
-        <p>في المرحلة الأولى، سيتم استخدام D لـ "اضطراب تواصل" و K لـ "تواصل طبيعي".</p>
+        {isTouchDevice ? (
+          <>
+            <p>خلال الاختبار، سيتم تبديل تصنيف المجموعات بين المربعين الأخضر على اليمين واليسار.</p>
+            <p>في المرحلة الأولى، سيتم استخدام المربع الأيمن لـ "اضطراب تواصل" والمربع الأيسر لـ "تواصل طبيعي".</p>
+          </>
+        ) : (
+          <>
+            <p>خلال الاختبار، سيتم تبديل تصنيف المجموعات بين المفاتيح D و K.</p>
+            <p>في المرحلة الأولى، سيتم استخدام D لـ "اضطراب تواصل" و K لـ "تواصل طبيعي".</p>
+          </>
+        )}
         <p>في مراحل لاحقة، قد يتغير التصنيف وتظهر لك تعليمات جديدة.</p>
         {testModel === "B" && (
           <p className="font-semibold text-blue-700 mt-2">
