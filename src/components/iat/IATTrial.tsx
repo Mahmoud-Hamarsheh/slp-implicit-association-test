@@ -66,6 +66,13 @@ export const IATTrial: React.FC<IATTrialProps> = ({
 
   return (
     <div className="max-w-3xl mx-auto border-2 border-blue-200 rounded-lg p-4 md:p-8 bg-white">
+      {/* عرض الإكس عند الخطأ في أعلى الصفحة */}
+      {showFeedback && !isCorrect && (
+        <div className="flex justify-center mb-4">
+          <div className="text-red-500 text-4xl md:text-6xl font-bold">X</div>
+        </div>
+      )}
+      
       {/* المحتوى الرئيسي في المنتصف - تكبير حجم النص والصور */}
       <div className="flex justify-center items-center min-h-[180px] md:min-h-[250px] mb-8">
         {trial.isImage ? (
@@ -74,9 +81,6 @@ export const IATTrial: React.FC<IATTrialProps> = ({
           </div>
         ) : (
           <div className="text-3xl md:text-5xl font-bold">{trial.stimulus}</div>
-        )}
-        {showFeedback && !isCorrect && (
-          <div className="absolute text-red-500 text-4xl md:text-6xl font-bold">X</div>
         )}
       </div>
 
