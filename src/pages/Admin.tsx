@@ -5,9 +5,12 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
 import { Dashboard } from "@/components/admin/Dashboard";
+import { TestAvailabilityDialog } from "@/components/admin/TestAvailabilityDialog";
+import { Settings } from "lucide-react";
 
 const Admin = () => {
   const [loading, setLoading] = useState(true);
+  const [isTestAvailabilityDialogOpen, setIsTestAvailabilityDialogOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -46,7 +49,17 @@ const Admin = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl md:text-3xl font-bold text-slate-800">لوحة تحكم نتائج IAT</h1>
-          <Button onClick={handleLogout} variant="outline" className="hover:bg-slate-100">تسجيل الخروج</Button>
+          <div className="flex items-center gap-3">
+            <Button 
+              onClick={() => setIsTestAvailabilityDialogOpen(true)} 
+              variant="outline" 
+              className="flex items-center gap-2"
+            >
+              <Settings size={16} />
+              تفعيل/تعطيل الاختبار
+            </Button>
+            <Button onClick={handleLogout} variant="outline" className="hover:bg-slate-100">تسجيل الخروج</Button>
+          </div>
         </div>
 
         {loading ? (
@@ -56,6 +69,11 @@ const Admin = () => {
         ) : (
           <Dashboard />
         )}
+
+        <TestAvailabilityDialog 
+          open={isTestAvailabilityDialogOpen} 
+          onOpenChange={setIsTestAvailabilityDialogOpen} 
+        />
       </div>
     </div>
   );
