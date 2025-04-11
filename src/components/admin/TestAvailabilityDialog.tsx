@@ -35,7 +35,6 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
     try {
       setIsLoading(true);
       
-      // Use a type cast to avoid TypeScript errors with table access
       const { data, error } = await supabase
         .from(SETTINGS_TABLE)
         .select("*")
@@ -47,7 +46,7 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
         if (error.code === "PGRST116") {  // Code for "no rows returned"
           await supabase
             .from(SETTINGS_TABLE)
-            .insert({ key: TEST_ENABLED_KEY, value: true });
+            .insert([{ key: TEST_ENABLED_KEY, value: true }]);
           setIsEnabled(true);
         } else {
           console.error("Error fetching test availability:", error);
@@ -58,8 +57,9 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
           });
         }
       } else {
-        // Parse boolean value
-        setIsEnabled(data?.value === true);
+        // Parse boolean value from the JSON data
+        const valueAsBoolean = typeof data.value === 'boolean' ? data.value : data.value === true;
+        setIsEnabled(valueAsBoolean);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -87,7 +87,7 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
       
       const { error } = await supabase
         .from(SETTINGS_TABLE)
-        .upsert({ key: TEST_ENABLED_KEY, value: pendingState });
+        .upsert([{ key: TEST_ENABLED_KEY, value: pendingState }]);
 
       if (error) {
         throw error;
