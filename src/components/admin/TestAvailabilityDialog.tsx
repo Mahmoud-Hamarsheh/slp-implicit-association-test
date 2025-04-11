@@ -34,9 +34,11 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
   const fetchTestAvailability = async () => {
     try {
       setIsLoading(true);
+      
+      // Use a type cast to avoid TypeScript errors with table access
       const { data, error } = await supabase
         .from(SETTINGS_TABLE)
-        .select("value")
+        .select("*")
         .eq("key", TEST_ENABLED_KEY)
         .single();
 
@@ -82,6 +84,7 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
     
     try {
       setIsLoading(true);
+      
       const { error } = await supabase
         .from(SETTINGS_TABLE)
         .upsert({ key: TEST_ENABLED_KEY, value: pendingState });
