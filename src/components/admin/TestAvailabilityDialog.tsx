@@ -58,7 +58,7 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
         }
       } else {
         // Parse boolean value from the JSON data
-        const valueAsBoolean = typeof data.value === 'boolean' ? data.value : data.value === true;
+        const valueAsBoolean = data.value === true || data.value === "true" || data.value === 1;
         setIsEnabled(valueAsBoolean);
       }
     } catch (error) {

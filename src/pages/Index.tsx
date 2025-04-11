@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Survey, SurveyData } from "@/components/Survey";
 import BiasAwarenessSurvey, { SurveyResponses } from "@/components/BiasAwarenessSurvey";
@@ -78,8 +79,8 @@ const Index = () => {
           setTestEnabled(true);
         }
       } else {
-        // Parse boolean value from the data
-        const enabled = typeof data.value === 'boolean' ? data.value : data.value === true;
+        // Parse boolean value from the JSON data
+        const enabled = data.value === true || data.value === "true" || data.value === 1;
         setTestEnabled(enabled);
         
         // If test is disabled and user is not on welcome stage, show test disabled message
