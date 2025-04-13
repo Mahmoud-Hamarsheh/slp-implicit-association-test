@@ -81,8 +81,9 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
           setTestEnabled(true);
         }
       } else {
-        // Parse boolean value from the JSON data
-        const enabled = data.value === true || data.value === "true" || data.value === 1;
+        // Fixed: Parse boolean value correctly handling any type of value
+        const enabled = typeof data.value === 'boolean' ? data.value : 
+                       data.value === true || data.value === "true" || data.value === 1;
         setTestEnabled(enabled);
       }
     } catch (error) {

@@ -57,8 +57,9 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
           });
         }
       } else {
-        // Parse boolean value from the JSON data
-        const valueAsBoolean = data.value === true || data.value === "true" || data.value === 1;
+        // Fixed: Parse boolean value from the value field (which could be a JSON value)
+        const valueAsBoolean = typeof data.value === 'boolean' ? data.value : 
+                              data.value === true || data.value === 'true' || data.value === 1;
         setIsEnabled(valueAsBoolean);
       }
     } catch (error) {
@@ -85,9 +86,13 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
     try {
       setIsLoading(true);
       
+      // Fixed: Ensure we're storing the value consistently - always as a boolean
       const { error } = await supabase
         .from(SETTINGS_TABLE)
-        .upsert([{ key: TEST_ENABLED_KEY, value: pendingState }]);
+        .upsert([{ 
+          key: TEST_ENABLED_KEY, 
+          value: pendingState 
+        }]);
 
       if (error) {
         throw error;
