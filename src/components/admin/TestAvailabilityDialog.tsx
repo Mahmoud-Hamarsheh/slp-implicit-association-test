@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,7 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
           });
         }
       } else {
-        // Parse boolean value - properly handle the Json type
+        // Parse boolean value properly based on the type
         let valueAsBoolean = false;
         
         if (typeof data.value === 'boolean') {
@@ -65,6 +66,9 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
           valueAsBoolean = data.value === 'true';
         } else if (typeof data.value === 'number') {
           valueAsBoolean = data.value === 1;
+        } else if (data.value === true || data.value === false) {
+          // Handle direct JSON boolean comparison
+          valueAsBoolean = Boolean(data.value);
         }
         
         setIsEnabled(valueAsBoolean);
@@ -93,16 +97,38 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
     try {
       setIsLoading(true);
       
-      // Store the value as boolean
-      const { error } = await supabase
+      // First check if the setting exists
+      const { data: existingData, error: checkError } = await supabase
         .from(SETTINGS_TABLE)
-        .upsert([{ 
-          key: TEST_ENABLED_KEY, 
-          value: pendingState 
-        }]);
+        .select("id")
+        .eq("key", TEST_ENABLED_KEY)
+        .maybeSingle();
+      
+      let updateError;
+      
+      if (checkError && checkError.code !== "PGRST116") {
+        throw checkError;
+      }
+      
+      // If setting exists, update it
+      if (existingData?.id) {
+        const { error } = await supabase
+          .from(SETTINGS_TABLE)
+          .update({ value: pendingState })
+          .eq("id", existingData.id);
+        
+        updateError = error;
+      } else {
+        // If setting doesn't exist, insert it
+        const { error } = await supabase
+          .from(SETTINGS_TABLE)
+          .insert([{ key: TEST_ENABLED_KEY, value: pendingState }]);
+        
+        updateError = error;
+      }
 
-      if (error) {
-        throw error;
+      if (updateError) {
+        throw updateError;
       }
 
       setIsEnabled(pendingState);

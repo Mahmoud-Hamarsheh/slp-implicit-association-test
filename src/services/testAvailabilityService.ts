@@ -19,6 +19,7 @@ export const checkTestAvailability = async (): Promise<boolean> => {
     if (error) {
       if (error.code === "PGRST116") {
         // No setting found, assume enabled by default
+        console.log("No test_enabled setting found, defaulting to enabled");
         return true;
       } else {
         console.error("Error checking test availability:", error);
@@ -35,12 +36,16 @@ export const checkTestAvailability = async (): Promise<boolean> => {
         enabled = data.value === 'true';
       } else if (typeof data.value === 'number') {
         enabled = data.value === 1;
+      } else if (data.value === true || data.value === false) {
+        // Handle JSON boolean values
+        enabled = Boolean(data.value);
       }
       
+      console.log(`Test enabled setting retrieved: ${enabled}`);
       return enabled;
     }
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error checking test availability:", error);
     // If there's an error, assume the test is enabled to prevent blocking users
     return true;
   }

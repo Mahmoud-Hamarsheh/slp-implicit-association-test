@@ -7,6 +7,7 @@ import { BlockChangeAlert } from "./BlockChangeAlert";
 import { useIATTest } from "./hooks/useIATTest";
 import { checkTestAvailability } from "@/services/testAvailabilityService";
 import { Card } from "@/components/ui/card";
+import { TestDisabled } from "@/components/stages/TestDisabled";
 
 interface IATBlockManagerProps {
   onComplete: (result: number, allResponses: any[], testModel: "A" | "B") => void;
@@ -58,6 +59,7 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
   // Check if test is enabled on component mount
   useEffect(() => {
     checkTestAvailability().then(enabled => {
+      console.log("Test availability status:", enabled);
       setTestEnabled(enabled);
       setLoading(false);
     }).catch(error => {
@@ -75,15 +77,9 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
     );
   }
 
+  // If test is explicitly disabled, show the disabled component
   if (testEnabled === false) {
-    return (
-      <Card className="p-6 text-center space-y-4">
-        <h3 className="text-xl font-bold">الاختبار غير متاح حاليًا</h3>
-        <p>
-          نأسف لإزعاجك، لكن هذا الاختبار غير متاح حاليًا. يرجى المحاولة مرة أخرى لاحقًا.
-        </p>
-      </Card>
-    );
+    return <TestDisabled />;
   }
 
   if (!trials.length) return null;
