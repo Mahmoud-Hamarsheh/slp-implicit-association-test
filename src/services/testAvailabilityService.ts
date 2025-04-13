@@ -26,9 +26,17 @@ export const checkTestAvailability = async (): Promise<boolean> => {
         return true;
       }
     } else {
-      // Fixed: Parse boolean value from the data.value field which could be of any type
-      const enabled = typeof data.value === 'boolean' ? data.value : 
-                     data.value === true || data.value === "true" || data.value === 1;
+      // Parse boolean value properly based on the type
+      let enabled = false;
+      
+      if (typeof data.value === 'boolean') {
+        enabled = data.value;
+      } else if (typeof data.value === 'string') {
+        enabled = data.value === 'true';
+      } else if (typeof data.value === 'number') {
+        enabled = data.value === 1;
+      }
+      
       return enabled;
     }
   } catch (error) {

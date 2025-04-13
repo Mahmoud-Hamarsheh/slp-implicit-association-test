@@ -5,12 +5,8 @@ import { IATTrialRunner } from "./IATTrialRunner";
 import { IATProps } from "./IATTypes";
 import { BlockChangeAlert } from "./BlockChangeAlert";
 import { useIATTest } from "./hooks/useIATTest";
-import { supabase } from "@/lib/supabase";
+import { checkTestAvailability } from "@/services/testAvailabilityService";
 import { Card } from "@/components/ui/card";
-
-// Settings constants 
-const SETTINGS_TABLE = "app_settings";
-const TEST_ENABLED_KEY = "test_enabled";
 
 interface IATBlockManagerProps {
   onComplete: (result: number, allResponses: any[], testModel: "A" | "B") => void;
@@ -54,46 +50,15 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
 
   // Check if test is enabled on component mount
   useEffect(() => {
-    checkTestAvailability();
-  }, []);
-
-  const checkTestAvailability = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from(SETTINGS_TABLE)
-        .select("*")
-        .eq("key", TEST_ENABLED_KEY)
-        .single();
-
-      if (error) {
-        if (error.code === "PGRST116") {
-          // No setting found, assume enabled by default
-          setTestEnabled(true);
-        } else {
-          console.error("Error checking test availability:", error);
-          toast({
-            title: "خطأ",
-            description: "حدث خطأ أثناء التحقق من توفر الاختبار",
-            variant: "destructive"
-          });
-          // Default to enabled
-          setTestEnabled(true);
-        }
-      } else {
-        // Fixed: Parse boolean value correctly handling any type of value
-        const enabled = typeof data.value === 'boolean' ? data.value : 
-                       data.value === true || data.value === "true" || data.value === 1;
-        setTestEnabled(enabled);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      // Default to enabled
-      setTestEnabled(true);
-    } finally {
+    checkTestAvailability().then(enabled => {
+      setTestEnabled(enabled);
       setLoading(false);
-    }
-  };
+    }).catch(error => {
+      console.error("Error checking test availability:", error);
+      setTestEnabled(true); // Default to enabled
+      setLoading(false);
+    });
+  }, []);
 
   if (loading) {
     return (

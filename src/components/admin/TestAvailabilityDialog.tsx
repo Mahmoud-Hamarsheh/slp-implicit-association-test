@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -57,9 +56,17 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
           });
         }
       } else {
-        // Fixed: Parse boolean value from the value field (which could be a JSON value)
-        const valueAsBoolean = typeof data.value === 'boolean' ? data.value : 
-                              data.value === true || data.value === 'true' || data.value === 1;
+        // Parse boolean value - properly handle the Json type
+        let valueAsBoolean = false;
+        
+        if (typeof data.value === 'boolean') {
+          valueAsBoolean = data.value;
+        } else if (typeof data.value === 'string') {
+          valueAsBoolean = data.value === 'true';
+        } else if (typeof data.value === 'number') {
+          valueAsBoolean = data.value === 1;
+        }
+        
         setIsEnabled(valueAsBoolean);
       }
     } catch (error) {
@@ -86,7 +93,7 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
     try {
       setIsLoading(true);
       
-      // Fixed: Ensure we're storing the value consistently - always as a boolean
+      // Store the value as boolean
       const { error } = await supabase
         .from(SETTINGS_TABLE)
         .upsert([{ 
