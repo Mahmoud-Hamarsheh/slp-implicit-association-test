@@ -25,6 +25,7 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
 }) => {
   const [testEnabled, setTestEnabled] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
+  const [testCompleted, setTestCompleted] = useState(false);
   
   // If no testModel is assigned, randomly assign one
   const testModel = surveyData.testModel || (Math.random() < 0.5 ? "A" : "B");
@@ -44,6 +45,12 @@ export const IATBlockManager: React.FC<IATBlockManagerProps> = ({
     handleCloseAlert,
     testModel: assignedTestModel
   } = useIATTest((result, allResponses, model) => {
+    // Prevent duplicate submissions with a flag check
+    if (testCompleted) return;
+    
+    // Mark the test as completed to prevent double calls
+    setTestCompleted(true);
+    
     // When test is complete, pass the result, all responses, and test model to parent component
     onComplete(result, allResponses, model);
   }, testModel);

@@ -1,4 +1,3 @@
-
 import { supabase } from "@/lib/supabase";
 import { Response } from "../IATTypes";
 import { IATProps } from "../IATTypes";
@@ -8,6 +7,9 @@ type ToastFunction = (props: {
   description: string; 
   variant?: "default" | "destructive" 
 }) => void;
+
+// Keep track of processed submissions to avoid duplicates
+let processedSubmissions = new Set();
 
 export const saveIATResults = async (
   dScore: number,
@@ -26,6 +28,23 @@ export const saveIATResults = async (
       console.log("User is not a specialist, skipping database save");
       return dScore;
     }
+    
+    // Create a unique submission identifier based on responses and user data
+    // This helps prevent duplicate submissions
+    const submissionKey = `${dScore}-${surveyData.age}-${surveyData.gender}-${Date.now()}`;
+    
+    // Check if this submission was already processed
+    if (processedSubmissions.has(submissionKey)) {
+      console.log("Duplicate submission detected, skipping database save");
+      toast({
+        title: "تنبيه",
+        description: "تم معالجة هذه البيانات مسبقًا، لن يتم حفظها مرة أخرى.",
+      });
+      return dScore;
+    }
+    
+    // Add this submission to processed set
+    processedSubmissions.add(submissionKey);
     
     // Ensure valid D-score (never null)
     const finalDScore = dScore || 0;

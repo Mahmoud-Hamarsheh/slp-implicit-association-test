@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -46,6 +45,7 @@ export const StageManager: React.FC = () => {
   const [testModel, setTestModel] = useState<"A" | "B">(Math.random() < 0.5 ? "A" : "B");
   const [isSpecialist, setIsSpecialist] = useState(false);
   const [testEnabled, setTestEnabled] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   // Assign test model on component mount and check if test is enabled
@@ -90,43 +90,51 @@ export const StageManager: React.FC = () => {
     setStage("bias-awareness");
   };
 
-  const handleBiasAwarenessComplete = (data: SurveyResponses) => {
-    console.log("Bias awareness survey completed with data:", data);
-    setBiasAwarenessData(data);
+  const handleBiasAwarenessComplete = async (data: SurveyResponses) => {
+    // Prevent multiple submissions
+    if (isSubmitting) return;
     
-    // Save all data to the database at the end of the flow
-    // Only save data if the user is a specialist
-    if (surveyData && testResult !== null && isSpecialist) {
-      // Combine all data together
-      const completeData = {
-        ...surveyData,
-        biasAwarenessResponses: data,
-        hasTakenIATBefore,
-        testModel,
-        isSpecialist
-      };
+    try {
+      setIsSubmitting(true);
+      console.log("Bias awareness survey completed with data:", data);
+      setBiasAwarenessData(data);
       
-      // Extract response times from responses for the database
-      const responseTimes = testResponses.map(response => response.responseTime);
+      // Save all data to the database at the end of the flow
+      // Only save data if the user is a specialist
+      if (surveyData && testResult !== null && isSpecialist) {
+        // Combine all data together
+        const completeData = {
+          ...surveyData,
+          biasAwarenessResponses: data,
+          hasTakenIATBefore,
+          testModel,
+          isSpecialist
+        };
+        
+        // Extract response times from responses for the database
+        const responseTimes = testResponses.map(response => response.responseTime);
+        
+        // Save everything to the database
+        await saveIATResults(testResult, testResponses, completeData, toast);
+      }
       
-      // Save everything to the database
-      saveIATResults(testResult, testResponses, completeData, toast)
-        .then(() => {
-          setStage("complete");
-          // Show toast for successful completion
-          toast({
-            title: "تم الانتهاء من الاستبيان",
-            description: "شكراً لإكمال جميع مراحل الدراسة"
-          });
-        });
-    } else {
-      // In case there's missing data or user is not a specialist,
-      // still move to complete stage but don't save to database
+      // In all cases, move to complete stage
       setStage("complete");
       toast({
         title: "تم الانتهاء من الاستبيان",
         description: "شكراً لإكمال جميع مراحل الدراسة"
       });
+    } catch (error) {
+      console.error("Error processing bias awareness results:", error);
+      toast({
+        title: "خطأ في معالجة النتائج",
+        description: "حدث خطأ أثناء معالجة النتائج، ولكن يمكنك المتابعة",
+        variant: "destructive"
+      });
+      // Still move to complete stage in case of error
+      setStage("complete");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

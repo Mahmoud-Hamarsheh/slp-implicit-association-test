@@ -13,6 +13,7 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
   const [currentPage, setCurrentPage] = useState(0);
   const [formResponses, setFormResponses] = useState<SurveyResponses>({});
   const [pageResponses, setPageResponses] = useState<SurveyResponses>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Calculate progress percentage
   const progressPercentage = ((currentPage + 1) / surveyPages.length) * 100;
@@ -32,6 +33,9 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
   };
 
   const handleNextPage = () => {
+    // Prevent multiple rapid submissions
+    if (isSubmitting) return;
+    
     if (!validatePage()) {
       alert('الرجاء الإجابة على جميع الأسئلة في هذه الصفحة.');
       return;
@@ -46,19 +50,27 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
       setCurrentPage(currentPage + 1);
       setPageResponses({});
     } else {
-      // Calculate final score
-      const responses = { ...updatedFormResponses };
+      // Prevent multiple submissions
+      setIsSubmitting(true);
       
-      // Calculate the bias score
-      const { biasScore, biasLevel } = calculateBiasScore(responses);
-      console.log(`Final bias score: ${biasScore}, level: ${biasLevel}`);
+      try {
+        // Calculate final score
+        const responses = { ...updatedFormResponses };
+        
+        // Calculate the bias score
+        const { biasScore, biasLevel } = calculateBiasScore(responses);
+        console.log(`Final bias score: ${biasScore}, level: ${biasLevel}`);
 
-      // Include bias level and score in the responses
-      responses.biasLevel = biasLevel;
-      responses.biasScore = biasScore.toString();
-      
-      console.log("Final survey responses with score:", responses);
-      onComplete(responses);
+        // Include bias level and score in the responses
+        responses.biasLevel = biasLevel;
+        responses.biasScore = biasScore.toString();
+        
+        console.log("Final survey responses with score:", responses);
+        onComplete(responses);
+      } catch (error) {
+        console.error("Error processing bias awareness survey:", error);
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -101,7 +113,7 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
             onClick={handlePrevPage}
             variant="outline"
             className="flex items-center gap-2"
-            disabled={currentPage === 0}
+            disabled={currentPage === 0 || isSubmitting}
           >
             <ArrowRight className="h-4 w-4" />
             السابق
@@ -118,10 +130,11 @@ const BiasAwarenessSurvey: React.FC<BiasAwarenessSurveyProps> = ({ onComplete })
           <Button
             onClick={handleNextPage}
             className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2"
+            disabled={isSubmitting}
           >
             {isLastPage ? (
               <>
-                إرسال
+                {isSubmitting ? 'جاري الإرسال...' : 'إرسال'}
                 <Send className="h-4 w-4 ms-1" />
               </>
             ) : (
