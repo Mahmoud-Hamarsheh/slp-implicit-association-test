@@ -66,9 +66,13 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
           valueAsBoolean = data.value === 'true';
         } else if (typeof data.value === 'number') {
           valueAsBoolean = data.value === 1;
-        } else if (data.value === true || data.value === false) {
-          // Handle direct JSON boolean comparison
-          valueAsBoolean = Boolean(data.value);
+        } else if (typeof data.value === 'object' && data.value !== null) {
+          // For JSON objects, try to extract a boolean value if possible
+          // This handles the case when Supabase returns the value as a JSON object
+          const jsonValue = data.value;
+          if ('value' in jsonValue && typeof jsonValue.value === 'boolean') {
+            valueAsBoolean = jsonValue.value;
+          }
         }
         
         setIsEnabled(valueAsBoolean);

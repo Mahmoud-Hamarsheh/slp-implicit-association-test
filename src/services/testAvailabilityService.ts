@@ -36,9 +36,12 @@ export const checkTestAvailability = async (): Promise<boolean> => {
         enabled = data.value === 'true';
       } else if (typeof data.value === 'number') {
         enabled = data.value === 1;
-      } else if (data.value === true || data.value === false) {
-        // Handle JSON boolean values
-        enabled = Boolean(data.value);
+      } else if (typeof data.value === 'object' && data.value !== null) {
+        // For JSON objects, try to extract a boolean value if possible
+        const jsonValue = data.value;
+        if ('value' in jsonValue && typeof jsonValue.value === 'boolean') {
+          enabled = jsonValue.value;
+        }
       }
       
       console.log(`Test enabled setting retrieved: ${enabled}`);
