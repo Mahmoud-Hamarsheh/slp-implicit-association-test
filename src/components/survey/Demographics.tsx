@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Card, CardContent } from '../ui/card';
@@ -98,7 +97,7 @@ export const Demographics: React.FC<DemographicsProps> = ({ onComplete }) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="degree" className="block text-right font-medium">الدرجة العلمية</Label>
+              <Label htmlFor="degree" className="block text-right font-medium">أعلى درجة علمية حصلت عليها</Label>
               <Select value={degree} onValueChange={setDegree}>
                 <SelectTrigger className="text-right bg-white">
                   <SelectValue placeholder="اختر الدرجة العلمية" />
