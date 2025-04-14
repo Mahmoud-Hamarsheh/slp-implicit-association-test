@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Card, CardContent } from '../ui/card';
@@ -16,19 +15,16 @@ export const Demographics: React.FC<DemographicsProps> = ({ onComplete }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Make sure age is not empty before submitting
     if (!age) {
       alert('الرجاء اختيار الفئة العمرية');
       return;
     }
 
-    // Make sure yearsExperience is not empty
     if (!yearsExperience) {
       alert('الرجاء اختيار سنوات الخبرة');
       return;
     }
 
-    // Make sure degree is not empty
     if (!degree) {
       alert('الرجاء اختيار الدرجة العلمية');
       return;
@@ -98,10 +94,10 @@ export const Demographics: React.FC<DemographicsProps> = ({ onComplete }) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="degree" className="block text-right font-medium">الدرجة العلمية</Label>
+              <Label htmlFor="degree" className="block text-right font-medium">أعلى درجة علمية حصلت عليها</Label>
               <Select value={degree} onValueChange={setDegree}>
                 <SelectTrigger className="text-right bg-white">
-                  <SelectValue placeholder="اختر الدرجة العلمية" />
+                  <SelectValue placeholder="اختر أعلى درجة علمية" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border shadow-md">
                   <SelectItem value="طالب سمع ونطق">طالب سمع ونطق</SelectItem>
