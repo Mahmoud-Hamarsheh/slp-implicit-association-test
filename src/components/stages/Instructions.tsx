@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,11 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
     <Card className="p-8 text-center space-y-6 animate-slideIn">
       <h2 className="text-2xl font-bold">تعليمات الاختبار</h2>
       <div className="text-right space-y-4">
-        <p>ستستخدم اللمس لتصنيف العناصر إلى مجموعاتها الأصلية بأسرع ما يمكن. فيما يلي المجموعات الأربع والعناصر التي تنتمي لكل منها:</p>
+        {isTouchDevice ? (
+          <p>ستستخدم اللمس لتصنيف العناصر في مجموعات بأسرع ما يمكن. انقر على المربع الأخضر على اليمين أو اليسار لتصنيف العناصر. فيما يلي المجموعات الأربع والعناصر التي تنتمي إلى كل منها:</p>
+        ) : (
+          <p>ستستخدم مفاتيح الكمبيوتر "D" و"K" لتصنيف العناصر في مجموعات بأسرع ما يمكن. فيما يلي المجموعات الأربع والعناصر التي تنتمي إلى كل منها:</p>
+        )}
       </div>
       
       <div className="overflow-x-auto">
@@ -86,9 +91,27 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
         </Table>
       </div>
 
+      <div className="text-right text-sm bg-blue-50 p-4 rounded-lg">
+        <p className="font-semibold">ملاحظة مهمة: </p>
+        {isTouchDevice ? (
+          <>
+            <p>خلال الاختبار، سيتم تبديل تصنيف المجموعات بين المربعين الأخضر على اليمين واليسار.</p>
+            <p>في المرحلة الأولى، سيتم استخدام المربع الأيمن لـ "اضطراب تواصل" والمربع الأيسر لـ "تواصل طبيعي".</p>
+          </>
+        ) : (
+          <>
+            <p>خلال الاختبار، سيتم تبديل تصنيف المجموعات بين المفاتيح D و K.</p>
+            <p>في المرحلة الأولى، سيتم استخدام D لـ "اضطراب تواصل" و K لـ "تواصل طبيعي".</p>
+          </>
+        )}
+        <p>في مراحل لاحقة، قد يتغير التصنيف وتظهر لك تعليمات جديدة.</p>
+        {testModel === "B" && (
+          <p className="font-semibold text-blue-700 mt-2">
+            في هذا الاختبار، ستبدأ بتصنيف "سلبي" و "إيجابي" بعد المرحلة الأولى.
+          </p>
+        )}
+      </div>
       <Button onClick={onContinue}>متابعة</Button>
     </Card>
   );
 };
-
-export default Instructions;
