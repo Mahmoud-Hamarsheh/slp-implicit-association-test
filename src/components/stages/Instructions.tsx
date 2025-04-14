@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,7 +20,7 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
     <Card className="p-8 text-center space-y-6 animate-slideIn">
       <h2 className="text-2xl font-bold">تعليمات الاختبار</h2>
       <div className="text-right space-y-4">
-        <p>ستستخدم اللمس لتصنيف العناصر إلى مجموعاتها الأصلية بأسرع ما يمكن. انقر على المربع الأخضر على اليمين أو اليسار لتصنيف العناصر. فيما يلي المجموعات الأربع والعناصر التي تنتمي لكل منها:</p>
+        <p>ستستخدم اللمس لتصنيف العناصر إلى مجموعاتها الأصلية بأسرع ما يمكن. فيما يلي المجموعات الأربع والعناصر التي تنتمي لكل منها:</p>
       </div>
       
       <div className="overflow-x-auto">
@@ -91,3 +90,5 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
     </Card>
   );
 };
+
+export default Instructions;
