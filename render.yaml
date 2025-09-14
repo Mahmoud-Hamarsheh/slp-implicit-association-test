@@ -2,8 +2,9 @@ services:
   - type: web
     name: slp-implicit-association-test
     env: static
-    buildCommand: npm install && npm run build
+    buildCommand: npm ci && npm run build
     staticPublishPath: ./dist
+    nodeVersion: 18
     headers:
       - path: /*
         name: X-Frame-Options
