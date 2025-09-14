@@ -11,15 +11,16 @@ export const calculateBiasScore = (responses: SurveyResponses): { biasScore: num
     'لا أوافق بشدة': 1,
   };
 
-  // Items that need reverse scoring (q5 and q8)
-  const reverseItems = ['q5', 'q8'];
+  // Items that need reverse scoring - none of the new questions need reverse scoring
+  // as they all measure positive attitudes toward people with communication disorders
+  const reverseItems: string[] = [];
   
   // Calculate the sum of scores
   let totalScore = 0;
   let answeredQuestions = 0;
   
-  // Process all question responses
-  for (let i = 1; i <= 12; i++) {
+  // Process all question responses (now 14 questions)
+  for (let i = 1; i <= 14; i++) {
     const questionId = `q${i}`;
     const response = responses[questionId];
     
@@ -42,11 +43,11 @@ export const calculateBiasScore = (responses: SurveyResponses): { biasScore: num
   // Determine bias level based on average score according to the new thresholds
   let biasLevel = '';
   if (averageScore <= 2.5) {
-    biasLevel = 'منخفض';
+    biasLevel = 'Low positive explicit attitudes';
   } else if (averageScore <= 3.5) {
-    biasLevel = 'متوسط';
+    biasLevel = 'Moderate positive explicit attitudes';
   } else {
-    biasLevel = 'مرتفع';
+    biasLevel = 'High positive explicit attitudes';
   }
 
   console.log(`Calculated bias score: ${averageScore.toFixed(2)}, level: ${biasLevel}`);

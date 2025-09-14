@@ -108,13 +108,14 @@ export const saveIATResults = async (
         'لا أوافق بشدة': 1,
       };
       
-      // Items that need reverse scoring (q5 and q8)
-      const reverseItems = ['q5', 'q8'];
+      // Items that need reverse scoring - none of the new questions need reverse scoring
+      // as they all measure positive attitudes toward people with communication disorders
+      const reverseItems: string[] = [];
       
       let totalScore = 0;
       let answeredQuestions = 0;
       
-      for (let i = 1; i <= 12; i++) {
+      for (let i = 1; i <= 14; i++) {
         const questionId = `q${i}`;
         const response = biasAwarenessResponses[questionId];
         

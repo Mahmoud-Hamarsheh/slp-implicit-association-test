@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile, useIsTouchDevice } from "@/hooks/use-mobile";
 
 // Services
 import { checkTestAvailability } from "@/services/testAvailabilityService";
@@ -11,6 +12,7 @@ import { Consent } from "@/components/stages/Consent";
 import { SpecialistQuestion } from "@/components/stages/SpecialistQuestion";
 import { NotEligible } from "@/components/stages/NotEligible";
 import { DeviceWarning } from "@/components/stages/DeviceWarning";
+import { DeviceRestriction } from "@/components/stages/DeviceRestriction";
 import { IATExperience } from "@/components/stages/IATExperience";
 import { Survey, SurveyData } from "@/components/Survey";
 import { IATWelcome } from "@/components/stages/IATWelcome";
@@ -25,6 +27,7 @@ export type Stage =
   | "consent" 
   | "specialist-question"
   | "device-warning"
+  | "device-restriction"
   | "iat-experience" 
   | "survey" 
   | "iat-welcome" 
@@ -47,6 +50,17 @@ export const StageManager: React.FC = () => {
   const [testEnabled, setTestEnabled] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  
+  // Device detection hooks
+  const isMobile = useIsMobile();
+  const isTouch = useIsTouchDevice();
+
+  // Check for mobile/tablet devices and redirect to device restriction
+  useEffect(() => {
+    if (isMobile || isTouch) {
+      setStage("device-restriction");
+    }
+  }, [isMobile, isTouch]);
 
   // Assign test model on component mount and check if test is enabled
   useEffect(() => {
@@ -171,6 +185,8 @@ export const StageManager: React.FC = () => {
       )}
 
       {stage === "test-disabled" && <TestDisabled />}
+
+      {stage === "device-restriction" && <DeviceRestriction />}
 
       {stage === "specialist-question" && (
         <SpecialistQuestion 
