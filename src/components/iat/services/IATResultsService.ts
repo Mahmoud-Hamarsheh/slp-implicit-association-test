@@ -20,16 +20,43 @@ export const saveIATResults = async (
   try {
     console.log("=== SAVING COMPLETE STUDY RESULTS ===");
     console.log("D-Score:", dScore);
-    console.log("Responses:", responses);
     console.log("Survey data:", JSON.stringify(surveyData, null, 2));
+    console.log("Responses count:", responses.length);
     
-    // Only save data for non-specialists
-    if (surveyData.isSpecialist) {
-      console.log("User is a specialist, skipping database save (specialists data not saved)");
+    // Test Supabase connection first
+    console.log("=== TESTING SUPABASE CONNECTION ===");
+    try {
+      const { data: testData, error: testError } = await supabase
+        .from('app_settings')
+        .select('*')
+        .limit(1);
+      
+      if (testError) {
+        console.error("Supabase connection test failed:", testError);
+        throw new Error("Database connection failed: " + testError.message);
+      }
+      console.log("✅ Supabase connection successful");
+    } catch (connError) {
+      console.error("❌ Supabase connection error:", connError);
+      toast({
+        title: "خطأ في الاتصال",
+        description: "فشل الاتصال بقاعدة البيانات: " + connError.message,
+        variant: "destructive",
+      });
       return dScore;
     }
     
-    console.log("Saving data for non-specialist user");
+    // Only save data for non-specialists
+    if (surveyData.isSpecialist) {
+      console.log("❌ User is a specialist, skipping database save (specialists data not saved)");
+      toast({
+        title: "تم تخطي الحفظ",
+        description: "لن يتم حفظ بيانات المتخصصين في قاعدة البيانات",
+      });
+      return dScore;
+    }
+    
+    console.log("✅ User is NOT a specialist, proceeding with data save");
     
     // Create a unique submission identifier based on responses and user data
     // This helps prevent duplicate submissions
@@ -184,6 +211,16 @@ export const saveIATResults = async (
       });
       return finalDScore;
     } else {
+      console.log("=== ATTEMPTING DATABASE INSERT ===");
+      console.log("Insert data validation:");
+      console.log("- D-Score:", dataToSave.d_score, typeof dataToSave.d_score);
+      console.log("- Age:", dataToSave.age, typeof dataToSave.age);
+      console.log("- Experience:", dataToSave.years_experience, typeof dataToSave.years_experience);
+      console.log("- Degree:", dataToSave.degree, typeof dataToSave.degree);
+      console.log("- Gender:", dataToSave.gender, typeof dataToSave.gender);
+      console.log("- Response times count:", dataToSave.response_times.length);
+      console.log("- Test model:", dataToSave.test_model);
+      
       // Insert the data
       const { data, error } = await supabase
         .from('iat_results')
@@ -191,17 +228,40 @@ export const saveIATResults = async (
         .select('id');
 
       if (error) {
-        console.error('Supabase error:', error);
+        console.error('❌ Supabase INSERT error:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        console.error('Error details:', error.details);
+        console.error('Error hint:', error.hint);
+        
+        // Check if it's an RLS policy error
+        if (error.code === '42501' || error.message.includes('row-level security')) {
+          console.error('🔒 RLS Policy violation detected');
+          
+          // Test if we can read from the table
+          const { data: readTest, error: readError } = await supabase
+            .from('iat_results')
+            .select('count')
+            .limit(1);
+          
+          if (readError) {
+            console.error('❌ Cannot read from iat_results table:', readError);
+          } else {
+            console.log('✅ Can read from iat_results table');
+          }
+        }
+        
         toast({
           title: "خطأ في حفظ النتائج",
-          description: "حدث خطأ أثناء حفظ النتائج: " + error.message,
+          description: `حدث خطأ أثناء حفظ النتائج: ${error.message} (كود: ${error.code})`,
           variant: "destructive",
         });
       } else {
-        console.log("Results saved successfully with ID:", data[0]?.id);
+        console.log("✅ Results saved successfully!");
+        console.log("Saved record ID:", data[0]?.id);
         toast({
           title: "تم حفظ النتائج بنجاح",
-          description: "تم تسجيل إجاباتك في قاعدة البيانات",
+          description: "تم تسجيل إجاباتك في قاعدة البيانات بنجاح",
         });
       }
       

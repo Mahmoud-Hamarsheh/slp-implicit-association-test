@@ -115,13 +115,21 @@ export const StageManager: React.FC = () => {
       
       // Save all data to the database at the end of the flow
       // Only save data if the user is a specialist
+        console.log("=== STAGE MANAGER: BIAS AWARENESS COMPLETE ===");
         console.log("About to save data. Conditions:", { 
           hasSurveyData: !!surveyData, 
           hasTestResult: testResult !== null, 
           isSpecialist,
           willSave: !isSpecialist,
-          testResult 
+          testResult,
+          hasTakenIATBefore
         });
+        
+        if (!isSpecialist) {
+          console.log("✅ Will attempt to save data (user is NOT a specialist)");
+        } else {
+          console.log("❌ Will NOT save data (user IS a specialist)");
+        }
       
       if (surveyData && testResult !== null && !isSpecialist) {
         // Combine all data together - only save for NON-specialists
