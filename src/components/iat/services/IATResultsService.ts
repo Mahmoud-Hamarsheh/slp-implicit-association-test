@@ -59,20 +59,48 @@ export const saveIATResults = async (
     console.log("✅ User is NOT a specialist, proceeding with data save");
     
     // Create a unique submission identifier based on responses and user data
-    // This helps prevent duplicate submissions
-    const submissionKey = `${dScore}-${surveyData.age}-${surveyData.gender}-${Date.now()}`;
+    // This helps prevent duplicate submissions within the same session
+    const submissionKey = `${dScore}-${surveyData.age}-${surveyData.gender}-${surveyData.yearsExperience}-${surveyData.degree}-${responses.length}`;
     
-    // Check if this submission was already processed
+    // Check if this submission was already processed in current session
     if (processedSubmissions.has(submissionKey)) {
-      console.log("Duplicate submission detected, skipping database save");
+      console.log("❌ Duplicate submission detected in current session, skipping database save");
       toast({
         title: "تنبيه",
-        description: "تم معالجة هذه البيانات مسبقًا، لن يتم حفظها مرة أخرى.",
+        description: "تم معالجة هذه البيانات مسبقًا في هذه الجلسة، لن يتم حفظها مرة أخرى.",
+        variant: "destructive",
       });
       return dScore;
     }
     
-    // Add this submission to processed set
+    // Check database for existing submissions with same characteristics to prevent duplicates
+    try {
+      const { data: existingResults, error: checkError } = await supabase
+        .from('iat_results')
+        .select('id')
+        .eq('d_score', dScore)
+        .eq('age', surveyData.age || 0)
+        .eq('years_experience', surveyData.yearsExperience || 0)
+        .eq('degree', surveyData.degree)
+        .eq('gender', typeof surveyData.gender === 'number' ? surveyData.gender : (surveyData.gender === 'female' ? 2 : 1))
+        .gte('created_at', new Date(Date.now() - 60 * 60 * 1000).toISOString()) // Last hour
+        .limit(1);
+      
+      if (!checkError && existingResults && existingResults.length > 0) {
+        console.log("❌ Similar submission found in database within last hour, likely duplicate");
+        toast({
+          title: "تنبيه",
+          description: "يبدو أنك قد أكملت الاختبار مؤخراً. لمنع التكرار، لن يتم حفظ هذه البيانات.",
+          variant: "destructive",
+        });
+        return dScore;
+      }
+    } catch (dbCheckError) {
+      console.warn("Could not check for duplicates in database:", dbCheckError);
+      // Continue with save if duplicate check fails
+    }
+    
+    // Add this submission to processed set for session-based duplicate prevention
     processedSubmissions.add(submissionKey);
     
     // Ensure valid D-score (never null)

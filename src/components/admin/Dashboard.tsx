@@ -19,7 +19,7 @@ import {
   prepareTestModelData
 } from "./dashboardUtils";
 import { Button } from "../ui/button";
-import { Download } from "lucide-react";
+import { Download, RefreshCw } from "lucide-react";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -30,6 +30,13 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchResults();
+    
+    // Set up auto-refresh to show new data as it comes in
+    const interval = setInterval(() => {
+      fetchResults();
+    }, 30000); // Refresh every 30 seconds
+    
+    return () => clearInterval(interval);
   }, []);
 
   const fetchResults = async () => {
@@ -105,17 +112,35 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-end">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleExport}
-          disabled={exporting || results.length === 0}
-          className="flex items-center gap-2"
-        >
-          <Download size={16} />
-          تصدير البيانات (CSV)
-        </Button>
+      <div className="flex justify-between items-center">
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExport}
+            disabled={exporting || results.length === 0}
+            className="flex items-center gap-2"
+          >
+            <Download size={16} />
+            تصدير البيانات (CSV)
+          </Button>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={fetchResults}
+            disabled={loading}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+            تحديث البيانات
+          </Button>
+          <span className="text-sm text-gray-500">
+            آخر تحديث: {new Date().toLocaleTimeString('ar-SA')}
+          </span>
+        </div>
       </div>
 
       <TabNavigation
