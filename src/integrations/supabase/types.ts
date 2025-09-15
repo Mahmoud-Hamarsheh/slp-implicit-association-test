@@ -14,7 +14,78 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      app_settings: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          updated_at?: string
+          value: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      iat_results: {
+        Row: {
+          age: number
+          created_at: string
+          d_score: number
+          degree: string
+          gender: number
+          id: string
+          response_times: number[]
+          responses: Json
+          survey_responses: Json | null
+          survey_score: number | null
+          test_model: string
+          updated_at: string
+          years_experience: number
+        }
+        Insert: {
+          age: number
+          created_at?: string
+          d_score: number
+          degree: string
+          gender: number
+          id?: string
+          response_times?: number[]
+          responses?: Json
+          survey_responses?: Json | null
+          survey_score?: number | null
+          test_model?: string
+          updated_at?: string
+          years_experience?: number
+        }
+        Update: {
+          age?: number
+          created_at?: string
+          d_score?: number
+          degree?: string
+          gender?: number
+          id?: string
+          response_times?: number[]
+          responses?: Json
+          survey_responses?: Json | null
+          survey_score?: number | null
+          test_model?: string
+          updated_at?: string
+          years_experience?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

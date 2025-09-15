@@ -37,25 +37,22 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
       
       const { data, error } = await supabase
         .from(SETTINGS_TABLE)
-        .select("*")
+        .select("id, value")
         .eq("key", TEST_ENABLED_KEY)
-        .single();
+        .maybeSingle();
 
       if (error) {
-        // If no setting exists, create default (enabled=true)
-        if (error.code === "PGRST116") {  // Code for "no rows returned"
-          await supabase
-            .from(SETTINGS_TABLE)
-            .insert([{ key: TEST_ENABLED_KEY, value: true }]);
-          setIsEnabled(true);
-        } else {
-          console.error("Error fetching test availability:", error);
-          toast({
-            title: "خطأ",
-            description: "حدث خطأ أثناء تحميل إعدادات الاختبار",
-            variant: "destructive",
-          });
-        }
+        console.error("Error fetching test availability:", error);
+        toast({
+          title: "خطأ",
+          description: "حدث خطأ أثناء تحميل إعدادات الاختبار",
+          variant: "destructive",
+        });
+      } else if (!data) {
+        await supabase
+          .from(SETTINGS_TABLE)
+          .insert([{ key: TEST_ENABLED_KEY, value: true }]);
+        setIsEnabled(true);
       } else {
         // Parse boolean value properly based on the type
         let valueAsBoolean = false;
@@ -69,7 +66,7 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
         } else if (typeof data.value === 'object' && data.value !== null) {
           // For JSON objects, try to extract a boolean value if possible
           // This handles the case when Supabase returns the value as a JSON object
-          const jsonValue = data.value;
+          const jsonValue = data.value as any;
           if ('value' in jsonValue && typeof jsonValue.value === 'boolean') {
             valueAsBoolean = jsonValue.value;
           }
@@ -115,11 +112,12 @@ export function TestAvailabilityDialog({ open, onOpenChange }: TestAvailabilityD
       }
       
       // If setting exists, update it
-      if (existingData?.id) {
+      const existingId = existingData?.id;
+      if (existingId) {
         const { error } = await supabase
           .from(SETTINGS_TABLE)
           .update({ value: pendingState })
-          .eq("id", existingData.id);
+          .eq("id", existingId);
         
         updateError = error;
       } else {
