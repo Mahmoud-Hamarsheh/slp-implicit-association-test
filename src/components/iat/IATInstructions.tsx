@@ -41,13 +41,11 @@ export const IATInstructions: React.FC<IATInstructionsProps> = ({
     const keyboardReminders = [
       "✔ حاول الإجابة بسرعة ودون تردد.",
       "✔ إذا أخطأت سيظهر رمز X أحمر. ويجب تصحيح الإجابة للمتابعة.",
-      "✔ ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة."
     ];
 
     const touchReminders = [
       "✔ حاول الإجابة بسرعة ودون تردد.",
       "✔ إذا أخطأت سيظهر رمز X أحمر. المس المربع الآخر للتصحيح.",
-      "✔ ستتغير أماكن التصنيفات خلال الاختبار، لذا انتبه جيدًا لكل مرحلة."
     ];
 
     const reminders = isTouchDevice ? touchReminders : keyboardReminders;
