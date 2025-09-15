@@ -91,19 +91,6 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
         </Table>
       </div>
 
-      {!isTouchDevice && (
-        <div className="text-right text-sm bg-blue-50 p-4 rounded-lg">
-          <p className="font-semibold">ملاحظة مهمة: </p>
-          <p>خلال الاختبار، سيتم تبديل تصنيف المجموعات بين المفاتيح D و K.</p>
-          <p>في المرحلة الأولى، سيتم استخدام D لـ "اضطراب تواصل" و K لـ "تواصل طبيعي".</p>
-          <p>في مراحل لاحقة، قد يتغير التصنيف وتظهر لك تعليمات جديدة.</p>
-          {testModel === "B" && (
-            <p className="font-semibold text-blue-700 mt-2">
-              في هذا الاختبار، ستبدأ بتصنيف "سلبي" و "إيجابي" بعد المرحلة الأولى.
-            </p>
-          )}
-        </div>
-      )}
       <Button onClick={onContinue}>متابعة</Button>
     </Card>
   );
