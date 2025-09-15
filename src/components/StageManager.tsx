@@ -115,15 +115,16 @@ export const StageManager: React.FC = () => {
       
       // Save all data to the database at the end of the flow
       // Only save data if the user is a specialist
-      console.log("About to save data. Conditions:", { 
-        hasSurveyData: !!surveyData, 
-        hasTestResult: testResult !== null, 
-        isSpecialist,
-        testResult 
-      });
+        console.log("About to save data. Conditions:", { 
+          hasSurveyData: !!surveyData, 
+          hasTestResult: testResult !== null, 
+          isSpecialist,
+          willSave: !isSpecialist,
+          testResult 
+        });
       
-      if (surveyData && testResult !== null) {
-        // Combine all data together
+      if (surveyData && testResult !== null && !isSpecialist) {
+        // Combine all data together - only save for NON-specialists
         const completeData = {
           ...surveyData,
           biasAwarenessResponses: data,

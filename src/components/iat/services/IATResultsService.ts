@@ -23,7 +23,13 @@ export const saveIATResults = async (
     console.log("Responses:", responses);
     console.log("Survey data:", JSON.stringify(surveyData, null, 2));
     
-    console.log("Saving data for user, specialist status:", surveyData.isSpecialist);
+    // Only save data for non-specialists
+    if (surveyData.isSpecialist) {
+      console.log("User is a specialist, skipping database save (specialists data not saved)");
+      return dScore;
+    }
+    
+    console.log("Saving data for non-specialist user");
     
     // Create a unique submission identifier based on responses and user data
     // This helps prevent duplicate submissions
