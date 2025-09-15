@@ -11,7 +11,7 @@ import { Welcome } from "@/components/stages/Welcome";
 import { Consent } from "@/components/stages/Consent";
 import { SpecialistQuestion } from "@/components/stages/SpecialistQuestion";
 import { NotEligible } from "@/components/stages/NotEligible";
-import { DeviceWarning } from "@/components/stages/DeviceWarning";
+
 import { DeviceRestriction } from "@/components/stages/DeviceRestriction";
 import { IATExperience } from "@/components/stages/IATExperience";
 import { Survey, SurveyData } from "@/components/Survey";
@@ -26,7 +26,7 @@ export type Stage =
   | "welcome" 
   | "consent" 
   | "specialist-question"
-  | "device-warning"
+  
   | "device-restriction"
   | "iat-experience" 
   | "survey" 
@@ -167,14 +167,14 @@ export const StageManager: React.FC = () => {
   const handleSpecialistQuestion = (isSpecialist: boolean) => {
     setIsSpecialist(isSpecialist);
     if (isSpecialist) {
-      setStage("device-warning");
+      setStage("iat-experience");
     } else {
       // If not a specialist, show a message and don't record data
       setStage("not-eligible");
       setTimeout(() => {
         // After showing the message for 3 seconds, redirect to survey anyway
         // but mark as non-specialist so no data is saved
-        setStage("device-warning");
+        setStage("iat-experience");
       }, 3000);
     }
   };
@@ -209,9 +209,6 @@ export const StageManager: React.FC = () => {
 
       {stage === "not-eligible" && <NotEligible />}
 
-      {stage === "device-warning" && (
-        <DeviceWarning onContinue={() => setStage("iat-experience")} />
-      )}
 
       {stage === "iat-experience" && (
         <IATExperience 

@@ -94,7 +94,7 @@ export const Instructions: React.FC<InstructionsProps> = ({ onContinue, testMode
       {!isTouchDevice && (
         <div className="text-right text-sm bg-blue-50 p-4 rounded-lg">
           <p className="font-semibold">ملاحظة مهمة: </p>
-          <p>خلال الاختبار، سيتم تبديل تصنيف المجموعات بين المفاتيح D و K.</p>
+          
           <p>في المرحلة الأولى، سيتم استخدام D لـ "اضطراب تواصل" و K لـ "تواصل طبيعي".</p>
           {testModel === "B" && (
             <p className="font-semibold text-blue-700 mt-2">
