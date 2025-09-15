@@ -73,20 +73,9 @@ export const IATTrial: React.FC<IATTrialProps> = ({
         </div>
       )}
       
-      {/* المحتوى الرئيسي في المنتصف - تكبير حجم النص والصور */}
-      <div className="flex justify-center items-center min-h-[180px] md:min-h-[250px] mb-8">
-        {trial.isImage ? (
-          <div className="flex justify-center">
-            <img src={trial.stimulus} alt="Attribute" className="h-24 w-24 md:h-36 md:w-36" />
-          </div>
-        ) : (
-          <div className="text-3xl md:text-5xl font-bold">{trial.stimulus}</div>
-        )}
-      </div>
-
       {shouldShowTouchControls ? (
-        // واجهة اللمس للهاتف/الجهاز اللوحي - المربعات الخضراء في الأسفل
-        <div className="grid grid-cols-2 gap-4 md:gap-8 mt-4">
+        // واجهة اللمس للهاتف/الجهاز اللوحي - المربعات الخضراء في الأعلى
+        <div className="grid grid-cols-2 gap-4 md:gap-8 mb-8">
           <div 
             className="flex flex-col items-center justify-center cursor-pointer"
             onClick={onTouchLeft}
@@ -131,6 +120,17 @@ export const IATTrial: React.FC<IATTrialProps> = ({
           </div>
         </div>
       )}
+
+      {/* المحتوى الرئيسي في الأسفل - تكبير حجم النص والصور */}
+      <div className="flex justify-center items-center min-h-[180px] md:min-h-[250px]">
+        {trial.isImage ? (
+          <div className="flex justify-center">
+            <img src={trial.stimulus} alt="Attribute" className="h-24 w-24 md:h-36 md:w-36" />
+          </div>
+        ) : (
+          <div className="text-3xl md:text-5xl font-bold">{trial.stimulus}</div>
+        )}
+      </div>
     </div>
   );
 };
