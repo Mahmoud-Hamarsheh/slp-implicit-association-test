@@ -122,7 +122,7 @@ export const StageManager: React.FC = () => {
         testResult 
       });
       
-      if (surveyData && testResult !== null && isSpecialist) {
+      if (surveyData && testResult !== null) {
         // Combine all data together
         const completeData = {
           ...surveyData,
