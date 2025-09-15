@@ -115,6 +115,13 @@ export const StageManager: React.FC = () => {
       
       // Save all data to the database at the end of the flow
       // Only save data if the user is a specialist
+      console.log("About to save data. Conditions:", { 
+        hasSurveyData: !!surveyData, 
+        hasTestResult: testResult !== null, 
+        isSpecialist,
+        testResult 
+      });
+      
       if (surveyData && testResult !== null && isSpecialist) {
         // Combine all data together
         const completeData = {
@@ -129,6 +136,11 @@ export const StageManager: React.FC = () => {
         const responseTimes = testResponses.map(response => response.responseTime);
         
         // Save everything to the database
+        console.log("Calling saveIATResults with:", { 
+          testResult, 
+          responseCount: testResponses.length,
+          isSpecialistInData: completeData.isSpecialist 
+        });
         await saveIATResults(testResult, testResponses, completeData, toast);
       }
       
@@ -197,9 +209,9 @@ export const StageManager: React.FC = () => {
 
       {stage === "not-eligible" && <NotEligible />}
 
-      {/* {stage === "device-warning" && (
+      {stage === "device-warning" && (
         <DeviceWarning onContinue={() => setStage("iat-experience")} />
-      )} */}
+      )}
 
       {stage === "iat-experience" && (
         <IATExperience 
