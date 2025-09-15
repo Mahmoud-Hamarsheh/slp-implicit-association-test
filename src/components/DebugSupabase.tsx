@@ -58,10 +58,9 @@ export const DebugSupabase: React.FC = () => {
         test_model: "A"
       };
 
-      const { data: insertData, error: insertError } = await supabase
+      const { error: insertError } = await supabase
         .from('iat_results')
-        .insert([testData])
-        .select('id');
+        .insert([testData], { returning: 'minimal' });
 
       if (insertError) {
         addLog(`❌ Insert test failed: ${insertError.message} (Code: ${insertError.code})`);
@@ -72,19 +71,7 @@ export const DebugSupabase: React.FC = () => {
           addLog(`Hint: ${insertError.hint}`);
         }
       } else {
-        addLog(`✅ Insert test passed! Created record: ${insertData[0]?.id}`);
-        
-        // Clean up test record
-        const { error: deleteError } = await supabase
-          .from('iat_results')
-          .delete()
-          .eq('id', insertData[0]?.id);
-          
-        if (deleteError) {
-          addLog(`⚠️ Could not clean up test record: ${deleteError.message}`);
-        } else {
-          addLog(`🧹 Test record cleaned up successfully`);
-        }
+        addLog(`✅ Insert test passed! (returning minimal)`);
       }
 
       // Test 4: Check auth status

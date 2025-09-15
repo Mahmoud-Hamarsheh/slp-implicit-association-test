@@ -222,10 +222,9 @@ export const saveIATResults = async (
       console.log("- Test model:", dataToSave.test_model);
       
       // Insert the data
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('iat_results')
-        .insert([dataToSave]) // Using array notation to ensure proper insert format
-        .select('id');
+        .insert([dataToSave], { returning: 'minimal' });
 
       if (error) {
         console.error('❌ Supabase INSERT error:', error);
@@ -257,8 +256,7 @@ export const saveIATResults = async (
           variant: "destructive",
         });
       } else {
-        console.log("✅ Results saved successfully!");
-        console.log("Saved record ID:", data[0]?.id);
+        console.log("✅ Results saved successfully (returning minimal)");
         toast({
           title: "تم حفظ النتائج بنجاح",
           description: "تم تسجيل إجاباتك في قاعدة البيانات بنجاح",
