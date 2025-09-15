@@ -197,9 +197,9 @@ export const StageManager: React.FC = () => {
 
       {stage === "not-eligible" && <NotEligible />}
 
-      {stage === "device-warning" && (
+      {/* {stage === "device-warning" && (
         <DeviceWarning onContinue={() => setStage("iat-experience")} />
-      )}
+      )} */}
 
       {stage === "iat-experience" && (
         <IATExperience 
