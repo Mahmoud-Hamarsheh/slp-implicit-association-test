@@ -174,9 +174,9 @@ export const saveIATResults = async (
     console.log("Final extracted bias score:", biasScore);
     
     // Format the survey responses for database storage
-    let formattedSurveyResponses = null;
+    let formattedSurveyResponses: any = null;
     if (Object.keys(questionResponsesOnly).length > 0) {
-      formattedSurveyResponses = JSON.stringify(questionResponsesOnly);
+      formattedSurveyResponses = questionResponsesOnly; // store as JSON object, not string
     }
     
     console.log("Survey responses to save:", formattedSurveyResponses);
@@ -193,11 +193,11 @@ export const saveIATResults = async (
       years_experience: Number(surveyData.yearsExperience) || 0,
       degree: degreeValue,
       gender: formattedGender,
-      response_times: responseTimes, // Save the response times array
-      responses: JSON.stringify(responses), // Save all detailed responses
-      survey_responses: formattedSurveyResponses,
+      response_times: responseTimes,
+      responses: responses as any, // store as JSON object
+      survey_responses: formattedSurveyResponses as any,
       survey_score: biasScore,
-      test_model: testModel // Save the test model (A or B)
+      test_model: testModel
     };
 
     console.log("=== FINAL DATA TO SAVE ===");

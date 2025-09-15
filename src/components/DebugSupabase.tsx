@@ -54,7 +54,7 @@ export const DebugSupabase: React.FC = () => {
         degree: "2",
         gender: 1,
         response_times: [1.0, 0.8, 0.9],
-        responses: JSON.stringify([{ block: 1, responseTime: 1.0, correct: true }]),
+        responses: [{ block: 1, responseTime: 1.0, correct: true }],
         test_model: "A"
       };
 
