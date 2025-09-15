@@ -42,12 +42,36 @@ const Dashboard = () => {
   const fetchResults = async () => {
     try {
       setLoading(true);
+      console.log("=== FETCHING IAT RESULTS ===");
+      
+      // Check current auth session
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log("Current session:", session ? "exists" : "null");
+      console.log("User ID:", session?.user?.id || "none");
+      
+      // Check admin flag from localStorage
+      const isAdmin = localStorage.getItem("isAdmin");
+      console.log("Admin flag in localStorage:", isAdmin);
+      
+      if (isAdmin === "true") {
+        console.log("Using localStorage admin bypass for data access");
+      }
+      
       const { data, error } = await supabase
         .from('iat_results')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      console.log("Query result:", { 
+        dataCount: data?.length || 0, 
+        error: error ? error.message : null,
+        errorCode: error?.code || null 
+      });
+      
+      if (error) {
+        console.error('Supabase query error:', error);
+        throw error;
+      }
 
       // Sort results by creation date (newest first)
       const sortedResults = data || [];
@@ -55,12 +79,13 @@ const Dashboard = () => {
         return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
       });
 
+      console.log("Sorted results count:", sortedResults.length);
       setResults(sortedResults);
     } catch (error) {
       console.error('Error fetching results:', error);
       toast({
         title: "خطأ في جلب البيانات",
-        description: "حدث خطأ أثناء محاولة جلب النتائج من قاعدة البيانات.",
+        description: "حدث خطأ أثناء محاولة جلب النتائج من قاعدة البيانات: " + (error?.message || "خطأ غير معروف"),
         variant: "destructive"
       });
     } finally {
