@@ -23,18 +23,15 @@ export const getExperienceRange = (expValue: number): string => {
 };
 
 export const getIATInterpretation = (dScore: number): string => {
-  if (dScore > 0.65) return "تحيز قوي (سلبي)";
-  if (dScore > 0.35) return "تحيز متوسط (سلبي)";
-  if (dScore > 0.15) return "تحيز خفيف (سلبي)";
-  if (dScore >= -0.15) return "محايد";
-  if (dScore >= -0.35) return "تحيز خفيف (إيجابي)";
-  if (dScore >= -0.65) return "تحيز متوسط (إيجابي)";
-  return "تحيز قوي (إيجابي)";
+  if (dScore >= 0.6) return "تحيز قوي (سلبي)";
+  if (dScore >= 0.35) return "تحيز متوسط (سلبي)";
+  if (dScore > 0.15) return "تحيز متوسط (سلبي)";
+  return "تحيز خفيف (سلبي)";
 };
 
 export const getSurveyInterpretation = (score?: number): string => {
   if (!score) return "غير متوفر";
-  if (score > 3.5) return "مرتفع";
-  if (score > 2.5) return "متوسط";
+  if (score >= 3.6) return "مرتفع";
+  if (score >= 2.6) return "متوسط";
   return "منخفض";
 };
