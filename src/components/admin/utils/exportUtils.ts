@@ -1,6 +1,51 @@
 
-import { IATResult, degreeMapping } from "../types/iatResults";
-import { getAgeRange, getExperienceRange, getIATInterpretation, getSurveyInterpretation } from "./helpers";
+import { IATResult } from "../types/iatResults";
+
+// English mappings for export
+const degreeMapping: { [key: string]: string } = {
+  "1": "Student",
+  "2": "Bachelor's",
+  "3": "Master's", 
+  "4": "PhD"
+};
+
+const getAgeRangeEnglish = (ageValue: number): string => {
+  switch (ageValue) {
+    case 1: return "20-30";
+    case 2: return "31-40";
+    case 3: return "41-50";
+    case 4: return "51+";
+    default: return "Not specified";
+  }
+};
+
+const getExperienceRangeEnglish = (expValue: number): string => {
+  switch (expValue) {
+    case 0: return "No experience";
+    case 1: return "1-2 years";
+    case 2: return "2-4 years";
+    case 3: return "5-10 years";
+    case 4: return "10+ years";
+    default: return "Not specified";
+  }
+};
+
+const getIATInterpretationEnglish = (dScore: number): string => {
+  if (dScore > 0.65) return "Strong bias (negative)";
+  if (dScore > 0.35) return "Moderate bias (negative)";
+  if (dScore > 0.15) return "Slight bias (negative)";
+  if (dScore >= -0.15) return "Neutral";
+  if (dScore >= -0.35) return "Slight bias (positive)";
+  if (dScore >= -0.65) return "Moderate bias (positive)";
+  return "Strong bias (positive)";
+};
+
+const getSurveyInterpretationEnglish = (score?: number): string => {
+  if (!score) return "Not available";
+  if (score > 3.5) return "High";
+  if (score > 2.5) return "Medium";
+  return "Low";
+};
 
 // Map Arabic responses to numerical values
 const responseValueMap = {
@@ -58,11 +103,11 @@ export const exportToCsv = (results: IATResult[], onSuccess: () => void, onError
     const csvRows = [headers.join(",")];
     
     results.forEach(result => {
-      const gender = result.gender === 1 ? "ذكر" : result.gender === 2 ? "أنثى" : "غير محدد";
-      const ageRange = getAgeRange(result.age);
-      const experienceRange = getExperienceRange(result.years_experience);
-      const interpretationText = getIATInterpretation(result.d_score);
-      const surveyInterpretation = getSurveyInterpretation(result.survey_score);
+      const gender = result.gender === 1 ? "Male" : result.gender === 2 ? "Female" : "Not specified";
+      const ageRange = getAgeRangeEnglish(result.age);
+      const experienceRange = getExperienceRangeEnglish(result.years_experience);
+      const interpretationText = getIATInterpretationEnglish(result.d_score);
+      const surveyInterpretation = getSurveyInterpretationEnglish(result.survey_score);
       
       // Base row data
       const baseRow = [
@@ -99,7 +144,7 @@ export const exportToCsv = (results: IATResult[], onSuccess: () => void, onError
       });
       
       // Add Test Model
-      const row = [...baseRow, ...questionResponses, `"${result.test_model || 'غير محدد'}"`];
+      const row = [...baseRow, ...questionResponses, `"${result.test_model || 'Not specified'}"`];
       csvRows.push(row.join(","));
     });
     
