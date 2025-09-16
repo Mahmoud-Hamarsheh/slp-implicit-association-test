@@ -31,17 +31,17 @@ const getExperienceRangeEnglish = (expValue: number): string => {
 };
 
 const getIATInterpretationEnglish = (dScore: number): string => {
-  if (dScore >= 0.6) return "indicates strong negative implicit attitudes";
-  if (dScore >= 0.35) return "indicates moderate negative implicit attitudes";
-  if (dScore > 0.15) return "indicates moderate negative implicit attitudes";
-  return "indicates low negative implicit attitudes";
+  if (dScore >= 0.6) return "≥ 0.6 indicates strong negative implicit attitudes";
+  if (dScore >= 0.35) return "Between 0.35 and 0.6 indicates moderate negative implicit attitudes";
+  if (dScore > 0.15) return "Between 0.15 and 0.35 indicates moderate negative implicit attitudes";
+  return "≤ 0.15 indicates low negative implicit attitudes";
 };
 
 const getSurveyInterpretationEnglish = (score?: number): string => {
   if (!score) return "Not available";
-  if (score >= 3.6) return "indicates high positive explicit attitudes";  
-  if (score >= 2.6) return "indicates moderate positive explicit attitudes";
-  return "indicates low positive explicit attitudes";
+  if (score >= 3.6) return "High positive explicit attitudes if the mean score ≥ 3.6";  
+  if (score >= 2.6) return "Moderate positive explicit attitudes if the mean score between 2.6 and 3.5";
+  return "Low positive explicit attitudes if the mean score ≤ 2.5";
 };
 
 // Map Arabic responses to numerical values
