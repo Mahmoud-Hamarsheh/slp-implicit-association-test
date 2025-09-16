@@ -9,11 +9,8 @@ import { saveIATResults } from "@/components/iat/services/IATResultsService";
 // Stage Components
 import { Welcome } from "@/components/stages/Welcome";
 import { Consent } from "@/components/stages/Consent";
-import { SpecialistQuestion } from "@/components/stages/SpecialistQuestion";
 import { NotEligible } from "@/components/stages/NotEligible";
-
 import { DeviceRestriction } from "@/components/stages/DeviceRestriction";
-import { IATExperience } from "@/components/stages/IATExperience";
 import { Survey, SurveyData } from "@/components/Survey";
 import { IATWelcome } from "@/components/stages/IATWelcome";
 import { Instructions } from "@/components/stages/Instructions";
@@ -25,10 +22,7 @@ import { TestDisabled } from "@/components/stages/TestDisabled";
 export type Stage = 
   | "welcome" 
   | "consent" 
-  | "specialist-question"
-  
   | "device-restriction"
-  | "iat-experience" 
   | "survey" 
   | "iat-welcome" 
   | "instructions" 
@@ -46,7 +40,6 @@ export const StageManager: React.FC = () => {
   const [testResponses, setTestResponses] = useState<any[]>([]);
   const [hasTakenIATBefore, setHasTakenIATBefore] = useState(false);
   const [testModel, setTestModel] = useState<"A" | "B">(Math.random() < 0.5 ? "A" : "B");
-  const [isSpecialist, setIsSpecialist] = useState(false);
   const [testEnabled, setTestEnabled] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -84,8 +77,7 @@ export const StageManager: React.FC = () => {
     // Add the test model to survey data
     const enrichedData = {
       ...data,
-      testModel,
-      isSpecialist
+      testModel
     };
     setSurveyData(enrichedData);
     
@@ -114,31 +106,21 @@ export const StageManager: React.FC = () => {
       setBiasAwarenessData(data);
       
       // Save all data to the database at the end of the flow
-      // Only save data if the user is a specialist
-        console.log("=== STAGE MANAGER: BIAS AWARENESS COMPLETE ===");
-        console.log("About to save data. Conditions:", { 
-          hasSurveyData: !!surveyData, 
-          hasTestResult: testResult !== null, 
-          isSpecialist,
-          willSave: !isSpecialist,
-          testResult,
-          hasTakenIATBefore
-        });
-        
-        if (!isSpecialist) {
-          console.log("✅ Will attempt to save data (user is NOT a specialist)");
-        } else {
-          console.log("❌ Will NOT save data (user IS a specialist)");
-        }
+      console.log("=== STAGE MANAGER: BIAS AWARENESS COMPLETE ===");
+      console.log("About to save data. Conditions:", { 
+        hasSurveyData: !!surveyData, 
+        hasTestResult: testResult !== null, 
+        testResult,
+        hasTakenIATBefore
+      });
       
-      if (surveyData && testResult !== null && !isSpecialist) {
-        // Combine all data together - only save for NON-specialists
+      if (surveyData && testResult !== null) {
+        // Combine all data together
         const completeData = {
           ...surveyData,
           biasAwarenessResponses: data,
           hasTakenIATBefore,
-          testModel,
-          isSpecialist
+          testModel
         };
         
         // Extract response times from responses for the database
@@ -147,8 +129,7 @@ export const StageManager: React.FC = () => {
         // Save everything to the database
         console.log("Calling saveIATResults with:", { 
           testResult, 
-          responseCount: testResponses.length,
-          isSpecialistInData: completeData.isSpecialist 
+          responseCount: testResponses.length
         });
         await saveIATResults(testResult, testResponses, completeData, toast);
       }
@@ -173,20 +154,6 @@ export const StageManager: React.FC = () => {
     }
   };
 
-  const handleSpecialistQuestion = (isSpecialist: boolean) => {
-    setIsSpecialist(isSpecialist);
-    if (isSpecialist) {
-      setStage("iat-experience");
-    } else {
-      // If not a specialist, show a message and don't record data
-      setStage("not-eligible");
-      setTimeout(() => {
-        // After showing the message for 3 seconds, redirect to survey anyway
-        // but mark as non-specialist so no data is saved
-        setStage("iat-experience");
-      }, 3000);
-    }
-  };
 
   return (
     <>
@@ -202,35 +169,14 @@ export const StageManager: React.FC = () => {
       )}
 
       {stage === "consent" && (
-        <Consent onAgree={() => setStage("specialist-question")} />
+        <Consent onAgree={() => setStage("survey")} />
       )}
 
       {stage === "test-disabled" && <TestDisabled />}
 
       {stage === "device-restriction" && <DeviceRestriction />}
 
-      {stage === "specialist-question" && (
-        <SpecialistQuestion 
-          onSelectYes={() => handleSpecialistQuestion(true)}
-          onSelectNo={() => handleSpecialistQuestion(false)}
-        />
-      )}
-
       {stage === "not-eligible" && <NotEligible />}
-
-
-      {stage === "iat-experience" && (
-        <IATExperience 
-          onSelectYes={() => {
-            setHasTakenIATBefore(true);
-            setStage("survey");
-          }} 
-          onSelectNo={() => {
-            setHasTakenIATBefore(false);
-            setStage("survey");
-          }} 
-        />
-      )}
 
       {stage === "survey" && <Survey onComplete={handleSurveyComplete} />}
 
