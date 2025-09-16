@@ -31,10 +31,10 @@ const getExperienceRangeEnglish = (expValue: number): string => {
 };
 
 const getIATInterpretationEnglish = (dScore: number): string => {
-  if (dScore >= 0.6) return "Indicates strong negative implicit attitudes";
-  if (dScore >= 0.35) return "Indicates moderate negative implicit attitudes";
-  if (dScore > 0.15) return "Indicates moderate negative implicit attitudes";
-  return "Indicates low negative implicit attitudes";
+  if (dScore >= 0.6) return "Strong negative implicit attitudes";
+  if (dScore >= 0.35) return "Moderate negative implicit attitudes";
+  if (dScore > 0.15) return "Moderate negative implicit attitudes";
+  return "Low negative implicit attitudes";
 };
 
 const getSurveyInterpretationEnglish = (score?: number): string => {
