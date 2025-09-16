@@ -20,7 +20,7 @@ export const BlockChangeAlert: React.FC<BlockChangeAlertProps> = ({
         <DialogHeader>
           <DialogTitle className="text-xl">تنبيه هام</DialogTitle>
           <DialogDescription className="text-lg pt-4">
-            يرجى التركيز ومتابعة التعليمات في المرحلة التالية.
+            انتبه سوف تتغير أماكن التصنيفات في المراحل القادمة
           </DialogDescription>
         </DialogHeader>
         <Button onClick={onClose} className="mt-4 mx-auto">فهمت</Button>

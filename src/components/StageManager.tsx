@@ -18,6 +18,7 @@ import { TestStage } from "@/components/stages/TestStage";
 import BiasAwarenessSurvey, { SurveyResponses } from "@/components/BiasAwarenessSurvey";
 import { Complete } from "@/components/stages/Complete";
 import { TestDisabled } from "@/components/stages/TestDisabled";
+import { TestToSurveyTransition } from "@/components/stages/TestToSurveyTransition";
 
 export type Stage = 
   | "welcome" 
@@ -27,6 +28,7 @@ export type Stage =
   | "iat-welcome" 
   | "instructions" 
   | "test" 
+  | "test-to-survey-transition"
   | "bias-awareness" 
   | "complete"
   | "not-eligible"
@@ -93,7 +95,7 @@ export const StageManager: React.FC = () => {
     setTestResult(result);
     setTestResponses(responses);
     // Just store the result and responses, don't save to database yet
-    setStage("bias-awareness");
+    setStage("test-to-survey-transition");
   };
 
   const handleBiasAwarenessComplete = async (data: SurveyResponses) => {
@@ -194,6 +196,13 @@ export const StageManager: React.FC = () => {
           surveyData={surveyData}
           hasTakenIATBefore={hasTakenIATBefore}
           biasAwarenessData={biasAwarenessData}
+        />
+      )}
+
+      {stage === "test-to-survey-transition" && (
+        <TestToSurveyTransition
+          open={true}
+          onContinue={() => setStage("bias-awareness")}
         />
       )}
 
