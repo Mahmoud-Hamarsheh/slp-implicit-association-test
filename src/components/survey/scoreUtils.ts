@@ -19,8 +19,8 @@ export const calculateBiasScore = (responses: SurveyResponses): { biasScore: num
   let totalScore = 0;
   let answeredQuestions = 0;
   
-  // Process all question responses (now 14 questions)
-  for (let i = 1; i <= 14; i++) {
+  // Process all question responses (now 13 questions)
+  for (let i = 1; i <= 13; i++) {
     const questionId = `q${i}`;
     const response = responses[questionId];
     
@@ -46,7 +46,7 @@ export const calculateBiasScore = (responses: SurveyResponses): { biasScore: num
     biasLevel = 'Low positive explicit attitudes';
   } else if (averageScore >= 2.6 && averageScore <= 3.5) {
     biasLevel = 'Moderate positive explicit attitudes';
-  } else {
+  } else if (averageScore >= 3.6) {
     biasLevel = 'High positive explicit attitudes';
   }
 
