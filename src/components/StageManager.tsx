@@ -176,7 +176,7 @@ export const StageManager: React.FC = () => {
 
       {stage === "test-disabled" && <TestDisabled />}
 
-      {stage === "device-restriction" && <DeviceRestriction />}
+     // {stage === "device-restriction" && <DeviceRestriction />}
 
       {stage === "not-eligible" && <NotEligible />}
 
