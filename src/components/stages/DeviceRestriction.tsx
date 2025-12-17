@@ -10,7 +10,7 @@ export const DeviceRestriction: React.FC = () => {
       </div>
       
       <div className="space-y-4">
-        <h2 className="text-3xl font-bold text-red-600">الاختبار غير متاح على الأجهزة المحمولة</h2>
+        <h2 className="text-3xl font-bold text-red-600">الاختبار غير متاح على الأجهزة المحمولة.</h2>
         
         <div className="space-y-3">
           <p className="text-lg text-gray-700">
@@ -25,7 +25,7 @@ export const DeviceRestriction: React.FC = () => {
             <span className="text-gray-400">|</span>
             <div className="flex items-center gap-2">
               <Monitor className="text-red-400" size={20} />
-              <span className="text-sm">الأجهزة اللوحية</span>
+              <span className="text-sm">.الأجهزة اللوحية</span>
             </div>
             <span className="text-gray-400">|</span>
             <div className="flex items-center gap-2">
